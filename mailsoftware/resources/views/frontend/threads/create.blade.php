@@ -6,7 +6,7 @@
 @endsection
 
 @section('content')
-    <div class="row hidden">
+    <div class="row">
         <div class="col-sm-12 col-lg-3">
             <div class="card card-custom card-stretch gutter-b">
                 <div class="card-header border-0 pt-5 pb-1">
@@ -21,15 +21,150 @@
                     <div class="table-responsive">
                         <table class="table table-borderless mb-0">
                             <tbody>
+                                <!--begin::Item-->
+                                <tr>
+                                    <td class="font-weight-bold text-muted  align-middle pb-6">Cliente: </td>
+                                    <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ $pren->header }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold text-muted  align-middle pb-6">Nazionalità: </td>
+                                    <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ $country }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold text-muted  align-middle pb-6">eMail: </td>
+                                    <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ $pren->tx_mask_t0_email }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold text-muted  align-middle pb-6">Telefono: </td>
+                                    <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ $pren->tx_mask_t0_tel }}</td>
+                                </tr>
+                                <!--end::Item-->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-lg-3">
+            <div class="card card-custom card-stretch gutter-b">
+                <div class="card-header border-0 pt-5 pb-1">
+                    <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label font-weight-bolder text-dark text-uppercase">
+                                Info Prenotazione
+                            </span>
+                        <span class="text-muted mt-3 font-weight-bold font-size-sm"></span>
+                    </h3>
+                </div>
+                <div class="card-body pt-0 pb-3">
+                    <div class="table-responsive">
+                        <table class="table table-borderless mb-0">
+                            <tbody>
                             <!--begin::Item-->
                             <tr>
-                                <td class="font-weight-bold text-muted  align-middle pb-6">Nome: </td>
-                                <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ $pren->header }}</td>
+                                <td class="font-weight-bold text-muted  align-middle pb-6">Data Prenot.: </td>
+                                <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ $pren->tx_mask_p_data_prenotazione }}</td>
                             </tr>
                             <tr>
-                                <td class="font-weight-bold text-muted  align-middle pb-6">Sito: </td>
-                                <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ $site->header }}</td>
+                                <td class="font-weight-bold text-muted  align-middle pb-6">Canale: </td>
+                                <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ $pren->tx_mask_t5_kross_cod_channel == 'BE' ? $pren->tx_mask_t5_kross_cod_channel.' (MAIL)' : $pren->tx_mask_t5_kross_cod_channel }}</td>
                             </tr>
+                            <tr>
+                                <td class="font-weight-bold text-muted  align-middle pb-6">Data Arrivo: </td>
+                                <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ $pren->tx_mask_p_data_arrivo }}</td>
+                            </tr>
+                            <tr>
+                                <td class="font-weight-bold text-muted  align-middle pb-6">Data Partenza: </td>
+                                <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ $pren->tx_mask_p_data_partenza }}</td>
+                            </tr>
+                            <tr>
+                                <td class="font-weight-bold text-muted  align-middle pb-6">N. Notti: </td>
+                                <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ $days }}</td>
+                            </tr>
+                            <!--end::Item-->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-lg-3">
+            <div class="card card-custom card-stretch gutter-b">
+                <div class="card-header border-0 pt-5 pb-1">
+                    <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label font-weight-bolder text-dark text-uppercase">
+                                Info Prenotazione
+                            </span>
+                        <span class="text-muted mt-3 font-weight-bold font-size-sm"></span>
+                    </h3>
+                </div>
+                <div class="card-body pt-0 pb-3">
+                    <div class="table-responsive">
+                        <table class="table table-borderless mb-0">
+                            <tbody>
+                            <!--begin::Item-->
+                            <tr>
+                                <td class="font-weight-bold text-muted  align-middle pb-6">Ospiti Totali: </td>
+                                <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ $pren->tx_mask_p_tot_ospiti }}</td>
+                            </tr>
+                            <tr>
+                                <td class="font-weight-bold text-muted  align-middle pb-6">Under 12: </td>
+                                <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ $pren->tx_mask_p_under_12 ?: 0 }}</td>
+                            </tr>
+                            <tr>
+                                <td class="font-weight-bold text-muted  align-middle pb-6">Costo Totale: </td>
+                                <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ number_format($pren->tx_mask_t3_p_stay, 2, ",", ".") .' €'}}</td>
+                            </tr>
+                            <tr>
+                                <td class="font-weight-bold text-muted  align-middle pb-6">Documenti: </td>
+                                <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ $pren->tx_mask_doc_inviati == 0 ? 'Attesa' : 'Inviati' }}</td>
+                            </tr>
+                            <tr>
+                                <td class="font-weight-bold text-muted  align-middle pb-6">Caparra: </td>
+                                <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ $caparra  }}</td>
+                            </tr>
+                            <!--end::Item-->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-lg-3">
+            <div class="card card-custom card-stretch gutter-b">
+                <div class="card-header border-0 pt-5 pb-1">
+                    <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label font-weight-bolder text-dark text-uppercase">
+                                Info Check-In / Check-Out
+                            </span>
+                        <span class="text-muted mt-3 font-weight-bold font-size-sm"></span>
+                    </h3>
+                </div>
+                <div class="card-body pt-0 pb-3">
+                    <div class="table-responsive">
+                        <table class="table table-borderless mb-0">
+                            <tbody>
+                            <!--begin::Item-->
+                            <tr>
+                                <td class="font-weight-bold text-muted  align-middle pb-6">Gestore: </td>
+                                <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ $gestore }}</td>
+                            </tr>
+                            <tr>
+                                <td class="font-weight-bold text-muted  align-middle pb-6">Gestore Cliente: </td>
+                                <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ $gestore_cliente  }}</td>
+                            </tr>
+                            <tr>
+                                <td class="font-weight-bold text-muted  align-middle pb-6">CheckIn: </td>
+                                <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ $pren->tx_mask_p_data_arrivo }}</td>
+                            </tr>
+                            <tr>
+                                <td class="font-weight-bold text-muted  align-middle pb-6">CheckOut: </td>
+                                <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ $pren->tx_mask_p_data_partenza }}</td>
+                            </tr>
+                            <tr>
+                                <td class="font-weight-bold text-muted  align-middle pb-6">Note Operatore: </td>
+                                <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ $pren->tx_mask_t1_op_note  }}</td>
+                            </tr>
+
                             <!--end::Item-->
                             </tbody>
                         </table>

@@ -44,6 +44,8 @@ td.ciccio a {
 
 td[class*="bg-"].text-left { text-align: left !important; }
 
+
+.bg-whatsapp-0 { background: #DCF8C6 !important; color: #128C7E !important; font-weight: bold !important;}
 .bg-whatsapp { background: #25D366 !important; color: #FFF !important; font-weight: bold !important;}
 .bg-whatsapp-2 { background: #128C7E !important; color: #FFF !important; font-weight: bold !important;}
 .bg-whatsapp-3 { background: #075E54 !important; color: #FFF !important; font-weight: bold !important;}
@@ -51,6 +53,7 @@ td[class*="bg-"].text-left { text-align: left !important; }
 .bg-whatsapp-2 i,
 .bg-whatsapp-3 i{ color: #FFF !important; }
 
+.bg-whatsapp-0 i{ color: #128C7E !important; }
 
 
 .symbol.symbol-blue-steel .symbol-label { background-color: #4B77BE; color: #ffffff; }
@@ -94,3 +97,9 @@ td[class*="bg-"].text-left { text-align: left !important; }
     background: #F3F6F9 !important;
 }
 
+
+input[type="range"]::-webkit-slider-thumb {
+    cursor: pointer;
+    -webkit-appearance: none;
+    background-color: #28a745 !important;
+}

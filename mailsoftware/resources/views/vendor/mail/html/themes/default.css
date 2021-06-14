@@ -4,7 +4,7 @@ body,
 body *:not(html):not(style):not(br):not(tr):not(code) {
     box-sizing: border-box;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
-        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
     position: relative;
 }
 
@@ -288,3 +288,45 @@ img {
 .break-all {
     word-break: break-all;
 }
+
+.btn-primary {
+    color: #fff;
+    background-color: #6993ff;
+    border-color: #6993ff;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    padding: 10px 30px;
+    margin: 15px 0;
+}
+
+.btn-primary:hover {
+    color: #fff;
+    background-color: #4377ff;
+    border-color: #366eff
+}
+
+.btn-primary.focus, .btn-primary:focus {
+    color: #fff;
+    background-color: #4377ff;
+    border-color: #366eff;
+    -webkit-box-shadow: 0 0 0 .2rem rgba(128, 163, 255, .5);
+    box-shadow: 0 0 0 .2rem rgba(128, 163, 255, .5)
+}
+
+.btn-primary.disabled, .btn-primary:disabled {
+    color: #fff;
+    background-color: #6993ff;
+    border-color: #6993ff
+}
+
+.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show > .btn-primary.dropdown-toggle {
+    color: #fff;
+    background-color: #366eff;
+    border-color: #2965ff
+}
+
+.btn-primary:not(:disabled):not(.disabled).active:focus, .btn-primary:not(:disabled):not(.disabled):active:focus, .show > .btn-primary.dropdown-toggle:focus {
+    -webkit-box-shadow: 0 0 0 .2rem rgba(128, 163, 255, .5);
+    box-shadow: 0 0 0 .2rem rgba(128, 163, 255, .5)
+}
+

@@ -52,7 +52,7 @@ class ThreadController extends Controller
 
 
         $site = $this->getSitesByKross($pren->tx_mask_t5_kross_cod_channel);
-        if($pren->tx_mask_t5_kross_cod_channel == 'BE')
+        if($pren->tx_mask_t5_kross_cod_channel == 'BE' || $pren->tx_mask_t5_kross_cod_channel == 'DIRECT')
             $site = $this->getSitesByKross('MAIL');
 
         $threads_pren = Thread::with('flow')->where('uid','=', $pren_uid)->get();
@@ -78,6 +78,41 @@ class ThreadController extends Controller
             $query->doesntHave('flows');
         }])->get();
 
+        if(!$pren->tx_mask_t0_country){
+            $country = 'NaN';
+        } else {
+            $country = $this->getCountriesArray($pren->tx_mask_t0_country);
+            $country = $country->name;
+        }
+
+//        TOTALE GIORNI PERMANENZA
+        $from = Carbon::parse($pren->tx_mask_p_data_arrivo);
+        $to = Carbon::parse($pren->tx_mask_p_data_partenza);
+        $days = $from->diffInDays($to);
+
+        $caparra = '';
+//        CAPARRA
+        $totale = floatval($pren->tx_mask_t3_p_stay);
+        $saldoBanca = floatval($pren->tx_mask_t3_p_s_b);
+        $saldoCash = floatval($pren->tx_mask_t3_p_s_chin);
+
+        if($saldoBanca == 0 && $saldoCash == 0) {
+            $caparra = "No Caparra";
+        } else if($saldoBanca > 0 && $saldoCash == 0) {
+            $caparra = $totale - $saldoBanca;
+            $caparra = number_format($caparra, 2, ",", "."). ' €';
+        } else {
+            $caparra = $totale - $saldoCash;
+            $caparra = number_format($caparra, 2, ",", "."). ' €';
+        }
+
+//        CONTATTO DI RIFERIMENTO
+        $contatto_riferimento = TypoUser::select(['first_name', 'last_name'])
+            ->where('uid', '=', $pren->tx_mask_contatto_riferimento)
+            ->first();
+
+        $gestore = $house_typo->tx_mask_t1_casa_gestore;
+        $gestore_cliente = $contatto_riferimento->first_name . ' ' . $contatto_riferimento->last_name;
 
         return view('frontend.threads.create')
             ->with(compact('pren'))
@@ -85,6 +120,11 @@ class ThreadController extends Controller
             ->with(compact('site'))
             ->with(compact('typeanswers_id'))
             ->with(compact('typeanswers'))
+            ->with(compact('country'))
+            ->with(compact('days'))
+            ->with(compact('caparra'))
+            ->with(compact('gestore'))
+            ->with(compact('gestore_cliente'))
             ->with(compact('other_texts_by_priority'));
     }
 
@@ -237,8 +277,8 @@ class ThreadController extends Controller
         }
         if(Str::contains($testo,'*pren*tx_mask_p_token*')){
             if($language != 'IT')
-                $testo = Str::replaceFirst('*pren*tx_mask_p_token*', '<a href="https://www.alguerhome.it/reservation/token/{'.$pren['tx_mask_p_token'].'}" target="_blank">Customer Page Link</a>' , $testo);
-            $testo = Str::replaceFirst('*pren*tx_mask_p_token*', '<a href="https://www.alguerhome.it/reservation/token/{'.$pren['tx_mask_p_token'].'}" target="_blank"><button class="btn btn-light btn" Link Pagina Cliente</a>' , $testo);
+                $testo = Str::replaceFirst('*pren*tx_mask_p_token*', '<a href="https://www.alguerhome.it/reservation/token/{'.$pren['tx_mask_p_token'].'}" target="_blank" class="btn btn-primary" role="button">Customer Page Link</a>' , $testo);
+            $testo = Str::replaceFirst('*pren*tx_mask_p_token*', '<a href="https://www.alguerhome.it/reservation/token/{'.$pren['tx_mask_p_token'].'}" target="_blank" class="btn btn-primary" role="button">Link Pagina Cliente</a>' , $testo);
         }
 
         foreach ($pren_key as $key => $value){

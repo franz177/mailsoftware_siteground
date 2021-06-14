@@ -60,7 +60,7 @@
                                                 </svg>
                                             </span>
                                     </th>
-                                    <th class="all text-center">uid</th>
+                                    <th class="none">uid</th>
                                     <th class="all">nominativo</th>
                                     <th class="all">arrivo</th>
                                     <th class="all">partenza</th>
@@ -127,6 +127,7 @@
             var houses_gestore = {!! $houses_gestore !!};
             var sites_kross = {!! $sites_kross !!};
             var op_checkin = {!! $op_checkin !!};
+            let wa_friendly;
 
             var table = $('#sample_20');
 
@@ -193,22 +194,43 @@
                 ],
 
                 rowCallback: function(row, data, index) {
+                    if(data.whatsapp_stato == -1){
+                        wa_friendly = ' (Mail)';
+                    } else {
+                        wa_friendly = '';
+                    }
                     $('td:eq(0)', row).addClass('bg-'+houses_color[data.casa]);
-                    $('td:eq(2)', row).addClass('bg-'+houses_color[data.casa]);
+                    // $('td:eq(2)', row).addClass('bg-'+houses_color[data.casa]);
                     $('td:eq(3)', row).addClass('alert-warning text-left');
                     $('td:eq(4)', row).addClass('alert-warning');
                     $('td:eq(5)', row).addClass('alert-danger');
-                    if(data.stato === "CANC") {
-                        $('td:eq(7)', row).addClass('bg-light-danger');
-                    }
                     $('td:eq(8)', row).html('<i class="icon-2x la text-dark-50 socicon-whatsapp"></i>' +
                         '<br>' +
-                        '<input type="range" class="custom-range whatsappRange" min="0" max="2" data-id="'+data.whatsapp_id+'" value="'+data.whatsapp_stato+'"><br>'+data.whatsapp_stato);
-
+                        '<input type="range" class="whatsappRange" min="-1" max="3" data-id="'+data.whatsapp_id+'" value="'+data.whatsapp_stato+'" list="tickmarks">' +
+                        '<datalist id="tickmarks">' +
+                        '<option value="-1" label="-1"></option>'+
+                        '<option value="0" label="0"></option>'+
+                        '<option value="1" label="1"></option>'+
+                        '<option value="2" label="2"></option>'+
+                        '<option value="3" label="3"></option>'+
+                        '</datalist>'+
+                        '<br>' +
+                        ''+data.whatsapp_stato + wa_friendly
+                    );
+                    if(!data.thread) {
+                        $('td:eq(7)', row).html('');
+                    } else {
+                        $('td:eq(7)', row).html(data.thread);
+                        $('td:eq(7)', row).addClass('bg-'+ data.color +' text-left');
+                    }
                     if(data.whatsapp_stato == 1){
                         $('td:eq(8)', row).addClass('bg-whatsapp');
                     } else if(data.whatsapp_stato == 2) {
                         $('td:eq(8)', row).addClass('bg-whatsapp-2');
+                    } else if(data.whatsapp_stato == 3) {
+                        $('td:eq(8)', row).addClass('bg-whatsapp-3');
+                    } else if(data.whatsapp_stato == 0) {
+                        $('td:eq(8)', row).addClass('bg-whatsapp-0');
                     }
                 },
 

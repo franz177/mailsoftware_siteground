@@ -37,7 +37,7 @@ class StoricoController extends Controller
         $sites_kross = $this->getSitesKross();
 
         if ($request->ajax()){
-            $data = Typo::select(['tt_content.uid', 'tt_content.tx_mask_p_data_arrivo', 'tt_content.tx_mask_p_data_partenza', 'tt_content.tx_mask_p_data_prenotazione', 'tx_mask_cod_reservation_status as stato',
+            $data = Typo::select(['tt_content.uid', 'tt_content.tx_mask_p_data_arrivo', 'tt_content.tx_mask_p_data_partenza', 'tt_content.tx_mask_p_data_prenotazione', 'tx_mask_cod_reservation_status as stato', 'tt_content.tx_mask_t0_tel',
                 Typo::raw('IF(tt_content.tx_mask_p_tot_ospiti = "", "0",tx_mask_p_tot_ospiti) as tx_mask_p_tot_ospiti'),
                 Typo::raw('(CASE WHEN tx_mask_t0_country IS NULL THEN "NaN" WHEN tx_mask_t0_country = "" THEN "NaN" ELSE tx_mask_t0_country END) as tx_mask_t0_country'),
                 Typo::raw('LCASE(tt_content.header) as headerl'),
@@ -54,7 +54,7 @@ class StoricoController extends Controller
 
             return Datatables::of($data)
                 ->addColumn('uid', function ($row) {
-                    $uid = '<a href="#" data-toggle="tooltip"  data-id="' . $row->uid . '" data-original-title="Edit" class="text-white font-weight-bolder text-hover-primary mb-1 font-size-lg">' . $row->uid . '</a>';
+                    $uid = '<a href="threads/create/'.$row->uid.'" data-toggle="tooltip"  data-id="' . $row->uid . '" data-original-title="uid" class="font-weight-bolder text-hover-primary mb-1 font-size-lg">' . $row->uid . '</a>';
 
                     return $uid;
                 })
@@ -71,7 +71,8 @@ class StoricoController extends Controller
                                 <br>
                                 <i class="icon-m text-dark-75 far fa-calendar-check"></i> '.$row->tx_mask_p_data_prenotazione.'
                                 <i class="icon-m text-dark-75 fas fa-globe-europe"></i> ('.$country.')
-                                <i class="icon-m text-dark-75 fas fa-users"></i> ('.$row->tx_mask_p_tot_ospiti.')';
+                                <i class="icon-m text-dark-75 fas fa-users"></i> ('.$row->tx_mask_p_tot_ospiti.') <br>
+                                <i class="icon-m text-dark-75 fas fa-phone-alt mt-3"></i> '.$row->tx_mask_t0_tel;
 
                     return $header;
                 })

@@ -53,7 +53,7 @@ class PrenotazioniController extends Controller
         }
 
         if ($request->ajax()){
-            $data = Typo::select(['tt_content.uid', 'tt_content.tx_mask_p_tot_ospiti', 'tt_content.tx_mask_p_data_arrivo', 'tt_content.tx_mask_p_data_partenza', 'tt_content.tx_mask_p_data_prenotazione', 'tt_content.tx_mask_t1_op_chechin',
+            $data = Typo::select(['tt_content.uid', 'tt_content.tx_mask_p_tot_ospiti', 'tt_content.tx_mask_p_data_arrivo', 'tt_content.tx_mask_p_data_partenza', 'tt_content.tx_mask_p_data_prenotazione', 'tt_content.tx_mask_t1_op_chechin', 'tt_content.tx_mask_t0_tel',
                 Typo::raw('IFNULL(tx_mask_t0_country, "NaN") tx_mask_t0_country'),
                 Typo::raw('LCASE(tt_content.header) as headerl'),
                 Typo::raw('tt_content.tx_mask_t5_kross_cod_channel as sito'),
@@ -70,7 +70,7 @@ class PrenotazioniController extends Controller
 
             return Datatables::of($data)
                 ->addColumn('uid', function ($row) {
-                    $uid = '<a href="threads/create/'.$row->uid.'" data-toggle="tooltip"  data-id="' . $row->uid . '" data-original-title="Edit" class="text-white font-weight-bolder text-hover-primary mb-1 font-size-lg editZtl">' . $row->uid . '</a>';
+                    $uid = '<a href="threads/create/'.$row->uid.'" data-toggle="tooltip"  data-id="' . $row->uid . '" data-original-title="uid" class="font-weight-bolder text-hover-primary mb-1 font-size-lg">' . $row->uid . '</a>';
 
                     return $uid;
                 })
@@ -87,7 +87,8 @@ class PrenotazioniController extends Controller
                                 <br>
                                 <i class="icon-m text-dark-75 far fa-calendar-check"></i> '.$row->tx_mask_p_data_prenotazione.'
                                 <i class="icon-m text-dark-75 fas fa-globe-europe"></i> ('.$country.')
-                                <i class="icon-m text-dark-75 fas fa-users"></i> ('.$row->tx_mask_p_tot_ospiti.')';
+                                <i class="icon-m text-dark-75 fas fa-users"></i> ('.$row->tx_mask_p_tot_ospiti.') <br>
+                                <i class="icon-m text-dark-75 fas fa-phone-alt mt-3"></i> '.$row->tx_mask_t0_tel;
 
                     return $header;
                 })
@@ -179,7 +180,7 @@ class PrenotazioniController extends Controller
             if(!$in_db_whatsapp){
                 Whatsapp::create([
                     'uid' => $p->uid,
-                    'stato' => 0,
+                    'stato' => -1,
                 ]);
             }
             // Inserisco a DB il Thread First Contact Prenotazione Immediata per le prenotazioni con canale BK nella tabella THREADS per le nuove prenotazioni arrivate

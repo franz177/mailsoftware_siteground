@@ -80,7 +80,9 @@ class Typo extends Model
         47  => ['MAIL'  , ' text-center font-weight-bolder'],
         60  => ['TA'    , ' text-center font-weight-bolder'],
         580 => ['AB'    , ' text-center font-weight-bolder'],
-        607 => ['BK 15%', ' text-center font-weight-bolder'],
+        607 => ['BK', ' text-center font-weight-bolder'],
+        1342 => ['AB', ' text-center font-weight-bolder'],
+        1398 => ['ST', ' text-center font-weight-bolder'],
 
     ];
 

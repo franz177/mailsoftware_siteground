@@ -53,7 +53,7 @@ class PrenotazioniController extends Controller
         }
 
         if ($request->ajax()){
-            $data = Typo::select(['tt_content.uid', 'tt_content.tx_mask_p_tot_ospiti', 'tt_content.tx_mask_p_data_arrivo', 'tt_content.tx_mask_p_data_partenza', 'tt_content.tx_mask_p_data_prenotazione', 'tt_content.tx_mask_t1_op_chechin', 'tt_content.tx_mask_t0_tel',
+            $data = Typo::select(['tt_content.uid', 'tt_content.tx_mask_p_tot_ospiti', 'tt_content.tx_mask_p_data_arrivo', 'tt_content.tx_mask_p_data_partenza', 'tt_content.tx_mask_p_data_prenotazione', 'tt_content.tx_mask_t1_op_chechin', 'tt_content.tx_mask_t0_tel', 'tt_content.tx_mask_t0_email',
                 Typo::raw('IFNULL(tx_mask_t0_country, "NaN") tx_mask_t0_country'),
                 Typo::raw('LCASE(tt_content.header) as headerl'),
                 Typo::raw('tt_content.tx_mask_t5_kross_cod_channel as sito'),
@@ -88,7 +88,8 @@ class PrenotazioniController extends Controller
                                 <i class="icon-m text-dark-75 far fa-calendar-check"></i> '.$row->tx_mask_p_data_prenotazione.'
                                 <i class="icon-m text-dark-75 fas fa-globe-europe"></i> ('.$country.')
                                 <i class="icon-m text-dark-75 fas fa-users"></i> ('.$row->tx_mask_p_tot_ospiti.') <br>
-                                <i class="icon-m text-dark-75 fas fa-phone-alt mt-3"></i> '.$row->tx_mask_t0_tel;
+                                <i class="icon-m text-dark-75 fas fa-phone-alt mt-3"></i> '.$row->tx_mask_t0_tel .'<br>
+                                <i class="icon-m text-dark-75 fas fa-envelope mt-3"></i> '.$row->tx_mask_t0_email;
 
                     return $header;
                 })

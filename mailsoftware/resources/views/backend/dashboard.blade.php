@@ -112,9 +112,10 @@
                                         <td class="pl-0 py-8">
                                             <div class="d-flex align-items-center">
                                                 {{-- Symbol --}}
-                                                <div class="symbol symbol-40 symbol-{{$colori_siti[$sito_kross->uid][1]}} mr-5">
+                                                <div class="symbol symbol-40 symbol-{{ array_key_exists($sito_kross->uid, $colori_siti) ? $colori_siti[$sito_kross->uid][1] : '' }}
+                                                    mr-5">
                                                     <span class="symbol-label">
-                                                        {{$colori_siti[$sito_kross->uid][0]}}
+                                                        {{ array_key_exists($sito_kross->uid, $colori_siti) ? $colori_siti[$sito_kross->uid][0] : $sito_kross->header }}
                                                     </span>
                                                 </div>
                                                 <div>

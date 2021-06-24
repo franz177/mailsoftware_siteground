@@ -427,7 +427,7 @@
                                 op+='<option value="'+types[i].type.id+'">'+types[i].type.name+'</option>';
                             }
 
-                            $('#type_id').html(op)
+                            $('#type_id').append(op)
                             $('#type_id').prop("disabled", false);
                         },
                         error:function (data){

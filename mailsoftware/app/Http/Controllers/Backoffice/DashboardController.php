@@ -37,7 +37,7 @@ class DashboardController extends Controller
             ->where('deleted', '=', 0)
             ->orderBy('stato')->get();
 
-        $siti_kross = Typo::select('uid', 'header', 'tx_mask_siti_kross_cod_channel as sito', 'tx_mask_siti_perc as percentuale')
+        $siti_kross = Typo::select(['uid', 'header',  Typo::raw('IFNULL(tx_mask_siti_kross_cod_channel,header) sito'), 'tx_mask_siti_perc as percentuale'])
             ->where('CType', $typo_s->CType)
             ->where('hidden', '=', 0)
             ->where('deleted', '=', 0)

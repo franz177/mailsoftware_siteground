@@ -3,6 +3,7 @@ namespace App\Classes\Theme;
 
 use App\Classes\Theme\Metronic;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 class Menu
 {
@@ -319,7 +320,9 @@ class Menu
                 }
 
                 // Badge
-                echo '<span class="menu-text">' . $item['title'] . '</span>';
+                if ($item['auth'] == 99 || $item['auth'] == Auth::user()->id)
+                    echo '<span class="menu-text">' . $item['title'] . '</span>';
+
                 if (isset($item['label'])) {
                     echo '<span class="menu-badge"><span class="label ' . $item['label']['type'] . '">' . $item['label']['value'] . '</span></span>';
                 }

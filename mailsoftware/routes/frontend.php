@@ -17,6 +17,9 @@ Route::get('/', [App\Http\Controllers\Typo\PrenotazioniController::class, 'index
 Route::resource('/prenotazioni', \App\Http\Controllers\Typo\PrenotazioniController::class);
 Route::resource('/storico', \App\Http\Controllers\Typo\StoricoController::class);
 
+Route::get('/viste/dashboard', [\App\Http\Controllers\Frontend\Views\DashboardController::class, 'index']);
+Route::get('/viste/mensile', [\App\Http\Controllers\Frontend\Views\MensileController::class, 'index']);
+
 Route::get('/threads/create/{pren_uid?}', [App\Http\Controllers\Frontend\ThreadController::class, 'create']);
 Route::get('/threads/get_text', [\App\Http\Controllers\Frontend\ThreadController::class, 'get_text' ])->name('threads.get_text');
 Route::get('/threads/thread_exist', [\App\Http\Controllers\Frontend\ThreadController::class, 'thread_exist' ])->name('threads.thread_exist');

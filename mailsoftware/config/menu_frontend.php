@@ -9,12 +9,37 @@ return [
             'root' => true,
             'page' => '/',
             'new-tab' => false,
+            'auth' => 99,
         ],
         [
             'title' => 'Storico',
             'root' => true,
             'page' => '/storico',
             'new-tab' => false,
+            'auth' => 2,
+        ],
+        [
+            'title' => 'Viste',
+            'root' => true,
+            'page' => '',
+            'new-tab' => false,
+            'auth' => 2,
+            'submenu' => [
+                [
+                    'title' => 'Dashboard',
+                    'bullet' => 'dot',
+                    'page' => '/viste/dashboard',
+                    'auth' => 2,
+                    'new-tab' => false,
+                ],
+                [
+                    'title' => 'Mensile',
+                    'bullet' => 'dot',
+                    'page' => '/viste/mensile',
+                    'auth' => 2,
+                    'new-tab' => false,
+                ],
+            ]
         ],
 
         /*[

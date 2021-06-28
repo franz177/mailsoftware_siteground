@@ -131,7 +131,6 @@
             var op_checkin = {!! $op_checkin !!};
 
             var table = $('#sample_20');
-            let wa_friendly;
 
             var oTable =table.DataTable({
                 // Internationalisation. For more info refer to http://datatables.net/manual/i18n
@@ -210,11 +209,22 @@
                 ],
 
                 rowCallback: function(row, data, index) {
-                    if(data.whatsapp_stato == -1){
-                        wa_friendly = ' (Mail)';
-                    } else {
-                        wa_friendly = '';
+                    let wa_friendly = ' (0)';
+
+                    if(data.whatsapp_stato == 1){
+                        $('td:eq(8)', row).addClass('bg-whatsapp');
+                        wa_friendly = ' (DOC)';
+                    } else if(data.whatsapp_stato == 2) {
+                        $('td:eq(8)', row).addClass('bg-whatsapp-2');
+                        wa_friendly = ' (IN)';
+                    } else if(data.whatsapp_stato == 3) {
+                        $('td:eq(8)', row).addClass('bg-whatsapp-3');
+                        wa_friendly = ' (OUT)';
+                    } else if(data.whatsapp_stato == 0) {
+                        $('td:eq(8)', row).addClass('bg-whatsapp-0');
+                        wa_friendly = ' (MAIL)';
                     }
+
                     $('td:eq(0)', row).addClass('bg-'+houses_color[data.casa]);
                     // $('td:eq(2)', row).addClass('bg-'+houses_color[data.casa]);
                     $('td:eq(3)', row).addClass('alert-warning text-left');
@@ -239,15 +249,7 @@
                         $('td:eq(7)', row).html(data.thread);
                         $('td:eq(7)', row).addClass('bg-'+ data.color +' text-left');
                     }
-                    if(data.whatsapp_stato == 1){
-                        $('td:eq(8)', row).addClass('bg-whatsapp');
-                    } else if(data.whatsapp_stato == 2) {
-                        $('td:eq(8)', row).addClass('bg-whatsapp-2');
-                    } else if(data.whatsapp_stato == 3) {
-                        $('td:eq(8)', row).addClass('bg-whatsapp-3');
-                    } else if(data.whatsapp_stato == 0) {
-                        $('td:eq(8)', row).addClass('bg-whatsapp-0');
-                    }
+
                 },
 
                 // setup buttons extentension: http://datatables.net/extensions/buttons/

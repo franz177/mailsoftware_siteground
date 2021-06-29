@@ -16,27 +16,27 @@ return [
             'root' => true,
             'page' => '/storico',
             'new-tab' => false,
-            'auth' => 2,
+            'auth' => 1,
         ],
         [
             'title' => 'Viste',
             'root' => true,
             'page' => '',
             'new-tab' => false,
-            'auth' => 2,
+            'auth' => 1,
             'submenu' => [
                 [
                     'title' => 'Dashboard',
                     'bullet' => 'dot',
                     'page' => '/viste/dashboard',
-                    'auth' => 2,
+                    'auth' => 1,
                     'new-tab' => false,
                 ],
                 [
                     'title' => 'Mensile',
                     'bullet' => 'dot',
                     'page' => '/viste/mensile',
-                    'auth' => 2,
+                    'auth' => 1,
                     'new-tab' => false,
                 ],
             ]

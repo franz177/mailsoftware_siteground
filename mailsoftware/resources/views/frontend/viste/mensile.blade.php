@@ -52,6 +52,8 @@
                                     <th class="none">Note</th>
                                     <th class="all">CityTax</th>
                                     <th class="all">Op. Check Out</th>
+                                    <th class="all">Cash Oper CO</th>
+                                    <th class="all">Cash Simo CO</th>
                                 </tr>
                                 </thead>
 
@@ -156,6 +158,8 @@
                             return operatore;
                         },
                     },
+                    {data: 'cash_operatore_co'},
+                    {data: 'cash_simo_co'},
 
                 ],
 
@@ -182,7 +186,7 @@
                     }
                 },
                 columnDefs: [
-                    { className: 'control', targets:   0, width: '5%' }, //plus
+                    { className: 'control', targets:   0, width: '3%' }, //plus
                     { width: '5%', targets: 1}, //house
                     { width: '5%', targets: 2}, //sito
                     { width: '20%', targets: 3}, //nominativo

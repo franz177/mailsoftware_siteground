@@ -44,7 +44,8 @@ class MensileController extends Controller
             Typo::raw('LCASE(tt_content.header) as headerl'),
             Typo::raw('IFNULL(tt_content.tx_mask_p_casa,0) casa'),
             Typo::raw('tt_content.tx_mask_t5_kross_cod_channel as sito'),
-            'tt_content.tx_mask_p_data_arrivo', 'tt_content.tx_mask_p_data_partenza', 'tt_content.tx_mask_t1_op_note', 'tx_mask_t3_p_city_tax_amount as city_tax', 'tx_mask_t1_op_checkout'
+            'tt_content.tx_mask_p_data_arrivo', 'tt_content.tx_mask_p_data_partenza', 'tt_content.tx_mask_t1_op_note', 'tx_mask_t3_p_city_tax_amount as city_tax', 'tx_mask_t1_op_checkout',
+            'tx_mask_t3_p_cash_op_cout as cash_operatore_co','tx_mask_t3_p_cash_simo as cash_simo_co'
         ])
             ->where('tt_content.CType', 'mask_db_alg_pren')
             ->where('tt_content.hidden', '=', 0)
@@ -60,12 +61,19 @@ class MensileController extends Controller
 
         return Datatables::of($data)
             ->addColumn('header', function ($row) {
-                return '<a href="#" data-toggle="tooltip"  class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg text-capitalize text-left">' . $row->headerl . '</a>';
+                $headerl = preg_replace('/(\([a-zA-Z0-9\s]+\)\s?)/', '', $row->headerl);
+                return '<a href="#" data-toggle="tooltip"  class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg text-capitalize text-left">' . $headerl . '</a>';
             })
             ->addColumn('city_tax', function ($row) {
                 return number_format($row->city_tax, 2, ',', '.') . ' €';
             })
-            ->rawColumns(['header', 'city_tax'])
+            ->addColumn('cash_operatore_co', function ($row) {
+                return number_format($row->cash_operatore_co, 2, ',', '.') . ' €';
+            })
+            ->addColumn('cash_simo_co', function ($row) {
+                return number_format($row->cash_simo_co, 2, ',', '.') . ' €';
+            })
+            ->rawColumns(['header', 'city_tax','cash_operatore_co', 'cash_simo_co'])
             ->make(true);
     }
 

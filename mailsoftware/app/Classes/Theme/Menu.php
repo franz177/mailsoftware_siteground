@@ -320,7 +320,7 @@ class Menu
                 }
 
                 // Badge
-                if ($item['auth'] == 99 || $item['auth'] == Auth::user()->id)
+                if ($item['auth'] == 99 || $item['auth'] == Auth::user()->role)
                     echo '<span class="menu-text">' . $item['title'] . '</span>';
 
                 if (isset($item['label'])) {

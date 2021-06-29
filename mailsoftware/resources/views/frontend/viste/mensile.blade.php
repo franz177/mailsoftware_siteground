@@ -189,7 +189,7 @@
                     { className: 'control', targets:   0, width: '3%' }, //plus
                     { width: '5%', targets: 1}, //house
                     { width: '5%', targets: 2}, //sito
-                    { width: '20%', targets: 3}, //nominativo
+                    { width: '5%', targets: 3}, //nominativo
                     { width: '10%', targets: 4}, //data-arrivo
                     { width: '10%', targets: 5}, //data-partenza
                     { width: '15%', targets: 6}, //note

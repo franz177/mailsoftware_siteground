@@ -283,6 +283,8 @@ class ThreadController extends Controller
 
         foreach ($pren_key as $key => $value){
             $value_to_search_pren = '*pren*'.$value.'*';
+            if($key == 'header')
+                $pren->header = preg_replace('/(\([a-zA-Z0-9\s]+\)\s?)/', '', $pren->header);
 
             if(Str::contains($testo, $value_to_search_pren)){
                 $testo = str_replace($value_to_search_pren, $pren[$value] , $testo);

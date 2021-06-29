@@ -24,7 +24,7 @@
                                 <!--begin::Item-->
                                 <tr>
                                     <td class="font-weight-bold text-muted  align-middle pb-6">Cliente: </td>
-                                    <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ $pren->header }}</td>
+                                    <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ $pren->header = preg_replace('/(\([a-zA-Z0-9\s]+\)\s?)/', '', $pren->header) }}</td>
                                 </tr>
                                 <tr>
                                     <td class="font-weight-bold text-muted  align-middle pb-6">Nazionalità: </td>

@@ -19,6 +19,7 @@ Route::resource('/storico', \App\Http\Controllers\Typo\StoricoController::class)
 
 Route::get('/viste/dashboard', [\App\Http\Controllers\Frontend\Views\DashboardController::class, 'index']);
 Route::get('/viste/mensile', [\App\Http\Controllers\Frontend\Views\MensileController::class, 'index']);
+Route::get('/viste/mensile/data', [\App\Http\Controllers\Frontend\Views\MensileController::class, 'getDataTable'])->name('viste.data');
 
 Route::get('/threads/create/{pren_uid?}', [App\Http\Controllers\Frontend\ThreadController::class, 'create']);
 Route::get('/threads/get_text', [\App\Http\Controllers\Frontend\ThreadController::class, 'get_text' ])->name('threads.get_text');

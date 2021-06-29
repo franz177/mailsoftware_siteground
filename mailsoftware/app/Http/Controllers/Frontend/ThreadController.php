@@ -254,10 +254,10 @@ class ThreadController extends Controller
             $debit = $city_tax->debit/100;
             if($giorni >= $city_tax->notti_max){
                 $totale_tassa = $city_tax->notti_max * $debit;
-                $totale_tassa = $totale_tassa * $pren->tx_mask_p_tot_ospiti;
+                $totale_tassa = $totale_tassa * ($pren->tx_mask_p_tot_ospiti - $pren->tx_mask_p_under_12);
             } else {
                 $totale_tassa = $giorni * $debit;
-                $totale_tassa = $totale_tassa * $pren->tx_mask_p_tot_ospiti;
+                $totale_tassa = $totale_tassa * ($pren->tx_mask_p_tot_ospiti - $pren->tx_mask_p_under_12);
             }
             $testo = Str::replaceFirst('*totaleTassa*', number_format($totale_tassa,2) , $testo);
         }

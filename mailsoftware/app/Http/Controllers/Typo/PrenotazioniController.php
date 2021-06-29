@@ -82,8 +82,9 @@ class PrenotazioniController extends Controller
                         $country = $row->tx_mask_t0_country;
                     }
 
+                    $headerl = preg_replace('/(\([a-zA-Z0-9\s]+\)\s?)/', '', $row->headerl);
 
-                    $header = '<a href="threads/create/'.$row->uid.'" data-toggle="tooltip"  data-id="' . $row->uid . '" data-original-title="Edit" class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg text-capitalize text-left">' . $row->headerl . '</a>
+                    $header = '<a href="threads/create/'.$row->uid.'" data-toggle="tooltip"  data-id="' . $row->uid . '" data-original-title="Edit" class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg text-capitalize text-left">' . $headerl . '</a>
                                 <br>
                                 <i class="icon-m text-dark-75 far fa-calendar-check"></i> '.$row->tx_mask_p_data_prenotazione.'
                                 <i class="icon-m text-dark-75 fas fa-globe-europe"></i> ('.$country.')

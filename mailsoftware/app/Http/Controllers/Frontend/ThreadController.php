@@ -107,12 +107,18 @@ class ThreadController extends Controller
         }
 
 //        CONTATTO DI RIFERIMENTO
-        $contatto_riferimento = TypoUser::select(['first_name', 'last_name'])
-            ->where('uid', '=', $pren->tx_mask_contatto_riferimento)
-            ->first();
+        if($pren->tx_mask_contatto_riferimento > 0){
+            $contatto_riferimento = TypoUser::select(['first_name', 'last_name'])
+                ->where('uid', '=', $pren->tx_mask_contatto_riferimento)
+                ->first();
+            $gestore_cliente = $contatto_riferimento->first_name . ' ' . $contatto_riferimento->last_name;
+        } else {
+            $gestore_cliente = 'No Gestore Selezionato';
+        }
 
-        $gestore = $house_typo->tx_mask_t1_casa_gestore;
-        $gestore_cliente = $contatto_riferimento->first_name . ' ' . $contatto_riferimento->last_name;
+
+        $gestore = $house_typo->tx_mask_t1_casa_gestore != NULL ? $house_typo->tx_mask_t1_casa_gestore : '';
+
 
         return view('frontend.threads.create')
             ->with(compact('pren'))

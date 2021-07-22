@@ -37,7 +37,7 @@ class StoricoController extends Controller
         $sites_kross = $this->getSitesKross();
 
         if ($request->ajax()){
-            $data = Typo::select(['tt_content.uid', 'tt_content.tx_mask_p_data_arrivo', 'tt_content.tx_mask_p_data_partenza', 'tt_content.tx_mask_p_data_prenotazione', 'tx_mask_cod_reservation_status as stato', 'tt_content.tx_mask_t0_tel',
+            $data = Typo::select(['tt_content.uid', 'tt_content.tx_mask_p_data_arrivo', 'tt_content.tx_mask_p_data_partenza', 'tt_content.tx_mask_p_data_prenotazione', 'tx_mask_cod_reservation_status', 'tt_content.tx_mask_t0_tel',
                 Typo::raw('IF(tt_content.tx_mask_p_tot_ospiti = "", "0",tx_mask_p_tot_ospiti) as tx_mask_p_tot_ospiti'),
                 Typo::raw('(CASE WHEN tx_mask_t0_country IS NULL THEN "NaN" WHEN tx_mask_t0_country = "" THEN "NaN" ELSE tx_mask_t0_country END) as tx_mask_t0_country'),
                 Typo::raw('LCASE(tt_content.header) as headerl'),
@@ -50,7 +50,6 @@ class StoricoController extends Controller
                 ->where('tt_content.tx_mask_p_data_partenza', '<', $today)
                 ->orderBy('tt_content.tx_mask_p_data_arrivo', 'DESC')
                 ->get();
-
 
             return Datatables::of($data)
                 ->addColumn('uid', function ($row) {
@@ -96,6 +95,14 @@ class StoricoController extends Controller
 
                     return $threads->flow->typeanswer->color->colore_bg;
                 })
+                ->addColumn('stato', function ($row) {
+                    $stato = '';
+                    if(!empty($row->tx_mask_cod_reservation_status)) {
+                        $stato = $row->tx_mask_cod_reservation_status;
+                    }
+
+                    return $stato;
+                })
                 ->addColumn('whatsapp_stato', function ($row) {
                     $whatsapp_status = Whatsapp::find($row->uid);
 
@@ -137,7 +144,7 @@ class StoricoController extends Controller
                         return $threads;
                     }
                 })
-                ->rawColumns(['uid', 'header', 'thread', 'color', 'whatsapp_id', 'whatsapp_stato', 'threads'])
+                ->rawColumns(['uid', 'header', 'thread', 'color', 'whatsapp_id', 'whatsapp_stato', 'threads', 'stato'])
                 ->make(true);
         }
 

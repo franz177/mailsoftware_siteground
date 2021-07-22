@@ -27,6 +27,7 @@ Route::resource('/', \App\Http\Controllers\Backoffice\DashboardController::class
 //ROUTES HOUSES, OPERATORS AND SETTINGS
 Route::resource('/casa', \App\Http\Controllers\Backoffice\HouseController::class);
 Route::resource('/operatore', \App\Http\Controllers\Backoffice\OperatorController::class);
+Route::resource('/users', \App\Http\Controllers\Backoffice\UserController::class);
 Route::resource('/camera', \App\Http\Controllers\Backoffice\RoomController::class);
 Route::resource('/banca', \App\Http\Controllers\Backoffice\BankController::class);
 Route::resource('/ztl', \App\Http\Controllers\Backoffice\ZtlController::class);

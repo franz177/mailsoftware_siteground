@@ -42,6 +42,7 @@ class PrenotazioniController extends Controller
         $op_checkin = $this->getUsersArray();
 
         $sites_kross = $this->getSitesKross();
+        $sites = $this->getSitesArray();
 
         $user = Auth::user();
         if($user->role != 1){
@@ -56,13 +57,13 @@ class PrenotazioniController extends Controller
             $data = Typo::select(['tt_content.uid', 'tt_content.tx_mask_p_tot_ospiti', 'tt_content.tx_mask_p_data_arrivo', 'tt_content.tx_mask_p_data_partenza', 'tt_content.tx_mask_p_data_prenotazione', 'tt_content.tx_mask_t1_op_chechin', 'tt_content.tx_mask_t0_tel', 'tt_content.tx_mask_t0_email',
                 Typo::raw('IFNULL(tx_mask_t0_country, "NaN") tx_mask_t0_country'),
                 Typo::raw('LCASE(tt_content.header) as headerl'),
-                Typo::raw('tt_content.tx_mask_t5_kross_cod_channel as sito'),
+                Typo::raw('IFNULL(tt_content.tx_mask_p_sito, tt_content.tx_mask_t5_kross_cod_channel) tx_mask_p_sito'),
                 Typo::raw('IF(tt_content.tx_mask_doc_inviati = 0, "Attesa", "INVIATI") as documenti'),
                 Typo::raw('IFNULL(tt_content.tx_mask_p_casa,0) casa')])
                 ->where('tt_content.CType', $this->CType)
                 ->where('tt_content.hidden', '=', 0)
                 ->where('tt_content.deleted', '=', 0)
-                ->where('tt_content.tx_mask_p_data_partenza', '>=', $today)
+                ->where('tt_content.tx_mask_p_data_partenza', '>', $today)
                 ->where('tt_content.tx_mask_cod_reservation_status', '!=', "CANC")
                 ->whereIn('tt_content.tx_mask_p_casa', $hs)
                 ->orderBy('tt_content.tx_mask_p_data_arrivo', 'ASC')
@@ -114,6 +115,22 @@ class PrenotazioniController extends Controller
 
                     return $threads->flow->typeanswer->color->colore_bg;
                 })
+                ->addColumn('data_arrivo', function ($row){
+                    $data_arrivo = array();
+                    $data_arrivo["display"] = $row->tx_mask_p_data_arrivo;
+                    $data_arrivo["timestamp"] = strtotime($row->tx_mask_p_data_arrivo);
+
+                    return $data_arrivo;
+
+                })
+                ->addColumn('data_partenza', function ($row){
+                    $data_partenza = array();
+                    $data_partenza["display"] = $row->tx_mask_p_data_partenza;
+                    $data_partenza["timestamp"] = strtotime($row->tx_mask_p_data_partenza);
+
+                    return $data_partenza;
+
+                })
                 ->addColumn('whatsapp_stato', function ($row) {
                     $whatsapp_status = Whatsapp::find($row->uid);
 
@@ -155,7 +172,7 @@ class PrenotazioniController extends Controller
                         return $threads;
                     }
                 })
-                ->rawColumns(['uid', 'header', 'thread', 'color', 'whatsapp_id', 'whatsapp_stato', 'threads'])
+                ->rawColumns(['uid', 'header', 'thread', 'color', 'whatsapp_id', 'whatsapp_stato', 'threads', 'data_arrivo', 'data_partenza'])
                 ->make(true);
         }
 
@@ -224,6 +241,7 @@ class PrenotazioniController extends Controller
             ->with(compact('houses_typo'))
             ->with(compact('houses_gestore'))
             ->with(compact('sites_kross'))
+            ->with(compact('sites'))
             ->with(compact('op_checkin'));
     }
 

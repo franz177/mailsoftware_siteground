@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller
 {
     public $year_to_search = array();
+    public $house_to_search = array();
 
     public function dashboard(Request $request)
     {
@@ -20,13 +21,22 @@ class DashboardController extends Controller
 
         $year_to_search = $this->year_to_search;
 
-        $reservations = $this->reservationsDonutDb($year_to_search);
-        $countries = $this->countriesRadial($year_to_search);
+        if($request->house_from){
+            $this->house_to_search[] = $request->house_from;
+            if($request->house_to)
+                $this->house_to_search[] = $request->house_to;
+        }
+
+        $house_to_search = $this->house_to_search;
+        $houses = $this->getHousesAbbArray();
+
+        $reservations = $this->reservationsDonutDb($year_to_search, $house_to_search);
+        $countries = $this->countriesRadial($year_to_search, $house_to_search);
 
         $labels = Array();
 //        $series = $reservations->pluck('total');
         foreach ($reservations as $reservation) {
-            $labels[] = (string)$reservation["year"];
+            $labels[] = $reservation["year"] . ' - ' . $houses[$reservation['house']];
         }
 
         $dataReservations = array();
@@ -40,9 +50,9 @@ class DashboardController extends Controller
         return response()->json(compact('dataReservations', 'dataCountries'));
     }
 
-    public function reservationsDonutDb($year_to_search = NULL)
+    public function reservationsDonutDb($year_to_search = NULL, $house_to_search = NULL)
     {
-        return Typo::select([Typo::raw('count(YEAR(tx_mask_p_data_prenotazione)) as total'), Typo::raw('YEAR(tx_mask_p_data_prenotazione) as year')])
+        return Typo::select([Typo::raw('count(YEAR(tx_mask_p_data_prenotazione)) as total'), Typo::raw('YEAR(tx_mask_p_data_prenotazione) as year'), 'tx_mask_p_casa as house'])
             ->where('CType', '=', 'mask_db_alg_pren')
             ->where('tt_content.hidden', '=', 0)
             ->where('tt_content.deleted', '=', 0)
@@ -52,12 +62,17 @@ class DashboardController extends Controller
                     return $q->whereIn(Typo::raw('YEAR(tx_mask_p_data_prenotazione)'), $year_to_search);
                 },
             )
-            ->groupBy([Typo::raw('YEAR(tx_mask_p_data_prenotazione)')])->get();
+            ->when($house_to_search,
+                function($q, $house_to_search){
+                    return $q->whereIn('tx_mask_p_casa', $house_to_search);
+                },
+            )
+            ->groupBy([Typo::raw('YEAR(tx_mask_p_data_prenotazione)'), 'house'])->get();
     }
 
-    public function countriesRadial($year_to_search = NULL)
+    public function countriesRadial($year_to_search = NULL, $house_to_search = NULL)
     {
-        return Typo::select([Typo::raw('count(tt_content.tx_mask_t0_country) as total'), 'static_countries.cn_short_it as country'])
+        return Typo::select([Typo::raw('count(tt_content.tx_mask_t0_country) as total'), 'static_countries.cn_short_it as country', 'tt_content.tx_mask_p_casa as house'])
             ->join('static_countries', 'static_countries.uid', '=', 'tt_content.tx_mask_t0_country')
             ->where('CType', '=', 'mask_db_alg_pren')
             ->where('tt_content.hidden', '=', 0)
@@ -66,6 +81,11 @@ class DashboardController extends Controller
             ->when($year_to_search,
                 function($q, $year_to_search){
                     return $q->whereIn(Typo::raw('YEAR(tx_mask_p_data_prenotazione)'), $year_to_search);
+                },
+            )
+            ->when($house_to_search,
+                function($q, $house_to_search){
+                    return $q->whereIn('tx_mask_p_casa', $house_to_search);
                 },
             )
             ->groupBy([Typo::raw('tt_content.tx_mask_t0_country')])->get();

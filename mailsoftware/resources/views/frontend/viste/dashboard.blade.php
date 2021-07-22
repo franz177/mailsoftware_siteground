@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@extends('layouts.template_view')
 
 @section('styles')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
@@ -6,70 +6,6 @@
 @endsection
 
 @section('content')
-    <form action="" method="POST" enctype="multipart/form-data" id="form_flow_text">
-        @csrf
-        <div class="row">
-            <div class="col-12">
-                <div class="card card-custom card-stretch gutter-b">
-                    <div class="card-body">
-                        <div class="tab-content">
-                            <div class="row mb-6">
-                                <div class="col-md-2">
-                                    <div class="mb-2 d-flex flex-column">
-                                        <div class="input-group has-validation">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                    <i class="far fa-calendar-alt"></i>
-                                                </span>
-                                            </div>
-                                            <select class="form-control text-uppercase" name="year_from" id="year_from">
-                                                <option value="" selected> tutti</option>
-                                                @foreach($years as $year)
-                                                    <option value="{{ $year->year }}">{{ $year->year }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="mb-2 d-flex flex-column">
-                                        <div class="input-group has-validation">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                    <i class="far fa-calendar-alt"></i>
-                                                </span>
-                                            </div>
-                                            <select class="form-control text-uppercase" name="year_to" id="year_to" disabled>
-                                                <option value="" selected> Scegli...</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="mb-2 d-flex flex-column">
-                                        <div class="input-group has-validation">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                    <i class="fas fa-home"></i>
-                                                </span>
-                                            </div>
-                                            <select class="form-control text-uppercase" name="year_from" id="year_from">
-                                                <option value="" selected> tutte</option>
-                                                @foreach($years as $year)
-                                                    <option value="{{ $year->year }}">{{ $year->year }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <p id="alert_text"></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
 
     <div class="row ">
         <div class="col-sm-12 col-lg-4">
@@ -126,8 +62,8 @@
             });
 
             let years = {!! $years !!};
-            let year_from;
-            let year_to;
+            let houses = {!! $houses !!};
+            data_search.year_from = {!! now()->year !!};
 
             var optionsDonut = {
                 chart: {
@@ -159,7 +95,7 @@
             var chartDonut = new ApexCharts(document.querySelector("#chartDonut"), optionsDonut);
             chartDonut.render();
 
-            getData(year_from, year_to);
+            getData(data_search.year_from, data_search.year_to, data_search.house_from, data_search.house_to);
 
             var optionsPie = {
                 chart: {
@@ -180,7 +116,7 @@
                                 show: true,
                                 total: {
                                     show: true,
-                                    label: "Totale",
+                                    label: "Totale per Naz.",
                                 }
                             }
                         }
@@ -190,46 +126,76 @@
 
             var chartPie = new ApexCharts(document.querySelector("#chartPie"), optionsPie);
             chartPie.render();
-            let anni;
+            let year_options;
             $(document).on('change', '#year_from', function(){
-                year_from = $(this).val();
+                data_search.year_from = $(this).val();
 
-                getData(year_from, year_to);
+                getData(data_search.year_from, data_search.year_to, data_search.house_from, data_search.house_to);
 
-                if (!year_to)
-                    $.each(years, function(anno, value){
-                        if( year_from && year_from < value.year){
-                            anni += '<option value="'+value.year+'">'+value.year+'</option>';
-                        } else {
-                            $('#year_to').html('<option value="0" selected> Scegli...</option>');
-                        }
-                    });
-                if(anni){
-                    $('#year_to').append(anni);
+                $.each(years, function(year, value){
+                    if( data_search.year_from && data_search.year_from < value.year){
+                        year_options += '<option value="'+value.year+'">'+value.year+'</option>';
+                    } else {
+                        $('#year_to').html('<option value="0" selected> Scegli...</option>');
+                    }
+                });
+                if(year_options){
+                    $('#year_to').append(year_options);
                     $('#year_to').prop("disabled", false);
                 } else {
                     $('#year_to').prop("disabled", true);
                 }
 
-                data_search.year_from = year_from;
-
             });
 
             $(document).on('change', '#year_to', function(){
-                year_to = $(this).val();
-                getData(year_from, year_to);
+                data_search["year_to"] = $(this).val();
+                getData(data_search.year_from, data_search.year_to, data_search.house_from, data_search.house_to);
+                $('#alert_text').html('<strong>Attenzione</strong>, verranno confrontati l\'anno <strong>'+data_search.year_from+'</strong> e l\'anno <strong>'+data_search.year_to+'</strong>')
+                $('#house_from').prop("disabled", false);
+                year_options = false;
             });
 
-            function getData(year_from, year_to){
+            let house_options;
+            $(document).on('change', '#house_from', function(){
+                data_search.house_from = $(this).val();
+
+                getData(data_search.year_from, data_search.year_to, data_search.house_from, data_search.house_to);
+
+                $.each(houses, function(house, value){
+                    if( data_search.house_from && data_search.house_from < house){
+                        house_options += '<option value="'+house+'">'+value+'</option>';
+                    } else {
+                        $('#house_to').html('<option value="0" selected> Scegli...</option>');
+                    }
+                });
+                if(house_options){
+                    $('#house_to').append(house_options);
+                    $('#house_to').prop("disabled", false);
+                    $('#alert_text').append(' per la casa <strong>'+houses[data_search.house_from]+'</strong>')
+                } else {
+                    $('#house_to').prop("disabled", true);
+                }
+
+            });
+
+            $(document).on('change', '#house_to', function(){
+                data_search["house_to"] = $(this).val();
+                getData(data_search.year_from, data_search.year_to, data_search.house_from, data_search.house_to);
+                $('#alert_text').append(' e la casa <strong>'+houses[data_search.house_to]+'</strong>')
+                house_options = false;
+            });
+
+            function getData(year_from, year_to, house_from, house_to){
                 $.ajax({
                     url: "{{ route('api.dashboard') }}",
-                    data: {year_from:year_from, year_to:year_to},
+                    data: {year_from:year_from, year_to:year_to, house_from:house_from, house_to:house_to},
                     type:"GET",
                     dataType: 'json',
                     async: true,
                     cache: false,
                     success: function(data) {
-                        // console.log(data);
+                        console.log(data);
                         chartDonut.updateOptions({
                             labels: data.dataReservations.labels,
                             animate: true,
@@ -259,10 +225,7 @@
 
 
 
-        $(document).on('change', '#year_to', function(){
-            data_search["year_to"] = $(this).val();
-            $('#alert_text').html('<strong>Attenzione</strong>, verranno confrontati l\'anno <strong>'+data_search.year_from+'</strong> e l\'anno <strong>'+data_search.year_to+'</strong>')
-        });
+
 
     </script>
 @endsection

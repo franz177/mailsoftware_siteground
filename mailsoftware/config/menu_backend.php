@@ -112,6 +112,13 @@ return [
             'root' => true,
             'page' => '/backend/operatore',
         ],
+        [
+            'title' => 'Elenco Account',
+            'icon' => 'media/svg/icons/General/User.svg',
+            'bullet' => 'line',
+            'root' => true,
+            'page' => '/backend/users',
+        ],
 
         // Varie
         [

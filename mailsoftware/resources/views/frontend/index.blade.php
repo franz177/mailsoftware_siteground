@@ -128,6 +128,7 @@
             var houses_typo = {!! $houses_typo !!};
             var houses_gestore = {!! $houses_gestore !!};
             var sites_kross = {!! $sites_kross !!};
+            var sites = {!! $sites !!};
             var op_checkin = {!! $op_checkin !!};
 
             var table = $('#sample_20');
@@ -170,33 +171,46 @@
                         {
                             var house = houses_typo[data];
                             return house;
-                        }, sortable: false,
+                        }, sortable: true,
                     },
-                    {data: 'sito',
+                    {data: 'tx_mask_p_sito',
                         render: function (data, type, row)
                         {
                             if(data in sites_kross){
                                 var site = sites_kross[data];
+                            } else if(data in sites) {
+                                var site = sites[data];
                             } else {
                                 var site = data;
                             }
 
                             return site;
-                        }, className:'text-center', sortable: false,
+                        }, className:'text-center', sortable: true,
                     },
                     {data: 'uid', sortable: false},
-                    {data: 'header', className: 'text-capitalize'},
-                    {data: 'tx_mask_p_data_arrivo'},
-                    {data: 'tx_mask_p_data_partenza'},
+                    {data: 'header'},
+                    { data: {
+                            _:    "data_arrivo.display",
+                            sort: "data_arrivo.timestamp"
+                        },
+                        name:'data_arrivo.timestamp'
+                    },
+                    { data: {
+                            _:    "data_partenza.display",
+                            sort: "data_partenza.timestamp"
+                        },
+                        name:'data_partenza.timestamp'
+                    },
                     {data: 'documenti'},
                     {data: 'thread', name: 'thread'},
-                    {data: 'whatsapp_stato', className: 'text-center'},
+                    {data: 'whatsapp_stato', className: 'text-center', sortable: false},
                     {data: 'casa',
                         render: function (data, type, row)
                         {
                             var house_gestore = houses_gestore[data];
                             return house_gestore;
                         },
+                        sortable: false
                     },
                     {data: 'tx_mask_t1_op_chechin',
                         render: function (data, type, row)
@@ -204,8 +218,9 @@
                             var operatore = op_checkin[data];
                             return operatore;
                         },
+                        sortable: false
                     },
-                    {data: 'threads', name: 'threads'},
+                    {data: 'threads', name: 'threads', sortable: false},
                 ],
 
                 rowCallback: function(row, data, index) {
@@ -218,6 +233,9 @@
                         $('td:eq(8)', row).addClass('bg-whatsapp-2');
                         wa_friendly = ' (IN)';
                     } else if(data.whatsapp_stato == 3) {
+                        $('td:eq(8)', row).addClass('bg-whatsapp-2');
+                        wa_friendly = ' (HOUSE)';
+                    }else if(data.whatsapp_stato == 4) {
                         $('td:eq(8)', row).addClass('bg-whatsapp-3');
                         wa_friendly = ' (OUT)';
                     } else if(data.whatsapp_stato == 0) {
@@ -232,16 +250,17 @@
                     $('td:eq(5)', row).addClass('alert-danger');
                     $('td:eq(8)', row).html('<i class="icon-2x la text-dark-50 socicon-whatsapp"></i>' +
                         '<br>' +
-                        '<input type="range" class="whatsappRange" min="-1" max="3" data-id="'+data.whatsapp_id+'" value="'+data.whatsapp_stato+'" list="tickmarks">' +
+                        '<input type="range" class="whatsappRange" min="-1" max="4" data-id="'+data.whatsapp_id+'" value="'+data.whatsapp_stato+'" list="tickmarks">' +
                         '<datalist id="tickmarks">' +
                         '<option value="-1" label="-1"></option>'+
                         '<option value="0" label="0"></option>'+
                         '<option value="1" label="1"></option>'+
                         '<option value="2" label="2"></option>'+
-                        '<option value="3" label="3"></option>'+
+                        '<option value="3" label="2.1"></option>'+
+                        '<option value="4" label="3"></option>'+
                         '</datalist>'+
                         '<br>' +
-                        ''+data.whatsapp_stato + wa_friendly
+                        ''+ wa_friendly
                     );
                     if(!data.thread) {
                         $('td:eq(7)', row).html('');

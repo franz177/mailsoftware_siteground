@@ -1,38 +1,47 @@
 <?php
 
-namespace App\Http\Controllers\Frontend\Views;
+namespace App\Http\Controllers\Backoffice;
 
 use App\Http\Controllers\Controller;
-use App\Models\Typo;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
+use App\Models\User;
 
-class DashboardController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $years = $this->getYears();
-        $houses = $this->getHousesAbbArray();
+        $users = User::all();
 
-        return view('frontend.viste.dashboard')
-            ->with(compact('years'))
-            ->with(compact('houses'));
-    }
+        if ($request->ajax()){
+            $data = User::all();
 
-    public function getYears(){
-        return Typo::select(Typo::raw('YEAR(tx_mask_p_data_prenotazione) as year'))
-            ->where('CType', '=', 'mask_db_alg_pren')
-            ->where('tt_content.hidden', '=', 0)
-            ->where('tt_content.deleted', '=', 0)
-            ->whereNotNull('tx_mask_p_data_prenotazione')
-            ->groupBy([Typo::raw('YEAR(tx_mask_p_data_prenotazione)')])
-            ->orderBy('year', 'desc')
-            ->get();
+            return Datatables::of($data)
+                ->addColumn('name', function ($row){
+                    return $row->name . ' ' . $row->lastname;
+                })
+                ->addColumn('role', function ($row){
+
+                })
+                ->addColumn('action', function($row){
+
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="btn btn-link-warning font-weight-bolder font-size-sm editUser">Edit</a>';
+
+                    $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-link-danger font-weight-bolder font-size-sm deleteUser">Delete</a>';
+
+                    return $btn;
+                })
+                ->rawColumns(['name', 'action'])
+                ->make(true);
+        }
+
+        return view('backend.users.index')
+            ->with(compact('users'));
     }
 
     /**

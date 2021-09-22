@@ -10,7 +10,7 @@
 #sample_3_filter.dataTables_filter,
 #sample_4_filter.dataTables_filter,
 /*#sample_10_filter.dataTables_filter,*/
-#sample_11_filter.dataTables_filter,
+/*#sample_11_filter.dataTables_filter,*/
 #sample_12_filter.dataTables_filter,
 #sample_13_filter.dataTables_filter,
 #sample_14_filter.dataTables_filter{
@@ -20,7 +20,7 @@
 #sample_3_length.dataTables_length,
 /*#sample_4_length.dataTables_length,*/
 /*#sample_10_length.dataTables_length,*/
-#sample_11_length.dataTables_length,
+/*#sample_11_length.dataTables_length,*/
 #sample_12_length.dataTables_length,
 #sample_13_length.dataTables_length,
 #sample_14_length.dataTables_length{
@@ -30,7 +30,7 @@
 #sample_3_info.dataTables_info,
 #sample_4_info.dataTables_info,
 /*#sample_10_info.dataTables_info,*/
-#sample_11_info.dataTables_info,
+/*#sample_11_info.dataTables_info,*/
 #sample_12_info.dataTables_info,
 #sample_13_info.dataTables_info,
 #sample_14_info.dataTables_info{
@@ -105,7 +105,7 @@ table.table-bordered.dataTable > tbody > tr[role="row"] > th:nth-child(4){
 }
 
 #sample_10.dataTable thead th, #sample_10.dataTable tbody td, #sample_10.dataTable tfoot td,
-#sample_11.dataTable thead th, #sample_11.dataTable tbody td, #sample_11.dataTable tfoot td,
+/*#sample_11.dataTable thead th, #sample_11.dataTable tbody td, #sample_11.dataTable tfoot td,*/
 #sample_12.dataTable thead th, #sample_12.dataTable tbody td, #sample_12.dataTable tfoot td,
 #sample_13.dataTable thead th, #sample_13.dataTable tbody td, #sample_13.dataTable tfoot td,
 #sample_14.dataTable thead th, #sample_14.dataTable tbody td, #sample_14.dataTable tfoot td {
@@ -116,7 +116,7 @@ table.table-bordered.dataTable > tbody > tr[role="row"] > th:nth-child(4){
 }
 
 #sample_10.dataTable thead th:nth-child(2), #sample_10.dataTable tbody td:nth-child(2), #sample_10.dataTable tfoot td:nth-child(2),
-#sample_11.dataTable thead th:nth-child(2), #sample_11.dataTable tbody td:nth-child(2), #sample_11.dataTable tfoot td:nth-child(2),
+/*#sample_11.dataTable thead th:nth-child(2), #sample_11.dataTable tbody td:nth-child(2), #sample_11.dataTable tfoot td:nth-child(2),*/
 #sample_12.dataTable thead th:nth-child(2), #sample_12.dataTable tbody td:nth-child(2), #sample_12.dataTable tfoot td:nth-child(2),
 #sample_13.dataTable thead th:nth-child(2), #sample_13.dataTable tbody td:nth-child(2), #sample_13.dataTable tfoot td:nth-child(2),
 #sample_14.dataTable thead th:nth-child(2), #sample_14.dataTable tbody td:nth-child(2), #sample_14.dataTable tfoot td:nth-child(2) {
@@ -147,11 +147,11 @@ table.dataTable.no-footer {
 table.dataTable tr.heading > th {
     background-color: #fbfcfd; }
 
-table.dataTable td.sorting_1, table.dataTable td.sorting_2, table.dataTable td.sorting_3,
-table.dataTable th.sorting_1,
-table.dataTable th.sorting_2,
-table.dataTable th.sorting_3 {
-    background: #fbfcfd !important; }
+/*table.dataTable td.sorting_1, table.dataTable td.sorting_2, table.dataTable td.sorting_3,*/
+/*table.dataTable th.sorting_1,*/
+/*table.dataTable th.sorting_2,*/
+/*table.dataTable th.sorting_3 {*/
+/*    background: #fbfcfd !important; }*/
 
 /***
 Extended pagination

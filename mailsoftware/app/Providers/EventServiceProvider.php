@@ -18,6 +18,15 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+
+        // Salesforce Event Listener
+        'App\Event\Booking\BookingEvent' => [
+            'App\Listeners\Booking\LogBookingListener',
+        ],
+
+        'App\Event\Booking\BookingErrorEvent' => [
+            'App\Listeners\Booking\LogBookingErrorListener',
+        ],
     ];
 
     /**

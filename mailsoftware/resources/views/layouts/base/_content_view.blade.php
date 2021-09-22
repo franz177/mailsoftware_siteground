@@ -17,11 +17,11 @@
                                             <div class="mb-2 d-flex flex-column">
                                                 <div class="input-group has-validation">
                                                     <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                    <i class="far fa-calendar-alt"></i>
-                                                </span>
+                                                        <span class="input-group-text">
+                                                            <i class="far fa-calendar-alt"></i>
+                                                        </span>
                                                     </div>
-                                                    <select class="form-control text-uppercase" name="year_from" id="year_from">
+                                                    <select multiple="multiple" class="form-control" id="years" name="years[]" style="min-height: 150px;">
                                                         @foreach($years as $year)
                                                             <option value="{{ $year->year }}" {{ $year->year == now()->year ? 'selected' : '' }}>{{ $year->year }}</option>
                                                         @endforeach
@@ -33,28 +33,46 @@
                                             <div class="mb-2 d-flex flex-column">
                                                 <div class="input-group has-validation">
                                                     <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                    <i class="far fa-calendar-alt"></i>
-                                                </span>
+                                                        <span class="input-group-text">
+                                                            <i class="far fa-calendar-alt"></i>
+                                                        </span>
                                                     </div>
-                                                    <select class="form-control text-uppercase" name="year_to" id="year_to" disabled>
-                                                        <option value="" selected> Scegli...</option>
+                                                    <select multiple="multiple" class="form-control" id="months" name="months[]" style="min-height: 150px;">
+                                                        @foreach($months as $month => $name)
+                                                            <option value="{{ $month }}">{{ $name }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
+                                            <a href="javascript:void(0)" class="btn btn-light btn-sm btn-block" id="clearMonths" name="clearMonths">Pulisci</a>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="mb-2 d-flex flex-column">
                                                 <div class="input-group has-validation">
                                                     <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                    <i class="fas fa-home"></i>
-                                                </span>
+                                                        <span class="input-group-text">
+                                                            <i class="fas fa-calendar-alt"></i>
+                                                        </span>
                                                     </div>
-                                                    <select class="form-control text-uppercase" name="house_from" id="house_from" disabled>
-                                                        <option value="" selected> Scegli... </option>
-                                                        @foreach($houses as $uid => $name)
-                                                            <option value="{{ $uid }}">{{ $name }}</option>
+                                                    <select class="form-control text-capitalize" name="seasons" id="seasons">
+                                                        <option value="999" selected> Sel. Stagione</option>
+                                                        @foreach($seasons as $season => $period)
+                                                            <option value="{{ $season }}">{{ $season . ' '.json_encode($period) }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2 d-flex flex-column">
+                                                <div class="input-group has-validation">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            <i class="fas fa-calendar-alt"></i>
+                                                        </span>
+                                                    </div>
+                                                    <select class="form-control text-capitalize" name="sub_seasons" id="sub_seasons">
+                                                        <option value="999" selected> Sel. Sub Stagione</option>
+                                                        @foreach($sub_seasons as $sub_season => $sub_period)
+                                                            <option value="{{ $sub_season }}">{{ $sub_period[0][0] . ' - '. $sub_period[0][1] }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -64,14 +82,22 @@
                                             <div class="mb-2 d-flex flex-column">
                                                 <div class="input-group has-validation">
                                                     <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                    <i class="fas fa-home"></i>
-                                                </span>
+                                                        <span class="input-group-text">
+                                                            <i class="fas fa-home"></i>
+                                                        </span>
                                                     </div>
-                                                    <select class="form-control text-uppercase" name="house_to" id="house_to" disabled>
-                                                        <option value="" selected> Scegli...</option>
+                                                    <select multiple="multiple" class="form-control" id="houses" name="houses[]" style="min-height: 150px;">
+                                                        @foreach($houses as $uid => $name)
+                                                            <option value="{{ $uid }}">{{ $name }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                                <button type="button" class="btn btn-light" name="removeFilter" id="removeFilter">Rimuovi Filtri</button>
+                                                <button type="button" class="btn btn-secondary" name="submit" id="submit">Invia</button>
                                             </div>
                                         </div>
                                     </div>

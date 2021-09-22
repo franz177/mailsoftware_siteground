@@ -10,6 +10,19 @@ class TypoController extends Controller
 {
 
     protected $CType = 'mask_db_alg_pren';
+
+    public function getBookings()
+    {
+        return Typo::select([Typo::raw('YEAR(tx_mask_p_data_arrivo) as YEAR'), Typo::raw('CONCAT(FORMAT(SUM(tx_mask_t3_p_stay), 2, "it_IT"), " €") as STAY')])
+            ->where('CType', $this->CType)
+            ->where('hidden', 0)
+            ->where('deleted', 0)
+            ->where('tt_content.tx_mask_cod_reservation_status', '!=', "CANC")
+            ;
+
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -17,11 +30,7 @@ class TypoController extends Controller
      */
     public function index()
     {
-        return view('frontend.index')
-            ->with('typo', Typo::where('CType', $this->CType)
-                                ->where('hidden', 0)
-                                ->where('deleted', 0)
-                                ->orderBy('uid', 'DESC')->get());
+
     }
 
     /**

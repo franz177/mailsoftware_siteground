@@ -114,5 +114,9 @@
         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
             @csrf
         </form>
+        <a href="{{ route('booking_force') }}" class="btn btn-light-warning font-weight-bold float-right">{{ __('Ricarica Prenotazioni') }}</a>
+        <form id="booking-force" action="{{ route('booking_force') }}" method="POST" class="d-none">
+            @csrf
+        </form>
     </div>
 </div>

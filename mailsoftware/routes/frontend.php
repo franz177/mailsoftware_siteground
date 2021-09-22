@@ -17,11 +17,6 @@ Route::get('/', [App\Http\Controllers\Typo\PrenotazioniController::class, 'index
 Route::resource('/prenotazioni', \App\Http\Controllers\Typo\PrenotazioniController::class);
 Route::resource('/storico', \App\Http\Controllers\Typo\StoricoController::class);
 
-Route::get('/viste/dashboard', [\App\Http\Controllers\Frontend\Views\DashboardController::class, 'index']);
-Route::get('/viste/mensile', [\App\Http\Controllers\Frontend\Views\MensileController::class, 'index']);
-Route::get('/viste/viste', [\App\Http\Controllers\Frontend\Views\VisteController::class, 'index']);
-Route::get('/viste/mensile/data', [\App\Http\Controllers\Frontend\Views\MensileController::class, 'getDataTable'])->name('viste.data');
-
 Route::get('/threads/create/{pren_uid?}', [App\Http\Controllers\Frontend\ThreadController::class, 'create']);
 Route::get('/threads/get_text', [\App\Http\Controllers\Frontend\ThreadController::class, 'get_text' ])->name('threads.get_text');
 Route::get('/threads/thread_exist', [\App\Http\Controllers\Frontend\ThreadController::class, 'thread_exist' ])->name('threads.thread_exist');
@@ -32,4 +27,19 @@ Route::get('/testi/getText/{id}', [\App\Http\Controllers\Backoffice\TextControll
 
 Route::resource('/whatsapp', \App\Http\Controllers\Backoffice\WhatsappController::class);
 
+// VISTE
+Route::get('/viste/dashboard', [\App\Http\Controllers\Frontend\Views\DashboardController::class, 'index']);
+Route::get('/viste/viste', [\App\Http\Controllers\Frontend\Views\VisteController::class, 'index'])->name('viste.index');
+Route::get('/viste/viste/refresh', [\App\Http\Controllers\Frontend\Views\VisteController::class, 'getDataForm'])->name('viste.refresh');
+Route::post('/viste/table',[\App\Http\Controllers\Frontend\Views\VisteController::class, 'getTable'])->name('viste.getTable');
+
+Route::get('/viste/mensile', [\App\Http\Controllers\Frontend\Views\MensileController::class, 'index']);
+Route::get('/viste/mensile/data', [\App\Http\Controllers\Frontend\Views\MensileController::class, 'getDataTable'])->name('viste.data');
+Route::get('/viste/mensile/datas', [\App\Http\Controllers\Frontend\Views\MensileController::class, 'getDataTables'])->name('viste.datas');
+
+Route::get('/viste/mensile/simonetta', [\App\Http\Controllers\Frontend\Views\SimonettaController::class, 'index']);
+Route::get('/viste/mensile/simonetta/data', [\App\Http\Controllers\Frontend\Views\SimonettaController::class, 'getDataTable'])->name('simonetta.data');
+
+Route::get('/booking', [\App\Http\Controllers\BookingController::class, 'index']);
+Route::get('/booking/force', [\App\Http\Controllers\BookingController::class, 'force'])->name('booking_force');
 

@@ -136,7 +136,7 @@ return [
             'icon' => 'media/svg/icons/Shopping/Money.svg',
             'bullet' => 'line',
             'root' => true,
-            'page' => '/backend/citytax',
+            'page' => '/backend/citytaxs',
         ],
 
 

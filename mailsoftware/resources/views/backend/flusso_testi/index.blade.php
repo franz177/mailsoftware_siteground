@@ -138,7 +138,7 @@
             turn = parseInt(turn);
 
             $('body').on('click', '.editBlockSection', function () {
-                alert('ciao sono click');
+                // alert('ciao sono click');
             });
 
             $(document).on('change', '#typeanswer_id', function(){
@@ -268,10 +268,10 @@
                         },
                         {data: 'block.name', name: 'Blocco', searchable: false},
                         {data: 'section.name', name: 'Sezione', searchable: false},
-                        {data: 'testo_name', name: 'testo_name', orderable: false, searchable: false},
-                        {data: 'text.testo', name: 'Testo'},
-                        {data: 'text.text', name: 'Text'},
-                        {data: 'text.priority.name', name: 'Priorità'},
+                        {data: 'testo_name', name: 'testo_name', orderable: false, searchable: true},
+                        {data: 'text.testo', name: 'Testo', searchable: true},
+                        {data: 'text.text', name: 'Text', searchable: true},
+                        {data: 'text.priority.name', name: 'Priorità', searchable: true},
                         {data: 'action', name: 'action', orderable: false, searchable: false},
 
                     ],
@@ -352,10 +352,10 @@
                     },
                     {data: 'block.name', name: 'Blocco', searchable: false},
                     {data: 'section.name', name: 'Sezione', searchable: false},
-                    {data: 'testo_name', name: 'testo_name', orderable: false, searchable: false},
-                    {data: 'text.testo', name: 'Testo'},
-                    {data: 'text.text', name: 'Text'},
-                    {data: 'text.priority.name', name: 'Priorità'},
+                    {data: 'testo_name', name: 'testo_name', orderable: false, searchable: true},
+                    {data: 'text.testo', name: 'Testo', searchable: true},
+                    {data: 'text.text', name: 'Text', searchable: true},
+                    {data: 'text.priority.name', name: 'Priorità', searchable: true},
                     {className: "ciccio", data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ],

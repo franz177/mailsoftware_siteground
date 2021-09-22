@@ -86,5 +86,36 @@ class Typo extends Model
 
     ];
 
+    public $seasons = [
+        'bassa' => [11,12,1,2],
+        'media' => [10,3,4,5],
+        'alta'  => [6,7,8,9]
+    ];
+
+    public $sub_seasons = [
+      0 => [['GEN','DIC'],[1,12]],
+      1 => [['FEB','NOV'],[2,11]],
+      2 => [['MAR','APR'],[3,4]],
+      4 => [['MAG','OTT'],[5,10]],
+      5 => [['GIU','SET'],[6,9]],
+      6 => [['LUG','AGO'],[7,8]],
+    ];
+
+    public $house_groups = [
+      'Alguerhome'  => [1,3,4],
+      'Nulvi'       => [6,7],
+      'Altre'       => [5,8],
+    ];
+
+    public $months = [
+      1 => "GEN", 2 => "FEB",
+      3 => "MAR", 4 => "APR",
+      5 => "MAG", 6 => "GIU",
+      7 => "LUG", 8 => "AGO",
+      9 => "SET", 10 => "OTT",
+      11 => "NOV", 12 => "DIC",
+    ];
+
+
 //    protected $primaryKey = 'tx_mask_p_old_uid';
 }

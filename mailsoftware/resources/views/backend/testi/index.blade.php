@@ -43,7 +43,7 @@
                         <!--begin::Table-->
 
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered  dt-responsive" id="sample_1">
+                            <table class="table table-striped table-bordered  dt-responsive" id="sample_111">
                                 <thead>
                                 <tr class="text-left text-uppercase">
                                     <th></th>
@@ -86,14 +86,15 @@
                                             </span>
                                         </td>
 
-                                        <form action="/backend/testi/{{ $text->id }}" method="POST">
-                                            @csrf
-                                            @method('delete')
-                                            <td class="pr-0 text-right">
-                                                <a href="/backend/testi/{{ $text->id }}/edit" class="btn btn-light-warning font-weight-bolder font-size-sm">Edit</a>
-                                                <button type="submit" class="btn btn-light-danger font-weight-bolder font-size-sm"> Delete </button>
-                                            </td>
-                                        </form>
+                                        <td class="pr-0 text-right">
+                                            <a href="/backend/testi/{{ $text->id }}/edit" class="btn btn-link-warning font-weight-bolder font-size-sm">Edit</a>
+                                            <form action="/backend/testi/{{ $text->id }}" method="POST">
+                                                @csrf
+                                                @method('delete')
+                                                <button type="submit" class="btn btn-link-danger font-weight-bolder font-size-sm"> Delete </button>
+                                            </form>
+                                        </td>
+
                                     </tr>
                                 @endforeach
                                 </tbody>

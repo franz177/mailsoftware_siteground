@@ -5355,6 +5355,18 @@ a.badge-white:focus, a.badge-white.focus {
   color: #083937;
 }
 
+.alert-green {
+    color: #0e6662;
+    background-color: #d1f3dd;
+    border-color: #bfefed;
+}
+.alert-green hr {
+    border-top-color: #abeae7;
+}
+.alert-green .alert-link {
+    color: #083937;
+}
+
 .alert-info {
   color: #472a83;
   background-color: #e7dcfe;

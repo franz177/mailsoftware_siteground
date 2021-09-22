@@ -74,9 +74,11 @@ class ThreadController extends Controller
             ->groupBy('typeanswer_id')
             ->get();
 
-        $other_texts_by_priority = Priority::whereHas('texts')->with(['texts' => function($query){
-            $query->doesntHave('flows');
-        }])->get();
+//        $other_texts_by_priority = Priority::whereHas('texts')->with(['texts' => function($query){
+//            $query->doesntHave('flows');
+//        }])->get();
+
+        $other_texts_by_priority = Priority::whereHas('texts')->with('texts')->orderBy('name', 'ASC')->get();
 
         if(!$pren->tx_mask_t0_country){
             $country = 'NaN';
@@ -234,7 +236,7 @@ class ThreadController extends Controller
             ->first();
         $house_typo_key = array_keys($house_typo->toArray());
 
-        $users_typo = TypoUser::select(['uid', 'pid', 'usergroup', 'name', TypoUser::raw('CONCAT(fe_users.first_name, \' \',middle_name, \' \',last_name) as full_name'), 'telephone', 'email', 'company', 'tx_nv_ag_cod_op', 'tx_nv_ag_cod_op_excel', 'disable'])
+        $users_typo = TypoUser::select(['uid', 'pid', 'usergroup', 'name', TypoUser::raw('CONCAT(fe_users.first_name) as full_name'), 'telephone', 'email', 'company', 'tx_nv_ag_cod_op', 'tx_nv_ag_cod_op_excel', 'disable'])
             ->where('uid', '=', $pren->tx_mask_t1_op_chechin)
             ->first();
         $users_typo_key = array_keys($users_typo->toArray());
@@ -246,26 +248,10 @@ class ThreadController extends Controller
         $users = Operator::find($pren->tx_mask_t1_op_chechin);
         $users_key = array_keys($users->toArray());
 
-//        Tassa di soggiorno
-        $data_arrivo = Carbon::parse($pren->tx_mask_p_data_arrivo);
-        $data_partenza = Carbon::parse($pren->tx_mask_p_data_partenza);
-        $giorni = $data_arrivo->diffInDays($data_partenza);
-        $city_tax = CityTax::where('city_id','=',$house_typo->tx_mask_casa_citta)
-            ->whereRaw('"'.$data_arrivo.'" BETWEEN mese_da AND mese_a')
-            ->first();
-
         $cities = City::select('id', 'city')->pluck('city', 'id');
 
         if(Str::contains($testo, '*totaleTassa*')){
-            $debit = $city_tax->debit/100;
-            if($giorni >= $city_tax->notti_max){
-                $totale_tassa = $city_tax->notti_max * $debit;
-                $totale_tassa = $totale_tassa * ($pren->tx_mask_p_tot_ospiti - $pren->tx_mask_p_under_12);
-            } else {
-                $totale_tassa = $giorni * $debit;
-                $totale_tassa = $totale_tassa * ($pren->tx_mask_p_tot_ospiti - $pren->tx_mask_p_under_12);
-            }
-            $testo = Str::replaceFirst('*totaleTassa*', number_format($totale_tassa,2) , $testo);
+            $testo = Str::replaceFirst('*totaleTassa*', number_format($pren->tx_mask_t3_p_city_tax_amount,2) , $testo);
         }
         if(Str::contains($testo,'*casa*tx_mask_casa_bagni*')){
             if($house_typo['tx_mask_casa_bagni'] > 1){

@@ -275,23 +275,26 @@
             $('body').on('click', '.deleteCamera', function () {
 
                 var camera_id = $(this).data("id");
-                confirm("Si è sicuri di voler eliminare la Camera selezionata?!");
+                var r = confirm("Si è sicuri di voler eliminare la Casa selezionata?!");
 
-                $.ajax({
-                    type: "DELETE",
-                    url: "/backend/camera/" + camera_id,
-                    success: function (data) {
-                        oTable.draw();
+                if(r == true) {
 
-                        $('#message_destroy').html(data.message_destroy);
-                        $("#destroy-alert").fadeTo(2000, 500).slideUp(500, function() {
-                            $("#destroy-alert").slideUp(500);
-                        });
-                    },
-                    error: function (data) {
-                        console.log('Error:', data);
-                    }
-                });
+                    $.ajax({
+                        type: "DELETE",
+                        url: "/backend/camera/" + camera_id,
+                        success: function (data) {
+                            oTable.draw();
+
+                            $('#message_destroy').html(data.message_destroy);
+                            $("#destroy-alert").fadeTo(2000, 500).slideUp(500, function () {
+                                $("#destroy-alert").slideUp(500);
+                            });
+                        },
+                        error: function (data) {
+                            console.log('Error:', data);
+                        }
+                    });
+                }
             });
 
             var table = $('#sample_15');

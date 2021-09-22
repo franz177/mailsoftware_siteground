@@ -37,7 +37,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['single', 'daily'],
             'ignore_exceptions' => false,
         ],
 
@@ -49,7 +49,7 @@ return [
 
         'daily' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/laravel.log'),
+            'path' => storage_path('logs/daily/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
             'days' => 14,
         ],
@@ -99,6 +99,21 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        'booking' => [
+            'driver'     => 'daily',
+            'path'      => storage_path('logs/booking/import.log'),
+            'level'     => 'debug',
+            'bubble'    => true,
+        ],
+
+        'booking_error' => [
+            'driver'     => 'daily',
+            'path'      => storage_path('logs/booking/error/import.log'),
+            'level'     => 'debug',
+            'bubble'    => true,
+        ],
+
     ],
 
 ];

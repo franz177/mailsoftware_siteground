@@ -1,4 +1,4 @@
-@extends('layouts.template_view')
+@extends('layouts.template')
 
 @section('styles')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
@@ -12,7 +12,7 @@
                 <div class="card-header border-0 pt-5">
                     <h3 class="card-title align-items-start flex-column">
                             <span class="card-label font-weight-bolder text-dark text-uppercase">
-                                Globale
+                                Costi Mensile - {{ $message }}
                             </span>
                         <span class="text-muted mt-3 font-weight-bold font-size-sm"></span>
                     </h3>
@@ -20,14 +20,26 @@
                 <div class="card-body pt-0 pb-3">
                     <div class="tab-content">
                         <!--begin::Table-->
-                        <table class="table table-striped table-bordered  dt-responsive" id="sample_7">
-                            <thead>
-                                <th></th>
-                                <th>YEAR</th>
-                                <th>STAY</th>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <div class="table-responsive" >
+                            <table class="table table-striped table-bordered  dt-responsive" id="sample_20">
+                                <thead class="text-uppercase">
+                                <tr>
+                                    <th></th>
+                                    <th class="all">Mesi</th>
+                                    <th class="all">Tot Pulizie</th>
+{{--                                    <th class="all">Tot Supervisor</th>--}}
+{{--                                    <th class="all">Tot C-OUT</th>--}}
+{{--                                    <th class="all">Tot EXTRA C-OUT</th>--}}
+{{--                                    <th class="all">Tot CASH OP. C-OUT</th>--}}
+{{--                                    <th class="all">Tot CASH SIMO C-OUT</th>--}}
+{{--                                    <th class="all">Tot CAMBI BIANCHERIA</th>--}}
+{{--                                    <th class="all">Tot CITY TAX</th>--}}
+{{--                                    <th class="all">Tot MANCIA CLIENTE</th>--}}
+                                </tr>
+                                </thead>
+
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -51,9 +63,10 @@
                 }
             });
 
-            var table = $('#sample_7');
+            var table = $('#sample_20');
 
             var oTable = table.DataTable({
+                // Internationalisation. For more info refer to http://datatables.net/manual/i18n
                 "language": {
                     "aria": {
                         "sortAscending": ": attivare per ordinare la colonna in ordine crescente",
@@ -72,10 +85,7 @@
                 serverSide: true,
 
                 ajax: {
-                    url:"{{ route('viste.index') }}",
-                    type: "GET",
-                    datatype: "JSON",
-                    // data:
+                    url:"{{ route('simonetta.data') }}"
                 },
 
                 columns: [
@@ -88,20 +98,33 @@
                         cellType: "th",
                         sortable: false
                     },
-                    {data: 'YEAR', name: 'YEAR'},
-                    {data: 'STAY', name: 'STAY'},
+                    {data: 'month'},                                    //td:eq(0)
+                    {data: 'stay'},                                    //td:eq(1)
+                    // {data: '0'},                                    //td:eq(2)
+                    // {data: '0'},                                    //td:eq(3)
+                    // {data: '0'},                                    //td:eq(4)
+                    // {data: '0'},                                    //td:eq(5)
+                    // {data: '0'},                                    //td:eq(6)
+                    // {data: '0'},                                    //td:eq(7)
+                    // {data: '0'},                                    //td:eq(8)
+                    // {data: '0'},                                    //td:eq(9)
+
 
                 ],
 
-                rowCallback: function() {
+                rowCallback: function(row, data, index) {
 
                 },
 
+                // setup buttons extentension: http://datatables.net/extensions/buttons/
                 buttons: [
+                    // { extend: 'print', className: 'btn dark btn-outline' },
                     { extend: 'pdf', className: 'btn green btn-outline' },
                     { extend: 'excel', className: 'btn purple btn-outline ' }
                 ],
 
+                // setup responsive extension: http://datatables.net/extensions/responsive/
+                // setup responsive extension: http://datatables.net/extensions/responsive/
                 responsive: {
                     details: {
                         type: 'column',
@@ -109,86 +132,21 @@
                     }
                 },
                 columnDefs: [
-                    { className: 'control', targets:   0, width: '5%' }, //plus
+                    { className: 'control', targets:   0, width: '3%' }, //plus
+                    { width: '5%', targets: 1}, //house
                 ],
 
                 "lengthMenu": [
                     [5, 10, 15, 20, -1],
-                    [5, 10, 15, 20, "Tutte"] // change per page values here
+                    [5, 10, 15, 20, "All"] // change per page values here
                 ],
+
                 // set the initial value
                 "pageLength": -1,
 
                 "dom": "<'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'B f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", // horizobtal scrollable datatable
             });
-
-            $('body').on('click', '#submit', function () {
-                var years = $('#years').val();
-                $.ajax({
-                    type: "GET",
-                    url: "{{ route('viste.index') }}",
-                    dataType: 'json',
-                    data: {years:years},
-                    success: function (data) {
-                        console.log(years);
-                        // console.log(data.message_update+' '+whatsapp_id+' '+whatsapp_value);
-                        // alert(data.message_update);
-                        oTable.draw();
-                    },
-                    error: function (data) {
-                        console.log('Error:', data);
-                    }
-                });
-            });
         });
-
-
-
-        let len=0;
-
-        $('body').on('change', '#months', function () {
-            len = $('select[name="months[]"] option:selected').length;
-            if(len > 0){
-                $('#clearMonths').prop('disabled', false);
-                $('#seasons').prop('disabled', true);
-                $('#sub_seasons').prop('disabled', true);
-            } else {
-                $('#clearMonths').prop('disabled', true);
-                $('#seasons').prop('disabled', false);
-                $('#sub_seasons').prop('disabled', false);
-            }
-        });
-
-        $('body').on('change', '#seasons', function () {
-            if($(this).val() != 999){
-                $('#months').prop('disabled', true);
-                $('#sub_seasons').prop('disabled', true);
-            } else {
-                $('#months').prop('disabled', false);
-                $('#sub_seasons').prop('disabled', false);
-            }
-        });
-
-        $('body').on('change', '#sub_seasons', function () {
-            if($(this).val() != 999){
-                $('#months').prop('disabled', true);
-                $('#seasons').prop('disabled', true);
-            } else {
-                $('#months').prop('disabled', false);
-                $('#seasons').prop('disabled', false);
-            }
-        });
-
-        $('body').on('click', '#clearMonths', function () {
-            $("#months :selected").prop('selected', false);
-            $('#seasons').prop('disabled', false);
-            $('#sub_seasons').prop('disabled', false);
-        });
-
-        $('body').on('click', '#removeFilter', function () {
-            $("#years :selected").prop('selected', false);
-        });
-
 
     </script>
 @endsection

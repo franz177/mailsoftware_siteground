@@ -19,10 +19,10 @@ class PriorityController extends Controller
      */
     public function index(Request $request)
     {
-        $priorities = Priority::all();
+        $priorities = Priority::orderBy('name')->get();
 
         if ($request->ajax()){
-            $data = Priority::all();
+            $data = Priority::orderBy('name')->get();
 
             return Datatables::of($data)
                 ->addColumn('action', function($row){

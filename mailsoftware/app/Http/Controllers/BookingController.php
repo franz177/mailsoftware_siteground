@@ -1,13 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Frontend\Views;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Jobs\BookingSincronizationJob;
+use App\Models\Booking;
 use App\Models\Typo;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\TypoBiancCsPeriodo;
+use App\Models\TypoHouses;
+use App\Models\TypoRange;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class DashboardController extends Controller
+class BookingController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,25 +20,14 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $typo = new Typo();
-        $years = $this->getYears();
-        $houses = $this->getHousesAbbArray();
-        $seasons = $typo->seasons;
-        $sub_seasons = $typo->sub_seasons;
-        $house_groups = $typo->house_groups;
-        $months = $typo->months;
-
-        return view('frontend.viste.dashboard')
-            ->with(compact('years'))
-            ->with(compact('houses'))
-            ->with(compact('seasons'))
-            ->with(compact('sub_seasons'))
-            ->with(compact('house_groups'))
-            ->with(compact('months'))
-            ;
+        $booking = Booking::find(1379);
     }
 
-
+    public function force()
+    {
+        BookingSincronizationJob::dispatch();
+        return back();
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -60,10 +53,10 @@ class DashboardController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Booking  $booking
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Booking $booking)
     {
         //
     }
@@ -71,10 +64,10 @@ class DashboardController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Booking  $booking
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Booking $booking)
     {
         //
     }
@@ -83,10 +76,10 @@ class DashboardController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Booking  $booking
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Booking $booking)
     {
         //
     }
@@ -94,10 +87,10 @@ class DashboardController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Booking  $booking
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Booking $booking)
     {
         //
     }

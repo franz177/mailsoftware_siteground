@@ -329,7 +329,7 @@
                         @foreach($other_texts_by_priority as $text_priority)
 
                             <li class="nav-item" data-container="body" data-toggle="tooltip" data-placement="top" title="{{ $text_priority->description }}">
-                                <a class="nav-link {{ $text_priority->id == 1 ? 'active' : '' }}" data-toggle="tab" href="#tab-{{ $text_priority->id }}">{{ $text_priority->name }}</a>
+                                <a class="nav-link text-uppercase {{ $text_priority->id == 1 ? 'active' : '' }}" data-toggle="tab" href="#tab-{{ $text_priority->id }}">{{ $text_priority->name }}</a>
                             </li>
 
                         @endforeach
@@ -406,6 +406,7 @@
             });
 
             $(document).on('change', '#typeanswer_id', function(){
+                $('#type_id').html('');
                 $('#type_id').prop("disabled", true);
                 var typeanswer_id = $(this).val();
                 var typeanswer_id_sended = $(this).find(':selected').data("id");

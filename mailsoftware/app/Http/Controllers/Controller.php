@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Typo;
 use App\Models\TypoCountry;
 use App\Models\TypoHouses;
 use App\Models\TypoSite;
@@ -181,5 +182,17 @@ class Controller extends BaseController
             ->first();
 
         return $countries;
+    }
+
+    // VISTE
+    public function getYears(){
+        return Typo::select(Typo::raw('YEAR(tx_mask_p_data_prenotazione) as year'))
+            ->where('CType', '=', 'mask_db_alg_pren')
+            ->where('tt_content.hidden', '=', 0)
+            ->where('tt_content.deleted', '=', 0)
+            ->whereNotNull('tx_mask_p_data_prenotazione')
+            ->groupBy([Typo::raw('YEAR(tx_mask_p_data_prenotazione)')])
+            ->orderBy('year', 'desc')
+            ->get();
     }
 }

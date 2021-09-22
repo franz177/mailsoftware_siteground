@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Typo;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\BookingSincronizationJob;
 use App\Models\Flow;
 use App\Models\House;
 use App\Models\Thread;
@@ -30,7 +31,8 @@ class PrenotazioniController extends Controller
     public function index(Request $request)
     {
 
-        $today = Carbon::now();
+        $today = Carbon::today();
+        $today = $today->subDays(1);
 
         $page_title = 'Dashboard';
         $page_description = 'Prenotazioni';
@@ -55,7 +57,7 @@ class PrenotazioniController extends Controller
 
         if ($request->ajax()){
             $data = Typo::select(['tt_content.uid', 'tt_content.tx_mask_p_tot_ospiti', 'tt_content.tx_mask_p_data_arrivo', 'tt_content.tx_mask_p_data_partenza', 'tt_content.tx_mask_p_data_prenotazione', 'tt_content.tx_mask_t1_op_chechin', 'tt_content.tx_mask_t0_tel', 'tt_content.tx_mask_t0_email',
-                Typo::raw('IFNULL(tx_mask_t0_country, "NaN") tx_mask_t0_country'),
+                Typo::raw('IF(tt_content.tx_mask_t0_country = "" OR tx_mask_t0_country IS NULL, "NaN", tx_mask_t0_country) tx_mask_t0_country'),
                 Typo::raw('LCASE(tt_content.header) as headerl'),
                 Typo::raw('IFNULL(tt_content.tx_mask_p_sito, tt_content.tx_mask_t5_kross_cod_channel) tx_mask_p_sito'),
                 Typo::raw('IF(tt_content.tx_mask_doc_inviati = 0, "Attesa", "INVIATI") as documenti'),
@@ -142,7 +144,7 @@ class PrenotazioniController extends Controller
                     return $whatsapp_id->uid;
                 })
                 ->addColumn('threads', function ($row) {
-                    $threads_pren = Thread::where('uid','=',$row->uid)->with('user','flow', 'flow.typeanswer', 'flow.typeanswer.color')->get();
+                    $threads_pren = Thread::where('uid','=',$row->uid)->with('user','flow', 'flow.typeanswer', 'flow.typeanswer.color')->orderBy('created_at', 'ASC')->get();
                     $threads = '';
 
                     if($threads_pren->count() < 1) {
@@ -202,11 +204,13 @@ class PrenotazioniController extends Controller
                     'stato' => -1,
                 ]);
             }
-            // Inserisco a DB il Thread First Contact Prenotazione Immediata per le prenotazioni con canale BK nella tabella THREADS per le nuove prenotazioni arrivate
 
-            if($p->tx_mask_t5_kross_cod_channel == 'BOOKING'){
+            // Inserisco a DB il Thread First Contact Prenotazione Immediata per le prenotazioni con canale BK nella tabella THREADS per le nuove prenotazioni arrivate
+            if($p->tx_mask_t5_kross_cod_channel){
                 $site_typo = $this->getSitesByKross($p->tx_mask_t5_kross_cod_channel);
-                $site_uid = $site_typo->uid;
+                $site_uid = 47;
+                if($site_typo)
+                    $site_uid = $site_typo->uid;
 
                 $flow = Flow::select('id')
                     ->where('typeanswer_id', '=', 1)
@@ -224,8 +228,8 @@ class PrenotazioniController extends Controller
                         'uid' => $p->uid,
                         'flow_id' => $flow->id,
                         'user_id' => 3,
-                        'title' => '<strong>First Contact </strong><br>da <u>Booking</u>',
-                        'testo' => 'Mail inviata direttamente tramite il sito Booking'
+                        'title' => '<strong>First Contact </strong><br>da <u>KROSS</u>',
+                        'testo' => 'Mail inviata direttamente tramite il KROSS'
                     ]);
                 }
 

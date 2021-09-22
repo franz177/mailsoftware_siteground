@@ -21,4 +21,5 @@ class Priority extends Model
     {
         return $this->hasMany(Text::class);
     }
+
 }

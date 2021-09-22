@@ -52,7 +52,7 @@ class TextController extends Controller
      */
     public function create()
     {
-        $priorities = Priority::all();
+        $priorities = Priority::orderBy('name')->get();
 
         return view('backend.testi.create')
             ->with(compact('priorities'));
@@ -123,7 +123,7 @@ class TextController extends Controller
             ->with(['flow_text', 'flow_text.flow', 'flow_text.block', 'flow_text.section', 'flow_text.flow.typeanswer', 'flow_text.flow.type'])
             ->first();
 
-        $priorities = Priority::all();
+        $priorities = Priority::orderBy('name')->get();
         $blocks = Block::all();
         $sections = Section::all();
         $typeanswers = Typeanswer::all();

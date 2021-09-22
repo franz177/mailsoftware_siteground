@@ -232,23 +232,25 @@
             $('body').on('click', '.deletePriority', function () {
 
                 var priority_id = $(this).data("id");
-                confirm("Si è sicuri di voler eliminare la Priorità selezionata?!");
+                var r = confirm("Si è sicuri di voler eliminare la Priorità selezionata?!");
 
-                $.ajax({
-                    type: "DELETE",
-                    url: "/backend/priorities/" + priority_id,
-                    success: function (data) {
-                        oTable.draw();
+                if(r == true){
+                    $.ajax({
+                        type: "DELETE",
+                        url: "/backend/priorities/" + priority_id,
+                        success: function (data) {
+                            oTable.draw();
 
-                        $('#message_destroy').html(data.message_destroy);
-                        $("#destroy-alert").fadeTo(2000, 500).slideUp(500, function() {
-                            $("#destroy-alert").slideUp(500);
-                        });
-                    },
-                    error: function (data) {
-                        console.log('Error:', data);
-                    }
-                });
+                            $('#message_destroy').html(data.message_destroy);
+                            $("#destroy-alert").fadeTo(2000, 500).slideUp(500, function() {
+                                $("#destroy-alert").slideUp(500);
+                            });
+                        },
+                        error: function (data) {
+                            console.log('Error:', data);
+                        }
+                    });
+                }
             });
 
             var table = $('#sample_15');

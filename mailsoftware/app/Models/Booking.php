@@ -124,7 +124,9 @@ class Booking extends Model
         'prop_incasso_ospiti_extra',
         'prop_costo_medio_a_notte',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'hidden',
+        'deleted',
     ];
 
     public $columns = [
@@ -238,6 +240,8 @@ class Booking extends Model
         'prop_percentuale_simonetta',
         'prop_incasso_ospiti_extra',
         'prop_costo_medio_a_notte',
+        'hidden',
+        'deleted',
     ];
 
 //    protected $dateFormat = 'Y-m-d H:i:s';
@@ -309,12 +313,12 @@ class Booking extends Model
                 ->first();
 
             if($costo_op){
-                $this->attributes['costo_orario'] = $costo_op->tx_mask_c_cod_costo_orario_operatore;
+                return $this->attributes['costo_orario'] = $costo_op->tx_mask_c_cod_costo_orario_operatore;
             } else {
-                $this->attributes['costo_orario'] = 0;
+                return $this->attributes['costo_orario'] = 0;
             }
         } else {
-            $this->attributes['costo_orario'] = 0;
+            return $this->attributes['costo_orario'] = 0;
         }
 
     }
@@ -329,7 +333,8 @@ class Booking extends Model
         $user = TypoUser::where('uid',$id_op_pulizie)->first();
 
         if($user->deleted != 1){
-            $c_house = TypoCHouse::select([TypoCHouse::raw('IFNULL(tx_mask_c_cod_costo_orario_operatore, 19) costo_orario_operatore'), 'tt_content.tx_mask_t7_pulizie_metodo', 'tt_content.tx_mask_t3_govout_c_cout', 'tt_content.tx_mask_t3_govout_ritiro_immondizia', 'tt_content.tx_mask_t3_govout_ritiro_soldi',
+            $c_house = TypoCHouse::select([TypoCHouse::raw('IFNULL(tt_content.tx_mask_c_cod_costo_orario_operatore, 19) costo_orario_operatore'), 'tt_content.tx_mask_t7_pulizie_metodo',
+                'tt_content.tx_mask_t3_govout_c_cout', 'tt_content.tx_mask_t3_govout_ritiro_immondizia', 'tt_content.tx_mask_t3_govout_ritiro_soldi',
                 'tt_content.tx_mask_t2_lav_c_cambio_b_cout', 'tt_content.tx_mask_t2_lav_prep_kit_cliente', 'tt_content.tx_mask_t2_lav_costo_dotazione_casa', 'tt_content.tx_mask_t2_lav_prep_kit_dotazione_casa',
                 'tt_content.tx_mask_t7_cert_covid', 'tt_content.tx_mask_t7_costo_prod_pul', 'tt_content.tx_mask_t7_pul_stracci', 'tt_content.tx_mask_t5_supervisor_c_fornitura_kit_serv', 'tt_content.tx_mask_t7_fisso_pul'])
                 ->join('tx_mask_c_cos_periodo', 'tx_mask_c_cos_periodo.parentid', '=', 'tt_content.uid')
@@ -359,7 +364,7 @@ class Booking extends Model
                     if($check_co) {
                         $total = $total - $sum;
                     }
-                    $this->attributes['totale_pulizie'] = $total;
+                    return $this->attributes['totale_pulizie'] = $total;
                 } else {
                     switch ($c_house->tx_mask_t7_pulizie_metodo){
                         case 1: // RANGE
@@ -374,21 +379,21 @@ class Booking extends Model
                                 ->where('parentid', $range['uid'])
                                 ->where('tx_mask_r_mm_max','>=', $this->attributes['tx_mask_t3_p_stay'])
                                 ->first();
-                            $this->attributes['totale_pulizie'] = $range_mm['tx_mask_r_mm_importo'];
+                            return $this->attributes['totale_pulizie'] = $range_mm['tx_mask_r_mm_importo'];
                         case 2: // IMPORTO FISSO
                             if($sum_pulizie == 0)
                                 $this->attributes['totale_pulizie'] = 0;
 
-                            $this->attributes['totale_pulizie'] = $sum_pulizie;
+                            return $this->attributes['totale_pulizie'] = $sum_pulizie;
                         default:
-                            $this->attributes['totale_pulizie'] = 0;
+                            return $this->attributes['totale_pulizie'] = 0;
                     }
                 }
             } else {
-                $this->attributes['totale_pulizie'] = 0;
+                return $this->attributes['totale_pulizie'] = 0;
             }
         } else {
-            $this->attributes['totale_pulizie'] = 0;
+            return $this->attributes['totale_pulizie'] = 0;
         }
     }
 
@@ -415,18 +420,18 @@ class Booking extends Model
                 ->first();
             if($c_house){
                 $sum = $c_house->tx_mask_t3_govout_c_cout + $c_house->tx_mask_t3_govout_ritiro_immondizia + $c_house->tx_mask_t3_govout_ritiro_soldi + $c_house->tx_mask_t2_lav_c_cambio_b_cout + $c_house->tx_mask_t2_lav_prep_kit_cliente + $c_house->tx_mask_t2_lav_costo_dotazione_casa + $c_house->tx_mask_t2_lav_prep_kit_dotazione_casa;
-                $this->attributes['costo_co'] = $sum;
+                return $this->attributes['costo_co'] = $sum;
             } else {
-                $this->attributes['costo_co'] = 0;
+                return $this->attributes['costo_co'] = 0;
             }
         } else {
-            $this->attributes['costo_co'] = 0;
+            return $this->attributes['costo_co'] = 0;
         }
     }
 
     public function setManciaCliAttribute($value)
     {
-        $this->attributes['mancia_cli'] = ($this->attributes['tx_mask_t3_p_cash_op_cout'] + $this->attributes['tx_mask_t3_p_cash_simo']) - ($this->attributes['tx_mask_t3_p_city_tax_amount'] + $this->attributes['tx_mask_t3_p_s_checkout']);
+        return $this->attributes['mancia_cli'] = ($this->attributes['tx_mask_t3_p_cash_op_cout'] + $this->attributes['tx_mask_t3_p_cash_simo']) - ($this->attributes['tx_mask_t3_p_city_tax_amount'] + $this->attributes['tx_mask_t3_p_s_checkout']);
     }
 
     public function setCostiCostoOperatoreCambioBiancheriaAttribute($value)
@@ -436,7 +441,7 @@ class Booking extends Model
 
         $user = TypoUser::where('uid',$id_op_co)->first();
 
-        if($user->deleted != 1){
+        if($user->deleted != 1 && $this->attributes['tx_mask_t2_p_cambi_l'] > 0){
             $c_house = TypoCHouse::select('tx_mask_t2_lav_c_cambio_b_stay_ar')
                 ->where('tx_mask_c_cod_feuser', 'like', '%'. $id_op_co .'%')
                 ->where('tx_mask_c_cod_casa', 'like', '%'. $id_house .'%')
@@ -445,12 +450,12 @@ class Booking extends Model
                 ->first();
 
             if($c_house){
-                $this->attributes['costi_costo_operatore_cambio_biancheria'] = $c_house['tx_mask_t2_lav_c_cambio_b_stay_ar'];
+                return $this->attributes['costi_costo_operatore_cambio_biancheria'] = $c_house['tx_mask_t2_lav_c_cambio_b_stay_ar'];
             } else {
-                $this->attributes['costi_costo_operatore_cambio_biancheria'] = 0;
+                return $this->attributes['costi_costo_operatore_cambio_biancheria'] = 0;
             }
         } else {
-            $this->attributes['costi_costo_operatore_cambio_biancheria'] = 0;
+            return $this->attributes['costi_costo_operatore_cambio_biancheria'] = 0;
         }
     }
 
@@ -492,9 +497,9 @@ class Booking extends Model
                 ($typo_house->tx_mask_casa_bagni * $typo_costi_biancheria->tx_mask_bianc_cs_ta) +
                 ($typo_house->tx_mask_casa_torcioni * $typo_costi_biancheria->tx_mask_bianc_cs_to);
 
-            $this->attributes['costi_costo_kit'] = $total;
+            return $this->attributes['costi_costo_kit'] = $total;
         } else {
-            $this->attributes['costi_costo_kit'] = $value;
+            return $this->attributes['costi_costo_kit'] = $value;
         }
 
     }

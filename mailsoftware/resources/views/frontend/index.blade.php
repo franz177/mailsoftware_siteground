@@ -38,7 +38,7 @@
                             <table class="table table-striped table-bordered  dt-responsive" id="sample_20">
                                 <thead>
                                     <tr>
-                                        <th></th>
+                                        <th class="none"></th>
                                         <th class="all text-center">
                                             <span class="svg-icon svg-icon-primary svg-icon-2x">
                                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -60,15 +60,16 @@
                                                 </svg>
                                             </span>
                                         </th>
-                                        <th class="none">uid</th>
+                                        <th class="none">city tax</th>
                                         <th class="all">nominativo</th>
                                         <th class="all">arrivo</th>
                                         <th class="all">partenza</th>
                                         <th class="all">doc</th>
                                         <th class="all">Mail Inviate</th>
                                         <th class="all">WA</th>
-                                        <th class="none">Gestore</th>
-                                        <th class="none">Op. Checkin</th>
+                                        <th class="all">Operatori</th>
+                                        <th class="none">Importo STAY</th>
+                                        <th class="none">KIT Biancheria</th>
                                         <th class="none">Threads</th>
                                     </tr>
                                 </thead>
@@ -170,7 +171,8 @@
                         render: function (data, type, row)
                         {
                             var house = houses_typo[data];
-                            return house;
+                            var house_gestore = houses_gestore[data];
+                            return house + '<br>' + house_gestore;
                         }, sortable: true,
                     },
                     {data: 'tx_mask_p_sito',
@@ -187,7 +189,7 @@
                             return site;
                         }, className:'text-center', sortable: true,
                     },
-                    {data: 'uid', sortable: false},
+                    {data: 'city_tax', sortable: false},
                     {data: 'header'},
                     { data: {
                             _:    "data_arrivo.display",
@@ -204,22 +206,9 @@
                     {data: 'documenti'},
                     {data: 'thread', name: 'thread'},
                     {data: 'whatsapp_stato', className: 'text-center', sortable: false},
-                    {data: 'casa',
-                        render: function (data, type, row)
-                        {
-                            var house_gestore = houses_gestore[data];
-                            return house_gestore;
-                        },
-                        sortable: false
-                    },
-                    {data: 'tx_mask_t1_op_chechin',
-                        render: function (data, type, row)
-                        {
-                            var operatore = op_checkin[data];
-                            return operatore;
-                        },
-                        sortable: false
-                    },
+                    {data: 'operatori'},
+                    {data: 'importo_stay'},
+                    {data: 'kit_base'},
                     {data: 'threads', name: 'threads', sortable: false},
                 ],
 
@@ -247,7 +236,9 @@
                     // $('td:eq(2)', row).addClass('bg-'+houses_color[data.casa]);
                     $('td:eq(3)', row).addClass('alert-warning text-left');
                     $('td:eq(4)', row).addClass('alert-warning');
+                    $('td:eq(4)', row).append('<p class="mt-2">h: '+data.tx_mask_t1_ora_checkin+'</p>');
                     $('td:eq(5)', row).addClass('alert-danger');
+                    $('td:eq(5)', row).append('<p class="mt-2">h: '+data.tx_mask_t1_ora_checkout+'</p>');
                     $('td:eq(8)', row).html('<i class="icon-2x la text-dark-50 socicon-whatsapp"></i>' +
                         '<br>' +
                         '<input type="range" class="whatsappRange" min="-1" max="4" data-id="'+data.whatsapp_id+'" value="'+data.whatsapp_stato+'" list="tickmarks">' +
@@ -283,7 +274,7 @@
                 responsive: {
                     details: {
                         type: 'column',
-                        target: 'th',
+                        target: 'tr',
                     }
                 },
                 columnDefs: [
@@ -291,7 +282,7 @@
                     { width: '5%', targets: 1}, //house
                     { width: '5%', targets: 2}, //site
                     { width: '5%', targets: 3}, //uid
-                    { width: '30%', targets: 4}, //Nominativo
+                    { width: '20%', targets: 4}, //Nominativo
                     { width: '10%', targets: 5}, //arrivo
                     { width: '10%', targets: 6}, //partenza
                     { width: '8%', targets: 7}, //doc

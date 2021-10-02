@@ -2,7 +2,9 @@
 
 namespace App\Console;
 
+use App\Jobs\ArtisanQueueWorkJob;
 use App\Jobs\BookingSincronizationJob;
+use App\Jobs\GetTypoBookingsJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -25,9 +27,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
-        $schedule->job(new BookingSincronizationJob)->everyFiveMinutes();
-        $schedule->command('queue:work', ['--sleep' => 3])->everyMinute();
+        $schedule->job(new GetTypoBookingsJob)->everyMinute();
+        $schedule->job(new ArtisanQueueWorkJob())->everyMinute();
+//        $schedule->command('queue:work', ['--sleep' => 3])->everyMinute();
     }
 
     /**

@@ -11,6 +11,7 @@ use App\Models\Typeanswer;
 use App\Models\Typo;
 use App\Models\TypoCountry;
 use App\Models\TypoHouses;
+use App\Models\TypoUser;
 use App\Models\User;
 use App\Models\Whatsapp;
 use Carbon\Carbon;
@@ -56,7 +57,10 @@ class PrenotazioniController extends Controller
         }
 
         if ($request->ajax()){
-            $data = Typo::select(['tt_content.uid', 'tt_content.tx_mask_p_tot_ospiti', 'tt_content.tx_mask_p_data_arrivo', 'tt_content.tx_mask_p_data_partenza', 'tt_content.tx_mask_p_data_prenotazione', 'tt_content.tx_mask_t1_op_chechin', 'tt_content.tx_mask_t0_tel', 'tt_content.tx_mask_t0_email',
+            $data = Typo::select(['tt_content.uid', 'tt_content.tx_mask_p_tot_ospiti', 'tt_content.tx_mask_p_data_arrivo', 'tt_content.tx_mask_p_data_partenza',
+                'tt_content.tx_mask_p_data_prenotazione', 'tt_content.tx_mask_t1_op_chechin', 'tt_content.tx_mask_t0_tel', 'tt_content.tx_mask_t0_email',
+                'tx_mask_t1_op_pulizie', 'tx_mask_t1_op_checkout', 'tx_mask_t1_op_chechin', 'tx_mask_t1_ora_checkin', 'tx_mask_t1_ora_checkout',
+                'tx_mask_t2_p_cambi_l','tx_mask_t2_p_cambi_a', 'tx_mask_t2_p_bianc', 'tx_mask_t3_p_stay', 'tx_mask_t3_p_city_tax_amount',
                 Typo::raw('IF(tt_content.tx_mask_t0_country = "" OR tx_mask_t0_country IS NULL, "NaN", tx_mask_t0_country) tx_mask_t0_country'),
                 Typo::raw('LCASE(tt_content.header) as headerl'),
                 Typo::raw('IFNULL(tt_content.tx_mask_p_sito, tt_content.tx_mask_t5_kross_cod_channel) tx_mask_p_sito'),
@@ -72,10 +76,9 @@ class PrenotazioniController extends Controller
                 ->get();
 
             return Datatables::of($data)
-                ->addColumn('uid', function ($row) {
-                    $uid = '<a href="threads/create/'.$row->uid.'" data-toggle="tooltip"  data-id="' . $row->uid . '" data-original-title="uid" class="font-weight-bolder text-hover-primary mb-1 font-size-lg">' . $row->uid . '</a>';
+                ->addColumn('city_tax', function ($row) {
 
-                    return $uid;
+                    return '<span class="font-weight-bolder">€ '.number_format($row->tx_mask_t3_p_city_tax_amount, 2, ',', '.').'</span>';
                 })
                 ->addColumn('header', function ($row) {
                     if($row->tx_mask_t0_country != 'NaN'){
@@ -87,7 +90,7 @@ class PrenotazioniController extends Controller
 
                     $headerl = preg_replace('/(\([a-zA-Z0-9\s]+\)\s?)/', '', $row->headerl);
 
-                    $header = '<a href="threads/create/'.$row->uid.'" data-toggle="tooltip"  data-id="' . $row->uid . '" data-original-title="Edit" class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg text-capitalize text-left">' . $headerl . '</a>
+                    $header = '<a href="threads/create/'.$row->uid.'" data-toggle="tooltip"  data-id="' . $row->uid . '" data-original-title="Edit" class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg text-capitalize text-left">' . $row->uid . ' - ' . $headerl . '</a>
                                 <br>
                                 <i class="icon-m text-dark-75 far fa-calendar-check"></i> '.$row->tx_mask_p_data_prenotazione.'
                                 <i class="icon-m text-dark-75 fas fa-globe-europe"></i> ('.$country.')
@@ -143,6 +146,51 @@ class PrenotazioniController extends Controller
 
                     return $whatsapp_id->uid;
                 })
+                ->addColumn('operatori', function ($row) {
+                    $user = $this->getAllUsersArray();
+                    $pulizie = $row->tx_mask_t1_op_pulizie ? $user[$row->tx_mask_t1_op_pulizie] : "NaN";
+                    $check_out = $row->tx_mask_t1_op_checkout ? $user[$row->tx_mask_t1_op_checkout] : "NaN";
+                    $check_in = $row->tx_mask_t1_op_chechin ? $user[$row->tx_mask_t1_op_chechin] : "NaN";
+
+                    $lenzuola = '';
+                    $asciugamani = '';
+                    $icon = '';
+
+                    if($row->tx_mask_t2_p_cambi_l > 0 || $row->tx_mask_t2_p_cambi_a > 0)
+                        $icon = '<i class="fa fa-exclamation text-warning" aria-hidden="true"></i>';
+
+                    if($row->tx_mask_t2_p_cambi_l > 0)
+                        $lenzuola = $row->tx_mask_t2_p_cambi_l.' Len';
+
+                    if($row->tx_mask_t2_p_cambi_a > 0)
+                        $asciugamani = $row->tx_mask_t2_p_cambi_a .' Asc';
+
+                    $header = '
+                                <p class="my-0">Pulizie:<span class="text-dark-75"> '.$pulizie.'</span></p>
+                                <p class="my-0">Check-Out:<span class="text-dark-75"> '.$check_out.'</span></p>
+                                <p class="my-0">Check-In:<span class="text-dark-75"> '.$check_in.'</span></p>
+                                <p> '.$icon.' '.$lenzuola.' '.$asciugamani.'</p>
+
+                                ';
+
+                    return $header;
+                })
+                ->addColumn('kit_base', function ($row){
+                    $kit_base = '<p class="text-danger text-uppercase">Selezionare Biancheria su Typo3</p>';
+                    if($row->tx_mask_t2_p_bianc){
+                        $typo_el_bianc = Typo::select('uid','header', 'subheader', 'tx_mask_bianc_tradit', 'tx_mask_bianc_traden', 'tx_mask_t1_bianc_qy_m', 'tx_mask_t1_bianc_qy_s', 'tx_mask_t1_bianc_qy_ba', 'tx_mask_t1_bianc_qy_v', 'tx_mask_t1_bianc_qy_f', 'tx_mask_t1_bianc_qy_bi')
+                            ->where('Ctype', 'mask_db_alg_el_bianc')
+                            ->where('uid',$row->tx_mask_t2_p_bianc)
+                            ->first();
+
+                        $kit_base = $typo_el_bianc->header;
+                    }
+
+                    return $kit_base;
+                })
+                ->addColumn('importo_stay', function ($row){
+                    return '<span class="font-weight-bolder">€ '.number_format($row->tx_mask_t3_p_stay, 2, ',', '.').'</span>';
+                })
                 ->addColumn('threads', function ($row) {
                     $threads_pren = Thread::where('uid','=',$row->uid)->with('user','flow', 'flow.typeanswer', 'flow.typeanswer.color')->orderBy('created_at', 'ASC')->get();
                     $threads = '';
@@ -174,7 +222,7 @@ class PrenotazioniController extends Controller
                         return $threads;
                     }
                 })
-                ->rawColumns(['uid', 'header', 'thread', 'color', 'whatsapp_id', 'whatsapp_stato', 'threads', 'data_arrivo', 'data_partenza'])
+                ->rawColumns(['city_tax', 'header', 'thread', 'color', 'whatsapp_id', 'whatsapp_stato', 'operatori', 'threads', 'data_arrivo', 'data_partenza', 'kit_base', 'importo_stay'])
                 ->make(true);
         }
 

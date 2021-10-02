@@ -39,9 +39,16 @@ return [
                     'new-tab' => false,
                     'submenu' => [
                         [
-                            'title' => 'Mensile',
+                            'title' => 'Mensile Generale',
                             'bullet' => 'dot',
                             'page' => '/viste/mensile',
+                            'auth' => 1,
+                            'new-tab' => false,
+                        ],
+                        [
+                            'title' => 'Totali Mensili Operatori',
+                            'bullet' => 'dot',
+                            'page' => '/viste/mensile/operatori',
                             'auth' => 1,
                             'new-tab' => false,
                         ],

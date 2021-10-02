@@ -174,6 +174,16 @@ class Controller extends BaseController
         return $users;
     }
 
+    protected function getAllUsersArray()
+    {
+        $users = TypoUser::select('uid', 'name')
+            ->where('disable', '=', 0)
+            ->where('deleted', '=', 0)
+            ->pluck('name', 'uid');
+
+        return $users;
+    }
+
     protected function getCountriesArray($country_id)
     {
         $countries = TypoCountry::select('cn_short_it as name')

@@ -145,7 +145,7 @@
                             <tbody>
                             <!--begin::Item-->
                             <tr>
-                                <td class="font-weight-bold text-muted  align-middle pb-6">Gestore: </td>
+                                <td class="font-weight-bold text-muted  align-middle pb-6">Proprietario: </td>
                                 <td class="font-size-lg font-weight-bolder text-right text-dark-75 align-middle w-150px pb-6">{{ $gestore }}</td>
                             </tr>
                             <tr>

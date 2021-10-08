@@ -25,7 +25,7 @@ class BookingController extends Controller
      */
     public function index()
     {
-        $booking = Booking::find(1525);
+        return $booking = Booking::find(1525);
 
         $user = TypoUser::where('uid',$booking->tx_mask_t1_op_pulizie)->first();
 

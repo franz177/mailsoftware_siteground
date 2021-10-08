@@ -62,8 +62,8 @@ class MensileController extends Controller
         $year = $request->year ? $request->year : now()->year;
 
 //        $month = $month - 2;
-        if($month == 1)
-            $month = 12;
+//        if($month == 1)
+//            $month = 12;
 
         $data = Booking::where(function ($q) use ($year) {
                 $q->where(Typo::raw('YEAR(tx_mask_p_data_arrivo)'), '=', $year)

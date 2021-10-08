@@ -278,6 +278,7 @@ class Menu
             if (isset($item['code'])) {
                 echo $item['code'];
             } else {
+                if (in_array(99, $item['auth']) || in_array(Auth::user()->role , $item['auth'])){
                 // insert title or heading
                 if (isset($item['heading']) == false) {
                     $url = '#';
@@ -320,8 +321,7 @@ class Menu
                 }
 
                 // Badge
-                if ($item['auth'] == 99 || $item['auth'] == Auth::user()->role)
-                    echo '<span class="menu-text">' . $item['title'] . '</span>';
+                echo '<span class="menu-text">' . $item['title'] . '</span>';
 
                 if (isset($item['label'])) {
                     echo '<span class="menu-badge"><span class="label ' . $item['label']['type'] . '">' . $item['label']['value'] . '</span></span>';
@@ -425,6 +425,7 @@ class Menu
 
             if (isset($item['heading']) == false) {
                 echo '</li>';
+            }
             }
         } elseif (is_array($item)) {
             foreach ($item as $each) {

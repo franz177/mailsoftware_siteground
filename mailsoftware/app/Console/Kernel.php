@@ -28,8 +28,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->job(new GetTypoBookingsJob)->everyMinute();
-        $schedule->job(new ArtisanQueueWorkJob())->everyMinute();
-//        $schedule->command('queue:work', ['--sleep' => 3])->everyMinute();
+//        $schedule->job(new ArtisanQueueWorkJob())->everyMinute();
+        $schedule->command('queue:work', ['--sleep' => 3])->everyMinute();
     }
 
     /**

@@ -67,9 +67,10 @@
                                         <th class="all">doc</th>
                                         <th class="all">Mail Inviate</th>
                                         <th class="all">WA</th>
-                                        <th class="all">Operatori</th>
+                                        <th class="all">Cambi</th>
                                         <th class="none">Importo STAY</th>
                                         <th class="none">KIT Biancheria</th>
+{{--                                        <th class="none">Check-In</th>--}}
                                         <th class="none">Threads</th>
                                     </tr>
                                 </thead>
@@ -172,7 +173,12 @@
                         {
                             var house = houses_typo[data];
                             var house_gestore = houses_gestore[data];
-                            return house + '<br>' + house_gestore;
+                            var house_gestore = row.gestore_casa;
+                            var op_check_in ='';
+                            if(row.op_check_in != 'chiave'){
+                                op_check_in = '<br> – <br>' + row.op_check_in;
+                            }
+                            return house + '<br>' + house_gestore + op_check_in;
                         }, sortable: true,
                     },
                     {data: 'tx_mask_p_sito',
@@ -206,10 +212,12 @@
                     {data: 'documenti'},
                     {data: 'thread', name: 'thread'},
                     {data: 'whatsapp_stato', className: 'text-center', sortable: false},
-                    {data: 'operatori'},
+                    {data: 'cambi'},
                     {data: 'importo_stay'},
                     {data: 'kit_base'},
+                    // {data: 'op_check_in'},
                     {data: 'threads', name: 'threads', sortable: false},
+
                 ],
 
                 rowCallback: function(row, data, index) {
@@ -237,8 +245,10 @@
                     $('td:eq(3)', row).addClass('alert-warning text-left');
                     $('td:eq(4)', row).addClass('alert-warning');
                     $('td:eq(4)', row).append('<p class="mt-2">h: '+data.tx_mask_t1_ora_checkin+'</p>');
+                    $('td:eq(4)', row).append('<p class="mt-2 font-size-sm">'+data.op_pulizie+'</p>');
                     $('td:eq(5)', row).addClass('alert-danger');
                     $('td:eq(5)', row).append('<p class="mt-2">h: '+data.tx_mask_t1_ora_checkout+'</p>');
+                    $('td:eq(5)', row).append('<p class="mt-2 font-size-sm">'+data.op_check_out+'</p>');
                     $('td:eq(8)', row).html('<i class="icon-2x la text-dark-50 socicon-whatsapp"></i>' +
                         '<br>' +
                         '<input type="range" class="whatsappRange" min="-1" max="4" data-id="'+data.whatsapp_id+'" value="'+data.whatsapp_stato+'" list="tickmarks">' +

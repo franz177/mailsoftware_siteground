@@ -23,6 +23,7 @@ class PrenotazioniController extends Controller
 {
 
     protected $CType = 'mask_db_alg_pren';
+    protected $users;
 
     /**
      * Display a listing of the resource.
@@ -57,10 +58,12 @@ class PrenotazioniController extends Controller
         }
 
         if ($request->ajax()){
+            $this->users = $this->getAllUsersArray();
             $data = Typo::select(['tt_content.uid', 'tt_content.tx_mask_p_tot_ospiti', 'tt_content.tx_mask_p_data_arrivo', 'tt_content.tx_mask_p_data_partenza',
                 'tt_content.tx_mask_p_data_prenotazione', 'tt_content.tx_mask_t1_op_chechin', 'tt_content.tx_mask_t0_tel', 'tt_content.tx_mask_t0_email',
                 'tx_mask_t1_op_pulizie', 'tx_mask_t1_op_checkout', 'tx_mask_t1_op_chechin', 'tx_mask_t1_ora_checkin', 'tx_mask_t1_ora_checkout',
                 'tx_mask_t2_p_cambi_l','tx_mask_t2_p_cambi_a', 'tx_mask_t2_p_bianc', 'tx_mask_t3_p_stay', 'tx_mask_t3_p_city_tax_amount',
+                'tx_mask_contatto_riferimento',
                 Typo::raw('IF(tt_content.tx_mask_t0_country = "" OR tx_mask_t0_country IS NULL, "NaN", tx_mask_t0_country) tx_mask_t0_country'),
                 Typo::raw('LCASE(tt_content.header) as headerl'),
                 Typo::raw('IFNULL(tt_content.tx_mask_p_sito, tt_content.tx_mask_t5_kross_cod_channel) tx_mask_p_sito'),
@@ -76,6 +79,16 @@ class PrenotazioniController extends Controller
                 ->get();
 
             return Datatables::of($data)
+                ->addColumn('gestore_casa', function($row){
+                    if($row->tx_mask_contatto_riferimento > 0){
+                        $contatto_riferimento = TypoUser::select('first_name')
+                            ->where('uid', '=', $row->tx_mask_contatto_riferimento)
+                            ->first();
+                        return '<span class="font-weight-bolder">'. $contatto_riferimento->first_name  .'</span>';
+                    } else {
+                        return '<span class="font-weight-bolder">Seleziona Gestore</span>';
+                    }
+                })
                 ->addColumn('city_tax', function ($row) {
 
                     return '<span class="font-weight-bolder">€ '.number_format($row->tx_mask_t3_p_city_tax_amount, 2, ',', '.').'</span>';
@@ -146,11 +159,22 @@ class PrenotazioniController extends Controller
 
                     return $whatsapp_id->uid;
                 })
-                ->addColumn('operatori', function ($row) {
-                    $user = $this->getAllUsersArray();
-                    $pulizie = $row->tx_mask_t1_op_pulizie ? $user[$row->tx_mask_t1_op_pulizie] : "NaN";
-                    $check_out = $row->tx_mask_t1_op_checkout ? $user[$row->tx_mask_t1_op_checkout] : "NaN";
-                    $check_in = $row->tx_mask_t1_op_chechin ? $user[$row->tx_mask_t1_op_chechin] : "NaN";
+                ->addColumn('op_pulizie', function($row){
+                    $user = $this->users;
+
+                    return $row->tx_mask_t1_op_pulizie ? $user[$row->tx_mask_t1_op_pulizie] : "NaN";
+                })
+                ->addColumn('op_check_out', function($row){
+                    $user = $this->users;
+
+                    return $row->tx_mask_t1_op_checkout ? $user[$row->tx_mask_t1_op_checkout] : "NaN";
+                })
+                ->addColumn('op_check_in', function($row){
+                    $user = $this->users;
+
+                    return $row->tx_mask_t1_op_chechin ? $user[$row->tx_mask_t1_op_chechin] : "NaN";
+                })
+                ->addColumn('cambi', function ($row) {
 
                     $lenzuola = '';
                     $asciugamani = '';
@@ -166,9 +190,6 @@ class PrenotazioniController extends Controller
                         $asciugamani = $row->tx_mask_t2_p_cambi_a .' Asc';
 
                     $header = '
-                                <p class="my-0">Pulizie:<span class="text-dark-75"> '.$pulizie.'</span></p>
-                                <p class="my-0">Check-Out:<span class="text-dark-75"> '.$check_out.'</span></p>
-                                <p class="my-0">Check-In:<span class="text-dark-75"> '.$check_in.'</span></p>
                                 <p> '.$icon.' '.$lenzuola.' '.$asciugamani.'</p>
 
                                 ';
@@ -222,7 +243,7 @@ class PrenotazioniController extends Controller
                         return $threads;
                     }
                 })
-                ->rawColumns(['city_tax', 'header', 'thread', 'color', 'whatsapp_id', 'whatsapp_stato', 'operatori', 'threads', 'data_arrivo', 'data_partenza', 'kit_base', 'importo_stay'])
+                ->rawColumns(['gestore_casa','city_tax', 'header', 'thread', 'color', 'whatsapp_id', 'whatsapp_stato', 'cambi', 'op_pulizie', 'op_check_out', 'op_check_in', 'threads', 'data_arrivo', 'data_partenza', 'kit_base', 'importo_stay'])
                 ->make(true);
         }
 

@@ -262,18 +262,18 @@ class Booking extends Model
     public function getTxMaskPDataArrivoAttribute()
     {
         if($this->attributes['tx_mask_p_data_arrivo'])
-            return Carbon::createFromFormat('Y-m-d', $this->attributes['tx_mask_p_data_arrivo'])->format('d-m-Y');
+            return Carbon::createFromFormat('Y-m-d', $this->attributes['tx_mask_p_data_arrivo'])->format('d-m-y');
     }
 
     public function getTxMaskPDataPartenzaAttribute()
     {
         if($this->attributes['tx_mask_p_data_partenza'])
-            return Carbon::createFromFormat('Y-m-d', $this->attributes['tx_mask_p_data_partenza'])->format('d-m-Y');
+            return Carbon::createFromFormat('Y-m-d', $this->attributes['tx_mask_p_data_partenza'])->format('d-m-y');
     }
     public function getTxMaskPDataPrenotazioneAttribute()
     {
         if($this->attributes['tx_mask_p_data_prenotazione'])
-            return Carbon::createFromFormat('Y-m-d', $this->attributes['tx_mask_p_data_prenotazione'])->format('d-m-Y');
+            return Carbon::createFromFormat('Y-m-d', $this->attributes['tx_mask_p_data_prenotazione'])->format('d-m-y');
     }
 
     public function setTxMaskPDataArrivoAttribute($value)
@@ -371,6 +371,8 @@ class Booking extends Model
                             $id_house = $this->attributes['tx_mask_p_casa'];
                             $range = TypoRange::select('uid', 'header', 'tx_mask_r_casa', 'tx_mask_r_dal', 'tx_mask_r_al', 'tx_mask_r_mm')
                                 ->where('tx_mask_r_casa', 'like', '%'. $id_house .'%')
+                                ->where('tx_mask_r_dal', '<=', $this->attributes['tx_mask_p_data_arrivo'])
+                                ->where('tx_mask_r_al', '>=', $this->attributes['tx_mask_p_data_arrivo'])
                                 ->where('hidden', 0)
                                 ->where('deleted', 0)
                                 ->first();
@@ -380,9 +382,10 @@ class Booking extends Model
                                 ->where('tx_mask_r_mm_max','>=', $this->attributes['tx_mask_t3_p_stay'])
                                 ->first();
                             return $this->attributes['totale_pulizie'] = $range_mm['tx_mask_r_mm_importo'];
+
                         case 2: // IMPORTO FISSO
                             if($sum_pulizie == 0)
-                                $this->attributes['totale_pulizie'] = 0;
+                                return $this->attributes['totale_pulizie'] = 0;
 
                             return $this->attributes['totale_pulizie'] = $sum_pulizie;
                         default:
@@ -405,18 +408,24 @@ class Booking extends Model
      */
     public function setCostoCoAttribute($value)
     {
-        $id_op_co = $this->attributes['tx_mask_t1_op_checkout'] ? $this->attributes['tx_mask_t1_op_checkout'] : 19;
+        $id_op_co = [
+            $this->attributes['tx_mask_t1_op_checkout'] ? $this->attributes['tx_mask_t1_op_checkout'] : 19
+        ];
         $id_house = $this->attributes['tx_mask_p_casa'];
 
         $user = TypoUser::where('uid',$id_op_co)->first();
 
         if($user->deleted != 1){
-            $c_house = TypoCHouse::select('uid', 'header', 'tx_mask_t3_govout_c_cout', 'tx_mask_t3_govout_ritiro_immondizia', 'tx_mask_t3_govout_ritiro_soldi',
-                'tx_mask_t2_lav_c_cambio_b_cout', 'tx_mask_t2_lav_prep_kit_cliente', 'tx_mask_t2_lav_costo_dotazione_casa', 'tx_mask_t2_lav_prep_kit_dotazione_casa')
-                ->where('tx_mask_c_cod_feuser', 'like', '%'. $id_op_co .'%')
-                ->where('tx_mask_c_cod_casa', 'like', '%'. $id_house .'%')
-                ->where('hidden', 0)
-                ->where('deleted', 0)
+            $c_house = TypoCHouse::select('tt_content.uid', 'tt_content.header', 'tt_content.tx_mask_t3_govout_c_cout', 'tt_content.tx_mask_t3_govout_ritiro_immondizia', 'tt_content.tx_mask_t3_govout_ritiro_soldi',
+                'tt_content.tx_mask_t2_lav_c_cambio_b_cout', 'tt_content.tx_mask_t2_lav_prep_kit_cliente', 'tt_content.tx_mask_t2_lav_costo_dotazione_casa', 'tt_content.tx_mask_t2_lav_prep_kit_dotazione_casa')
+                ->join('tx_mask_c_cos_periodo', 'tx_mask_c_cos_periodo.parentid', '=', 'tt_content.uid')
+//                ->where('tt_content.tx_mask_c_cod_feuser', 'like', '%'. $id_op_co .'%')
+                ->whereIn('tt_content.tx_mask_c_cod_feuser', $id_op_co)
+                ->where('tt_content.tx_mask_c_cod_casa', 'like', '%'. $id_house .'%')
+                ->where('tx_mask_c_cos_periodo.tx_mask_c_cod_from', '<=', $this->attributes['tx_mask_p_data_partenza'])
+                ->where('tx_mask_c_cos_periodo.tx_mask_c_cod_to', '>=', $this->attributes['tx_mask_p_data_partenza'])
+                ->where('tt_content.hidden', 0)
+                ->where('tt_content.deleted', 0)
                 ->first();
             if($c_house){
                 $sum = $c_house->tx_mask_t3_govout_c_cout + $c_house->tx_mask_t3_govout_ritiro_immondizia + $c_house->tx_mask_t3_govout_ritiro_soldi + $c_house->tx_mask_t2_lav_c_cambio_b_cout + $c_house->tx_mask_t2_lav_prep_kit_cliente + $c_house->tx_mask_t2_lav_costo_dotazione_casa + $c_house->tx_mask_t2_lav_prep_kit_dotazione_casa;

@@ -37,8 +37,11 @@ class GetTypoBookingsJob implements ShouldQueue
             ->orderBy('uid', 'desc')
             ->get();
 
-        $bookings->each(function($booking) {
-            BookingSincronizationJob::dispatch($booking);
-        });
+        if($bookings){
+            $bookings->each(function($booking) {
+                BookingSincronizationJob::dispatch($booking);
+            });
+        }
+
     }
 }

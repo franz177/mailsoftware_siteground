@@ -212,6 +212,7 @@ class MensileController extends Controller
                     ->orWhere(Typo::raw('MONTH(tx_mask_p_data_partenza)'), '=', $month);
             })
             ->where('tx_mask_cod_reservation_status', '!=', "CANC")
+            ->orderBy('tx_mask_p_casa', 'ASC')
             ->orderBy('tx_mask_p_data_arrivo', 'ASC')
             ->orderBy('tx_mask_p_data_partenza', 'ASC')
             ->get();

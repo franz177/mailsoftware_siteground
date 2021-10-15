@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\ArtisanQueueWorkJob;
 use App\Jobs\BookingSincronizationJob;
+use App\Jobs\GetTypoBookingsJob;
 use App\Models\Booking;
 use App\Models\Typo;
 use App\Models\TypoBiancCsPeriodo;
@@ -25,7 +26,15 @@ class BookingController extends Controller
      */
     public function index()
     {
-        return $booking = Booking::find(1525);
+        $month = now()->month;
+        $bookings = Typo::where('CType','mask_db_alg_pren')
+            ->where('hidden', 0)
+            ->where('deleted', 0)
+            ->where(Typo::raw('MONTH(FROM_UNIXTIME(tstamp))'), '=', $month)
+            ->orderBy('uid', 'desc')
+            ->get();
+
+        return Booking::find(1525);
 
         $user = TypoUser::where('uid',$booking->tx_mask_t1_op_pulizie)->first();
 
@@ -102,17 +111,19 @@ class BookingController extends Controller
 
     public function force()
     {
-        $bookings = Typo::where('CType','mask_db_alg_pren')
-            ->where('hidden', 0)
-            ->where('deleted', 0)
-            ->orderBy('uid', 'desc')
-            ->get();
+//        $bookings = Typo::where('CType','mask_db_alg_pren')
+//            ->where('hidden', 0)
+//            ->where('deleted', 0)
+//            ->orderBy('uid', 'desc')
+//            ->get();
+//
+//        $bookings->each(function($booking) {
+//            BookingSincronizationJob::dispatch($booking);
+//        });
 
-        $bookings->each(function($booking) {
-            BookingSincronizationJob::dispatch($booking);
-        });
+        BookingSincronizationJob::dispatch();
 
-        ArtisanQueueWorkJob::dispatch();
+        Artisan::call('queue:work',['--stop-when-empty' => 1]);
 
         return back();
     }

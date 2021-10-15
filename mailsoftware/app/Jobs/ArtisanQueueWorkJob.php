@@ -31,6 +31,6 @@ class ArtisanQueueWorkJob implements ShouldQueue
      */
     public function handle()
     {
-        Artisan::call('queue:work', ['--sleep' => 3]);
+        Artisan::call('queue:work',['--stop-when-empty']);
     }
 }

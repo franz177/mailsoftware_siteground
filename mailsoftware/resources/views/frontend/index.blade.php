@@ -23,15 +23,14 @@
     <div class="row">
         <div class="col-lg-12 col-xxl-12">
             <div class="card card-custom card-stretch gutter-b">
-                <div class="card-header border-0 pt-5">
-                    <h3 class="card-title align-items-start flex-column">
-                            <span class="card-label font-weight-bolder text-dark text-uppercase">
-                                Confermate
-                            </span>
-                        <span class="text-muted mt-3 font-weight-bold font-size-sm"></span>
-                    </h3>
-                </div>
-                <div class="card-body pt-0 pb-3">
+{{--                <div class="card-header border-0 pt-5">--}}
+{{--                    <h3 class="card-title align-items-start flex-column">--}}
+{{--                            <span class="card-label font-weight-bolder text-dark text-uppercase">--}}
+{{--                            </span>--}}
+{{--                        <span class="text-muted mt-3 font-weight-bold font-size-sm"></span>--}}
+{{--                    </h3>--}}
+{{--                </div>--}}
+                <div class="card-body pb-3">
                     <div class="tab-content">
                         <!--begin::Table-->
                         <div class="table-responsive" >
@@ -160,7 +159,7 @@
 
                 columns: [
                     {
-                        className:      '',
+                        className:      'hidden',
                         orderable:      false,
                         searchable:     false,
                         data:           null,

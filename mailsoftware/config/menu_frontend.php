@@ -23,7 +23,7 @@ return [
             'root' => true,
             'page' => '',
             'new-tab' => false,
-            'auth' => [1],
+            'auth' => [1,3],
             'submenu' => [
                 [
                     'title' => 'Dashboard',
@@ -35,7 +35,7 @@ return [
                 [
                     'title' => 'Mensile',
                     'bullet' => 'dot',
-                    'auth' => [1],
+                    'auth' => [1,3],
                     'new-tab' => false,
                     'submenu' => [
                         [
@@ -49,7 +49,7 @@ return [
                             'title' => 'Totali Mensili Operatori',
                             'bullet' => 'dot',
                             'page' => '/viste/mensile/operatori',
-                            'auth' => [1],
+                            'auth' => [1,3],
                             'new-tab' => false,
                         ],
                         [

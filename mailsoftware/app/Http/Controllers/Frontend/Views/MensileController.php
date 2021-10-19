@@ -107,9 +107,28 @@ class MensileController extends Controller
 
         if($data->count() > 0){
             return Datatables::of($data)
+                ->addColumn('note_alert', function ($row) {
+                    $note_alert = '';
+                    if($row->tx_mask_t1_op_note)
+                        $note_alert = '<span class="badge badge-warning"><i class="fas fa-exclamation" aria-hidden="true"></i> note</span>';
+                    return $note_alert;
+                })
                 ->addColumn('header', function ($row) {
                     $header = preg_replace('/(\([a-zA-Z0-9\s]+\)\s?)/', '', $row->header);
                     return '<a href="#" data-toggle="tooltip"  class="text-dark-75 text-hover-primary mb-1 font-size-lg text-capitalize text-left">' . $header . '</a>';
+                })
+                ->addColumn('data_arrivo', function ($row){
+                    $h = $row->tx_mask_t1_ora_checkin ? $row->tx_mask_t1_ora_checkin : '<span class="text-danger">NaN</span>';
+                    $arrivo = Carbon::createFromFormat('d-m-y', $row->tx_mask_p_data_arrivo)->format('Y-m-d');
+                    $partenza = Carbon::createFromFormat('d-m-y', $row->tx_mask_p_data_partenza)->format('Y-m-d');
+                    $arrivo = Carbon::parse($arrivo);
+                    $partenza = Carbon::parse($partenza);
+                    $diff = $partenza->diffInDays($arrivo);
+                    return $row->tx_mask_p_data_arrivo . ' </br> <span class="text-dark-75">h</span> '. $h . ' <i class="fas fa-moon text-dark-75"></i> '. $diff ;
+                })
+                ->addColumn('data_partenza', function ($row){
+                    $h = $row->tx_mask_t1_ora_checkout ? $row->tx_mask_t1_ora_checkout : '<span class="text-danger">NaN</span>';
+                    return $row->tx_mask_p_data_arrivo . ' </br> <span class="text-dark-75">h</span> '. $h;
                 })
                 ->addColumn('city_tax', function ($row) {
                     return '<span class="font-weight-bolder">€ '.number_format($row->tx_mask_t3_p_city_tax_amount, 2, ',', '.').'</span>';
@@ -177,7 +196,7 @@ class MensileController extends Controller
                     return '';
                 })
                 ->rawColumns([
-                    'header', 'city_tax','costo_orario', 'totale_pulizie',
+                    'note_alert', 'header', 'data_arrivo', 'data_partenza', 'city_tax','costo_orario', 'totale_pulizie',
                     'cash_operatore_co', 'cash_simo_co', 'costo_co', 'costo_ex_co',
                     'mancia_cli', 'mancia_cli_or', 'extra_cash_ospite', 'costi_costo_operatore_cambio_biancheria',
                     'sum_tot_pulizie', 'sum_supervisor_pulizie', 'sum_costo_co',
@@ -212,7 +231,6 @@ class MensileController extends Controller
                     ->orWhere(Typo::raw('MONTH(tx_mask_p_data_partenza)'), '=', $month);
             })
             ->where('tx_mask_cod_reservation_status', '!=', "CANC")
-            ->orderBy('tx_mask_p_casa', 'ASC')
             ->orderBy('tx_mask_p_data_arrivo', 'ASC')
             ->orderBy('tx_mask_p_data_partenza', 'ASC')
             ->get();
@@ -227,16 +245,38 @@ class MensileController extends Controller
 
         if($data->count() > 0){
             return Datatables::of($data)
+                ->addColumn('note_alert', function ($row) {
+                    $note_alert = '';
+                    if($row->tx_mask_t1_op_note)
+                        $note_alert = '<span class="badge badge-warning"><i class="fas fa-exclamation" aria-hidden="true"></i> note</span>';
+
+                    if($row->tx_mask_t1_op_chechin != 21)
+                        $note_alert = '<span class="badge badge-warning"><i class="fas fa-exclamation" aria-hidden="true"></i> Check-In</span>';
+                    return $note_alert;
+                })
                 ->addColumn('header', function ($row) {
                     $header = preg_replace('/(\([a-zA-Z0-9\s]+\)\s?)/', '', $row->header);
                     return '<a href="#" data-toggle="tooltip"  class="text-dark-75 text-hover-primary mb-1 font-size-lg text-capitalize text-left">' . $header . '</a>';
+                })
+                ->addColumn('data_arrivo', function ($row){
+                    $h = $row->tx_mask_t1_ora_checkin ? $row->tx_mask_t1_ora_checkin : '<span class="text-danger">NaN</span>';
+                    $arrivo = Carbon::createFromFormat('d-m-y', $row->tx_mask_p_data_arrivo)->format('Y-m-d');
+                    $partenza = Carbon::createFromFormat('d-m-y', $row->tx_mask_p_data_partenza)->format('Y-m-d');
+                    $arrivo = Carbon::parse($arrivo);
+                    $partenza = Carbon::parse($partenza);
+                    $diff = $partenza->diffInDays($arrivo);
+                    return $row->tx_mask_p_data_arrivo . ' </br> <span class="text-dark-75">h</span> '. $h . ' <i class="fas fa-moon text-dark-75"></i> '. $diff ;
+                })
+                ->addColumn('data_partenza', function ($row){
+                    $h = $row->tx_mask_t1_ora_checkout ? $row->tx_mask_t1_ora_checkout : '<span class="text-danger">NaN</span>';
+                    return $row->tx_mask_p_data_arrivo . ' </br> <span class="text-dark-75">h</span> '. $h;
                 })
                 ->addColumn('city_tax', function ($row) {
                     return '<span class="font-weight-bolder">€ '.number_format($row->tx_mask_t3_p_city_tax_amount, 2, ',', '.').'</span>';
                 })
                 ->addColumn('costo_orario', function($row) {
 
-                    return '<span class="font-weight-bolder">€ '.number_format($row->costo_orario, 2, ',', '.').'</span>';
+                    return '<span class="font-weight-bolder"> '.$row->tx_mask_t1_ore_pulizie.'</span> (€ '.number_format($row->costo_orario, 2, ',', '.').')';
                 })
                 ->addColumn('totale_pulizie', function($row) {
                     if($row->totale_pulizie == 0)
@@ -296,13 +336,44 @@ class MensileController extends Controller
                 ->addColumn('extra_mondezza', function ($data) {
                     return '';
                 })
+                ->addColumn('kit_base', function ($row){
+                    $kit_base = '<p class="text-danger text-uppercase">Selezionare Biancheria su Typo3</p>';
+                    if($row->tx_mask_t2_p_bianc){
+                        $typo_el_bianc = Typo::select('uid','header', 'subheader', 'tx_mask_bianc_tradit', 'tx_mask_bianc_traden', 'tx_mask_t1_bianc_qy_m', 'tx_mask_t1_bianc_qy_s', 'tx_mask_t1_bianc_qy_ba', 'tx_mask_t1_bianc_qy_v', 'tx_mask_t1_bianc_qy_f', 'tx_mask_t1_bianc_qy_bi')
+                            ->where('Ctype', 'mask_db_alg_el_bianc')
+                            ->where('uid',$row->tx_mask_t2_p_bianc)
+                            ->first();
+
+                        $kit_base = $typo_el_bianc->header;
+                    }
+
+                    $lenzuola = '';
+                    $asciugamani = '';
+                    $icon = '';
+                    $span = '';
+
+                    if($row->tx_mask_t2_p_cambi_l > 0 || $row->tx_mask_t2_p_cambi_a > 0){
+                        $icon = '<span class="badge badge-warning"><i class="fas fa-exclamation" aria-hidden="true"></i>';
+                        $span = '</span>';
+                    }
+
+
+                    if($row->tx_mask_t2_p_cambi_l > 0)
+                        $lenzuola = $row->tx_mask_t2_p_cambi_l.' Len';
+
+                    if($row->tx_mask_t2_p_cambi_a > 0)
+                        $asciugamani = $row->tx_mask_t2_p_cambi_a .' Asc';
+
+                    return $kit_base . '</br>' . $icon . ' ' . $lenzuola . ' ' . $asciugamani . $span;
+
+                })
                 ->rawColumns([
-                    'header', 'city_tax','costo_orario', 'totale_pulizie',
+                    'note_alert', 'header', 'data_arrivo', 'data_partenza', 'city_tax','costo_orario', 'totale_pulizie',
                     'cash_operatore_co', 'cash_simo_co', 'costo_co', 'costo_ex_co',
                     'mancia_cli', 'mancia_cli_or', 'extra_cash_ospite', 'costi_costo_operatore_cambio_biancheria',
                     'sum_tot_pulizie', 'sum_supervisor_pulizie', 'sum_costo_co',
                     'sum_ex_co', 'sum_cash_operatore_co', 'sum_cash_simo_co',
-                    'sum_mancia_cli', 'extra_mondezza'
+                    'sum_mancia_cli', 'extra_mondezza', 'kit_base'
                 ])
                 ->make(true);
         } else {

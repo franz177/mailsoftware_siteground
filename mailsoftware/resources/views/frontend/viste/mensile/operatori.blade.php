@@ -72,7 +72,7 @@
                             <table class="table table-striped table-bordered  dt-responsive" id="sample_21">
                                 <thead>
                                 <tr>
-                                    <th></th>
+                                    <th class="none"></th>
                                     <th class="all text-center">
                                             <span class="svg-icon svg-icon-primary svg-icon-2x">
                                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -83,59 +83,27 @@
                                                 </svg>
                                             </span>
                                     </th>
-                                    <th class="none text-left">Sito</th>
-                                    <th class="all text-uppercase">Cliente</th>
                                     <th class="all">Arrivo</th>
-                                    <th class="none">Note</th>
-                                    <th class="none">CityTax</th>
                                     <th class="all">Op. Pulizie</th>
-                                    <th class="none">Ore Pulizie</th>
-                                    <th class="none">Costo Ore Pulizie</th>
-                                    <th class="all">Tot <br> Pulizie</th>
-                                    <th class="all">Supervisor <br> Pulizie</th>
+                                    <th class="all">kit base</th>
                                     <th class="all">Partenza</th>
                                     <th class="all">Op. <br> C-OUT</th>
-                                    <th class="all">Costo <br> C-OUT</th>
-                                    <th class="all">Costo <br> Extra <br> C-OUT</th>
                                     <th class="all">Cash <br> Op. C-OUT</th>
-                                    <th class="all">Cash <br> Simo <br> C-OUT</th>
-                                    <th class="all">Mancia Cliente</th>
+
+                                    <th class="none">Note</th>
+                                    <th class="none">CityTax</th>
                                     <th class="none">Extra Cash dell'ospite al C-OUT</th>
-                                    <th class="all">Costo Op.Cambio</th>
-                                    <th class="none">Note Contabili</th>
-                                    <th class="none">Note per Noi</th>
+                                    <th class="none">Ore Pulizie</th>
+                                    <th class="none">Supervisor Pulizie</th>
+                                    <th class="none">Costo Extra C-OUT</th>
+                                    <th class="none">Costo Op.Cambio</th>
                                     <th class="none">Extra Mondezza</th>
+                                    <th class="none">Operatore C-IN</th>
+                                    <th class="none">Cash Preso da Simo C-OUT</th>
+                                    <th class="none">Sito</th>
+                                    <th class="none text-uppercase">Cliente</th>
                                 </tr>
                                 </thead>
-
-                                <tfoot>
-                                <tr>
-                                    <th></th>
-                                    <th class="all text-center"></th>
-                                    <th class="none text-left"></th>
-                                    <th class="all text-uppercase"></th>
-                                    <th class="all"></th>
-                                    <th class="none"></th>
-                                    <th class="none"></th>
-                                    <th class="all"></th>
-                                    <th class="none">Ore Pulizie</th>
-                                    <th class="none">Costo Ore Pulizie</th>
-                                    <th class="all">Tot <br> Pulizie</th>
-                                    <th class="all">Supervisor <br> Pulizie</th>
-                                    <th class="all"></th>
-                                    <th class="all"></th>
-                                    <th class="all">Costo <br> C-OUT</th>
-                                    <th class="all">Costo <br> Extra <br> C-OUT</th>
-                                    <th class="all">Cash <br> Op. C-OUT</th>
-                                    <th class="all">Cash <br> Simo <br> C-OUT</th>
-                                    <th class="all">Mancia Cliente</th>
-                                    <th class="all"></th>
-                                    <th class="all">Costo Op.Cambio</th>
-                                    <th class="none">Note Contabili</th>
-                                    <th class="none">Note per Noi</th>
-                                    <th class="none">Extra Mondezza</th>
-                                </tr>
-                                </tfoot>
 
                             </table>
                         </div>
@@ -199,7 +167,7 @@
 
                 columns: [
                     {
-                        className:      '',
+                        className:      'hidden',
                         orderable:      false,
                         searchable:     false,
                         data:           null,
@@ -208,15 +176,73 @@
                         sortable: false
                     },
                     {
-                        data: 'tx_mask_p_casa',                               //td:eq(0)
+                        data: null,                                             //td:eq(0)
                         render: function (data, type, row)
                         {
-                            var houses = houses_typo[data];
-                            return houses;
+                            var houses = houses_typo[row.tx_mask_p_casa];
+                            return houses + '</br>' + row.note_alert;
                         },
                         sortable: false,
                     },
-                    {data: 'tx_mask_p_sito',                                  //td:eq(1)
+                    {data: 'data_arrivo'},                                      //td:eq(1)
+                    {data: 'tx_mask_t1_op_pulizie',                             //td:eq(2)
+                        render: function (data, type, row)
+                        {
+                            if(data in op_check_out) {
+                                var operatore = op_check_out[data] + ' '+ row.totale_pulizie;
+                            } else {
+                                var operatore = 'NaN';
+                            }
+                            return operatore;
+                        },
+                    },
+                    {data: 'kit_base'},                                         //td:eq(3)
+                    {data: 'data_partenza'},                                    //td:eq(4)
+                    {data: 'tx_mask_t1_op_checkout',                            //td:eq(5)
+                        render: function (data, type, row)
+                        {
+                            if(data in op_check_out) {
+                                var operatore = op_check_out[data] + ' ' + row.costo_co;
+                            } else {
+                                var operatore = 'NaN';
+                            }
+                            return operatore;
+                        },
+                    },
+                    {data: 'cash_operatore_co'},                                //td:eq(6)
+
+
+                    {data: 'tx_mask_t1_op_note'},                               //td:eq(7)
+                    {data: 'city_tax'},                                         //td:eq(8)
+                    {data: 'extra_cash_ospite'},                                //td:eq(9)
+                    {data: 'costo_orario'},                                     //td:eq(11)
+                    {data: null,                                                //td:eq(12)
+                        render: function (data, type, row)
+                        {
+                            if(row.tx_mask_t0_fattura) {
+                                return row.tx_mask_t0_fattura + '<br><span class="font-weight-bolder">&euro; ' + row.tx_mask_t3_p_extra_p + '</span>';
+                            }
+                            return '<span class="font-weight-bolder">&euro; ' + row.tx_mask_t3_p_extra_p + '</span>';
+                        }
+                    },
+                    {data: 'costo_ex_co'},                                      //td:eq(13)
+                    {data: 'costi_costo_operatore_cambio_biancheria'},          //td:eq(14)
+                    {data: 'extra_mondezza'},                                   //td:eq(15)
+                    {data: 'tx_mask_t1_op_chechin',                            //td:eq(5)
+                        render: function (data, type, row)
+                        {
+                            if(data in op_check_out) {
+                                var operatore = '<span class="text-dark font-weight-bolder">' + op_check_out[data] + '</span> Costo Extra C-IN <span class="text-dark font-weight-bolder">€' + row.tx_mask_t3_p_s_extra_checkin + '</span>';
+                            } else {
+                                var operatore = 'NaN' ;
+                            }
+                            return operatore;
+                        },
+                    },                            //td:eq(15)
+                    {data: 'cash_simo_co'},                                     //td:eq(16)
+
+
+                    {data: 'tx_mask_p_sito',                                    //td:eq(17)
                         render: function (data, type, row)
                         {
                             if(data in sites_array){
@@ -228,82 +254,23 @@
                             return sites;
                         }, className:'text-left', sortable: false,
                     },
-                    {data: 'header', className: 'text-capitalize'}, //td:eq(2)
-                    {data: 'tx_mask_p_data_arrivo'},                //td:eq(3)
-                    {data: 'tx_mask_t1_op_note'},                   //td:eq(4)
-                    {data: 'city_tax'},                             //td:eq(5)
-                    {data: 'tx_mask_t1_op_pulizie',                 //td:eq(6)
-                        render: function (data, type, row)
-                        {
-                            if(data in op_check_out) {
-                                var operatore = op_check_out[data]+ ' ['+data+']';
-                            } else {
-                                var operatore = 'NaN';
-                            }
-                            return operatore;
-                        },
-                    },
-                    {data: 'tx_mask_t1_ore_pulizie'},               //td:eq(7)
-                    {data: 'costo_orario'},                         //td:eq(8)
-                    {data: 'totale_pulizie'},                       //td:eq(9)
-                    {data: null,                                    //td:eq(10)
-                        render: function (data, type, row)
-                        {
-                            if(row.tx_mask_t0_fattura) {
-                                return row.tx_mask_t0_fattura + '<br><span class="font-weight-bolder">&euro; ' + row.tx_mask_t3_p_extra_p + '</span>';
-                            }
-                            return '<span class="font-weight-bolder">&euro; ' + row.tx_mask_t3_p_extra_p + '</span>';
-                        }
-                    },
-                    {data: 'tx_mask_p_data_partenza'},              //td:eq(11)
-                    {data: 'tx_mask_t1_op_checkout',                //td:eq(12)
-                        render: function (data, type, row)
-                        {
-                            if(data in op_check_out) {
-                                var operatore = op_check_out[data]+ ' ['+data+']';
-                            } else {
-                                var operatore = 'NaN';
-                            }
-                            return operatore;
-                        },
-                    },
-                    {data: 'costo_co'},                             //td:eq(13)
-                    {data: 'costo_ex_co'},                          //td:eq(14)
-                    {data: 'cash_operatore_co'},                    //td:eq(15)
-                    {data: 'cash_simo_co'},                         //td:eq(16)
-                    {data: 'mancia_cli'},                           //td:eq(17)
-                    {data: 'extra_cash_ospite'},                    //td:eq(18)
-                    {data: 'costi_costo_operatore_cambio_biancheria'},                    //td:eq(18)
-                    {data: 'tx_mask_t3_p_note_cont'},                    //td:eq(18)
-                    {data: 'tx_mask_p_note_noi'},                    //td:eq(18)
-                    {data: 'extra_mondezza'},                    //td:eq(18)
+                    {data: 'header', className: 'text-capitalize'},             //td:eq(18)
+
 
                 ],
 
                 rowCallback: function(row, data, index) {
-                    $('td:eq(0)', row).addClass('bg-'+houses_color[data.casa]); //CASA
-                    // $('td:eq(2)', row).addClass('alert-warning text-left');     //CLIENTE
-                    $('td:eq(3)', row).addClass('alert-warning');               //DATA-ARRIVO
-                    $('td:eq(6)', row).addClass('alert-warning');               //OP. PULIZIE
-                    $('td:eq(11)', row).addClass('alert-danger');                //DATA-PARTENZA
-                    $('td:eq(12)', row).addClass('alert-danger');                //OP. C-OUT
-                    $('td:eq(17)', row).addClass('alert-success');                //MANCIA
+                    $('td:eq(0)', row).addClass('bg-'+houses_color[data.tx_mask_p_casa]);   //CASA
+                    $('td:eq(0)', row).addClass('text-center');                             //CASA
+                    $('td:eq(1)', row).addClass('alert-warning');                           //DATA-ARRIVO
+                    $('td:eq(2)', row).addClass('alert-warning');                           //OP. PULIZIE
+                    $('td:eq(3)', row).addClass('alert-warning');                           //KIT BASE
+                    $('td:eq(4)', row).addClass('alert-danger');                           //DATA-PARTENZA
+                    $('td:eq(5)', row).addClass('alert-danger');                           //OP. C-OUT
 
                     // if(data.mancia_cli_or < 0){
                     //     $('td:eq(17)', row).addClass('text-danger');
                     // }
-                },
-
-                footerCallback: function(row, data, index){
-                    var api = this.api(), data;
-                    $( api.column( 10 ).footer() ).html(data[0].sum_tot_pulizie);
-                    $( api.column( 11 ).footer() ).html(data[0].sum_supervisor_pulizie);
-                    $( api.column( 14 ).footer() ).html(data[0].sum_costo_co);
-                    $( api.column( 15 ).footer() ).html(data[0].sum_ex_co);
-                    $( api.column( 16 ).footer() ).html(data[0].sum_cash_operatore_co);
-                    $( api.column( 17 ).footer() ).html(data[0].sum_cash_simo_co);
-                    $( api.column( 18 ).footer() ).html(data[0].sum_mancia_cli);
-                    $( api.column( 18 ).footer() ).addClass('alert-success');
                 },
 
                 // setup buttons extentension: http://datatables.net/extensions/buttons/
@@ -323,10 +290,14 @@
                 },
                 columnDefs: [
                     { className: 'control', targets:   0, width: '3%' }, //plus
-                    { width: '5%', targets: 1}, //house
-                    { width: '5%', targets: 3}, //cliente
-                    { width: '8%', targets: 4}, //data-arrivo
-                    { width: '8%', targets: 5}, //data-partenza
+                    { width: '5%', targets: 1},         //house
+                    { width: '10%', targets: 2},        //data-arrivo
+                    { width: '17%', targets: 3},        //OP.PULIZIE
+                    { width: '31%', targets: 4},        //KIT BASE
+                    { width: '10%', targets: 5},       //data-partenza
+                    { width: '17%', targets: 6},       //OP.C-OUT
+                    { width: '10%', targets: 7},       //CASH
+
                 ],
 
                 "lengthMenu": [

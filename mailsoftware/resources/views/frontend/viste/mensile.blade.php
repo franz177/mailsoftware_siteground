@@ -72,7 +72,7 @@
                             <table class="table table-striped table-bordered  dt-responsive" id="sample_21">
                                 <thead>
                                 <tr>
-                                    <th></th>
+                                    <th class="none"></th>
                                     <th class="all text-center">
                                             <span class="svg-icon svg-icon-primary svg-icon-2x">
                                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -86,7 +86,7 @@
                                     <th class="none text-left">Sito</th>
                                     <th class="all text-uppercase">Cliente</th>
                                     <th class="all">Arrivo</th>
-                                    <th class="none">Note</th>
+                                    <th class="none">Note Operatore</th>
                                     <th class="none">CityTax</th>
                                     <th class="all">Op. Pulizie</th>
                                     <th class="none">Ore Pulizie</th>
@@ -102,8 +102,6 @@
                                     <th class="all">Mancia Cliente</th>
                                     <th class="none">Extra Cash dell'ospite al C-OUT</th>
                                     <th class="all">Costo Op.Cambio</th>
-                                    <th class="none">Note Contabili</th>
-                                    <th class="none">Note per Noi</th>
                                     <th class="none">Extra Mondezza</th>
                                 </tr>
                                 </thead>
@@ -131,8 +129,6 @@
                                     <th class="all">Mancia Cliente</th>
                                     <th class="all"></th>
                                     <th class="all">Costo Op.Cambio</th>
-                                    <th class="none">Note Contabili</th>
-                                    <th class="none">Note per Noi</th>
                                     <th class="none">Extra Mondezza</th>
                                 </tr>
                                 </tfoot>
@@ -199,20 +195,20 @@
 
                 columns: [
                     {
-                        className:      '',
+                        className:      'hidden',
                         orderable:      false,
                         searchable:     false,
                         data:           null,
                         defaultContent: '',
-                        cellType: "th",
-                        sortable: false
+                        cellType:       "th",
+                        sortable:       false
                     },
                     {
-                        data: 'tx_mask_p_casa',                               //td:eq(0)
+                        data: null,                               //td:eq(0)
                         render: function (data, type, row)
                         {
-                            var houses = houses_typo[data];
-                            return houses;
+                            var houses = houses_typo[row.tx_mask_p_casa];
+                            return houses +'</br>' + row.note_alert;
                         },
                         sortable: false,
                     },
@@ -229,7 +225,7 @@
                         }, className:'text-left', sortable: false,
                     },
                     {data: 'header', className: 'text-capitalize'}, //td:eq(2)
-                    {data: 'tx_mask_p_data_arrivo'},                //td:eq(3)
+                    {data: 'data_arrivo'},                //td:eq(3)
                     {data: 'tx_mask_t1_op_note'},                   //td:eq(4)
                     {data: 'city_tax'},                             //td:eq(5)
                     {data: 'tx_mask_t1_op_pulizie',                 //td:eq(6)
@@ -255,7 +251,7 @@
                             return '<span class="font-weight-bolder">&euro; ' + row.tx_mask_t3_p_extra_p + '</span>';
                         }
                     },
-                    {data: 'tx_mask_p_data_partenza'},              //td:eq(11)
+                    {data: 'data_partenza'},              //td:eq(11)
                     {data: 'tx_mask_t1_op_checkout',                //td:eq(12)
                         render: function (data, type, row)
                         {
@@ -273,15 +269,14 @@
                     {data: 'cash_simo_co'},                         //td:eq(16)
                     {data: 'mancia_cli'},                           //td:eq(17)
                     {data: 'extra_cash_ospite'},                    //td:eq(18)
-                    {data: 'costi_costo_operatore_cambio_biancheria'},                    //td:eq(18)
-                    {data: 'tx_mask_t3_p_note_cont'},                    //td:eq(18)
-                    {data: 'tx_mask_p_note_noi'},                    //td:eq(18)
-                    {data: 'extra_mondezza'},                    //td:eq(18)
+                    {data: 'costi_costo_operatore_cambio_biancheria'},                    //td:eq(19)
+                    {data: 'extra_mondezza'},                    //td:eq(20)
 
                 ],
 
                 rowCallback: function(row, data, index) {
-                    $('td:eq(0)', row).addClass('bg-'+houses_color[data.casa]); //CASA
+                    $('td:eq(0)', row).addClass('bg-'+houses_color[data.tx_mask_p_casa]); //CASA
+                    $('td:eq(0)', row).addClass('text-center'); //CASA
                     // $('td:eq(2)', row).addClass('alert-warning text-left');     //CLIENTE
                     $('td:eq(3)', row).addClass('alert-warning');               //DATA-ARRIVO
                     $('td:eq(6)', row).addClass('alert-warning');               //OP. PULIZIE

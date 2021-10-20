@@ -27,10 +27,10 @@
                                     <th></th>
                                     <th class="all">Mesi</th>
                                     <th class="all">Tot Pulizie</th>
-{{--                                    <th class="all">Tot Supervisor</th>--}}
-{{--                                    <th class="all">Tot C-OUT</th>--}}
-{{--                                    <th class="all">Tot EXTRA C-OUT</th>--}}
-{{--                                    <th class="all">Tot CASH OP. C-OUT</th>--}}
+                                    <th class="all">Tot Costo-CO</th>
+                                    <th class="all">Tot Op-Cambio</th>
+                                    <th class="all">Tot EXTRA C-OUT</th>
+                                    <th class="all">Tot Commissioni sitiweb</th>
 {{--                                    <th class="all">Tot CASH SIMO C-OUT</th>--}}
 {{--                                    <th class="all">Tot CAMBI BIANCHERIA</th>--}}
 {{--                                    <th class="all">Tot CITY TAX</th>--}}
@@ -99,11 +99,11 @@
                         sortable: false
                     },
                     {data: 'month'},                                    //td:eq(0)
-                    {data: 'stay'},                                    //td:eq(1)
-                    // {data: '0'},                                    //td:eq(2)
-                    // {data: '0'},                                    //td:eq(3)
-                    // {data: '0'},                                    //td:eq(4)
-                    // {data: '0'},                                    //td:eq(5)
+                    {data: 'totale_pulizie'},                                    //td:eq(1)
+                    {data: 'costo_co'},                                    //td:eq(2)
+                    {data: 'costi_costo_operatore_cambio_biancheria'},                                    //td:eq(3)
+                    {data: 'tx_mask_t3_p_s_ex_checkout'},                                    //td:eq(4)
+                    {data: 'tx_mask_p_perc_importo_fisso'},                                    //td:eq(5)
                     // {data: '0'},                                    //td:eq(6)
                     // {data: '0'},                                    //td:eq(7)
                     // {data: '0'},                                    //td:eq(8)

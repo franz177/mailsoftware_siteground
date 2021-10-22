@@ -29,7 +29,6 @@ class SimonettaController extends Controller
 
     public function getDataTables(Request $request)
     {
-        $month = $request->month ? $request->month : now()->month;
         $year = $request->year ? $request->year : now()->year;
 
         $data = Booking::select([
@@ -41,13 +40,9 @@ class SimonettaController extends Controller
             Booking::raw('SUM(tx_mask_p_perc_importo_fisso) as tx_mask_p_perc_importo_fisso'),
             ])
             ->where(function ($q) use ($year) {
-            $q->where(Typo::raw('YEAR(tx_mask_p_data_arrivo)'), '=', 2019)
-                ->orWhere(Typo::raw('YEAR(tx_mask_p_data_partenza)'), '=', 2019);
+            $q->where(Typo::raw('YEAR(tx_mask_p_data_arrivo)'), '=', $year)
+                ->orWhere(Typo::raw('YEAR(tx_mask_p_data_partenza)'), '=', $year);
             })
-//            ->where(function ($q) use ($month) {
-//                $q->where(Typo::raw('MONTH(tx_mask_p_data_arrivo)'), '=', $month)
-//                    ->orWhere(Typo::raw('MONTH(tx_mask_p_data_partenza)'), '=', $month);
-//            })
             ->where('tx_mask_cod_reservation_status', '!=', "CANC")
             ->orderBy('tx_mask_p_data_arrivo', 'ASC')
             ->orderBy('tx_mask_p_data_partenza', 'ASC')

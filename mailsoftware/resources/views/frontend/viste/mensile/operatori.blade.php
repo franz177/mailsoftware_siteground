@@ -232,7 +232,7 @@
                         render: function (data, type, row)
                         {
                             if(data in op_check_out) {
-                                var operatore = '<span class="text-dark font-weight-bolder">' + op_check_out[data] + '</span> Costo Extra C-IN <span class="text-dark font-weight-bolder">€' + row.tx_mask_t3_p_s_extra_checkin + '</span>';
+                                var operatore = '<span class="text-dark font-weight-bolder">' + op_check_out[data] + ' € ' + row.costi_check_in_self_check_in +'</span> Costo Extra C-IN <span class="text-dark font-weight-bolder">€ ' + row.tx_mask_t3_p_s_extra_checkin + '</span>';
                             } else {
                                 var operatore = 'NaN' ;
                             }

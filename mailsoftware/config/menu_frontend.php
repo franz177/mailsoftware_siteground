@@ -46,19 +46,35 @@ return [
                             'new-tab' => false,
                         ],
                         [
-                            'title' => 'Totali Mensili Operatori',
-                            'bullet' => 'dot',
-                            'page' => '/viste/mensile/operatori',
-                            'auth' => [1,3],
-                            'new-tab' => false,
-                        ],
-                        [
                             'title' => 'Simonetta',
                             'bullet' => 'dot',
                             'page' => '/viste/mensile/simonetta',
                             'auth' => [1],
                             'new-tab' => false,
                         ],
+                        [
+                            'title' => 'Operatori',
+                            'bullet' => 'dot',
+                            'auth' => [1,3],
+                            'new-tab' => false,
+                            'submenu' => [
+                                [
+                                    'title' => 'Mensile Operatori',
+                                    'bullet' => 'dot',
+                                    'page' => '/viste/mensile/operatori',
+                                    'auth' => [1,3],
+                                    'new-tab' => false,
+                                ],
+                                [
+                                    'title' => 'Totali Mensili Operatori',
+                                    'bullet' => 'dot',
+                                    'page' => '#',
+                                    'auth' => [1,3],
+                                    'new-tab' => false,
+                                ],
+                            ]
+                        ],
+
                     ],
                 ],
             ]

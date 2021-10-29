@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend\Views;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\House;
+use App\Models\Operator;
 use App\Models\Typo;
 use App\Models\TypoHouses;
 use App\Models\TypoRange;
@@ -13,6 +14,7 @@ use App\Models\TypoUser;
 use App\Models\TypoCHouse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Yajra\DataTables\DataTables;
 
 class MensileController extends Controller
@@ -397,65 +399,64 @@ class MensileController extends Controller
             ->with(compact('months'));
     }
 
+    private $totale_pulizie = 0;
+    private $supervisor_pulizie = 0;
+
     public function getDataTotaliOperatori(Request $request)
     {
         $month = $request->month ? $request->month : now()->month;
         $year = $request->year ? $request->year : now()->year;
 
         $pulizie = Booking::select('tx_mask_t1_op_pulizie')
-            ->selectRaw('SUM(totale_pulizie)')
-            ->selectRaw('SUM(tx_mask_t3_p_extra_p)')
-            ->where(function ($q) use ($year) {
-                $q->where(Typo::raw('YEAR(tx_mask_p_data_arrivo)'), '=', $year)
-                    ->orWhere(Typo::raw('YEAR(tx_mask_p_data_partenza)'), '=', $year);
-            })
-            ->where(function ($q) use ($month) {
-                $q->where(Typo::raw('MONTH(tx_mask_p_data_arrivo)'), '=', $month)
-                    ->orWhere(Typo::raw('MONTH(tx_mask_p_data_partenza)'), '=', $month);
-            })
+            ->selectRaw('SUM(totale_pulizie) as totale_pulizie')
+            ->selectRaw('SUM(tx_mask_t3_p_extra_p) as supervisor_pulizie ')
+            ->where(Typo::raw('YEAR(tx_mask_p_data_arrivo)'), '=', $year)
+            ->where(Typo::raw('MONTH(tx_mask_p_data_arrivo)'), '=', $month)
             ->where('tx_mask_cod_reservation_status', '!=', "CANC")
             ->groupBy('tx_mask_t1_op_pulizie')
             ->get();
 
-        $data = Booking::where('tx_mask_t1_op_pulizie', function($q){
-                $q->select('tx_mask_t1_op_pulizie')
-                    ->selectRaw('SUM(totale_pulizie)')
-                    ->selectRaw('SUM(tx_mask_t3_p_extra_p)');
-            })
-            ->where('tx_mask_t1_op_checkout', function($q){
-                $q->select('tx_mask_t1_op_checkout')
-                    ->selectRaw('SUM(costo_co)')
-                    ->selectRaw('SUM(tx_mask_t3_p_s_ex_checkout)')
-                    ->selectRaw('SUM(tx_mask_t3_p_cash_op_cout)');
-            })
-            ->where(function ($q) use ($year) {
-                $q->where(Typo::raw('YEAR(tx_mask_p_data_arrivo)'), '=', $year)
-                    ->orWhere(Typo::raw('YEAR(tx_mask_p_data_partenza)'), '=', $year);
-            })
-            ->where(function ($q) use ($month) {
-                $q->where(Typo::raw('MONTH(tx_mask_p_data_arrivo)'), '=', $month)
-                    ->orWhere(Typo::raw('MONTH(tx_mask_p_data_partenza)'), '=', $month);
-            });
+        $check_out = Booking::select('tx_mask_t1_op_checkout')
+                ->selectRaw('SUM(costo_co)')
+                ->selectRaw('SUM(tx_mask_t3_p_s_ex_checkout)')
+                ->selectRaw('SUM(tx_mask_t3_p_cash_op_cout)')
+            ->where(Typo::raw('YEAR(tx_mask_p_data_arrivo)'), '=', $year)
+            ->where(Typo::raw('MONTH(tx_mask_p_data_arrivo)'), '=', $month)
+            ->where('tx_mask_cod_reservation_status', '!=', "CANC")
+            ->groupBy('tx_mask_t1_op_checkout')
+            ->get();
+
+        $cambi = Booking::select('tx_mask_t1_op_cambio_biancheria')
+            ->selectRaw('SUM(costi_costo_operatore_cambio_biancheria)')
+            ->where(Typo::raw('YEAR(tx_mask_p_data_arrivo)'), '=', $year)
+            ->where(Typo::raw('MONTH(tx_mask_p_data_arrivo)'), '=', $month)
+            ->where('tx_mask_cod_reservation_status', '!=', "CANC")
+            ->groupBy('tx_mask_t1_op_cambio_biancheria')
+            ->get();
+
+        $operators = Operator::all();
+        $data = new Collection;
+
+        $operators->each(function ($operator) use ($data, $pulizie, $check_out, $cambi){
+
+            if($pulizie->contains('tx_mask_t1_op_pulizie', $operator->uid)){
+                $this->totale_pulizie = $pulizie->where('tx_mask_t1_op_pulizie', $operator->uid)->first()->totale_pulizie;
+                $this->supervisor_pulizie = $pulizie->where('tx_mask_t1_op_pulizie', $operator->uid)->first()->supervisor_pulizie;
+            } else {
+                $this->totale_pulizie = 0;
+                $this->supervisor_pulizie = 0;
+            }
+
+
+
+            $data->push([
+                'uid' => $operator->uid,
+                'totale_pulizie' => $this->totale_pulizie,
+                'supervisor_pulizie' => $this->supervisor_pulizie,
+            ]);
+        });
 
         dd($data);
-
-//        $check_out = Booking::select([
-//            'tx_mask_t1_op_checkout',
-//            Typo::raw('SUM(costo_co) AS "costo_c_out"'),
-//            Typo::raw('SUM(tx_mask_t3_p_s_ex_checkout) AS "costo_extra_c_out"'),
-//            Typo::raw('SUM(tx_mask_t3_p_cash_op_cout) AS "cash_op_c_out"')
-//        ])
-//            ->where(function ($q) use ($year) {
-//                $q->where(Typo::raw('YEAR(tx_mask_p_data_arrivo)'), '=', $year)
-//                    ->orWhere(Typo::raw('YEAR(tx_mask_p_data_partenza)'), '=', $year);
-//            })
-//            ->where(function ($q) use ($month) {
-//                $q->where(Typo::raw('MONTH(tx_mask_p_data_arrivo)'), '=', $month)
-//                    ->orWhere(Typo::raw('MONTH(tx_mask_p_data_partenza)'), '=', $month);
-//            })
-//            ->where('tx_mask_cod_reservation_status', '!=', "CANC")
-//            ->groupBy('tx_mask_t1_op_checkout')
-//            ->get();
 
     }
 

@@ -38,7 +38,7 @@
                             <table class="table table-striped table-bordered  dt-responsive" id="sample_20">
                                 <thead>
                                 <tr>
-                                    <th></th>
+                                    <th class="none"></th>
                                     <th class="all text-center">
                                             <span class="svg-icon svg-icon-primary svg-icon-2x">
                                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -60,12 +60,17 @@
                                                 </svg>
                                             </span>
                                     </th>
-                                    <th class="none">uid</th>
+                                    <th class="none">city tax</th>
                                     <th class="all">nominativo</th>
                                     <th class="all">arrivo</th>
                                     <th class="all">partenza</th>
                                     <th class="all">doc</th>
+                                    <th class="all">Mail Inviate</th>
                                     <th class="all">WA</th>
+                                    <th class="all">Cambi</th>
+                                    <th class="none">Importo STAY</th>
+                                    <th class="none">KIT Biancheria</th>
+                                    {{--                                        <th class="none">Check-In</th>--}}
                                     <th class="none">Threads</th>
                                 </tr>
                                 </thead>
@@ -167,28 +172,52 @@
                         render: function (data, type, row)
                         {
                             var house = houses_typo[data];
-                            return house;
-                        }, sortable: false,
+                            var house_gestore = houses_gestore[data];
+                            var house_gestore = row.gestore_casa;
+                            var op_check_in ='';
+                            if(row.op_check_in != 'chiave'){
+                                op_check_in = '<br> – <br>' + row.op_check_in;
+                            }
+                            return house + '<br>' + house_gestore + op_check_in;
+                        }, sortable: true,
                     },
-                    {data: 'sito',
+                    {data: 'tx_mask_p_sito',
                         render: function (data, type, row)
                         {
                             if(data in sites_kross){
                                 var site = sites_kross[data];
+                            } else if(data in sites) {
+                                var site = sites[data];
                             } else {
                                 var site = data;
                             }
 
                             return site;
-                        }, className:'text-center', sortable: false,
+                        }, className:'text-center', sortable: true,
                     },
-                    {data: 'uid', sortable: false},
-                    {data: 'header', className: 'text-capitalize'},
-                    {data: 'tx_mask_p_data_arrivo'},
-                    {data: 'tx_mask_p_data_partenza'},
+                    {data: 'city_tax', sortable: false},
+                    {data: 'header'},
+                    { data: {
+                            _:    "data_arrivo.display",
+                            sort: "data_arrivo.timestamp"
+                        },
+                        name:'data_arrivo.timestamp'
+                    },
+                    { data: {
+                            _:    "data_partenza.display",
+                            sort: "data_partenza.timestamp"
+                        },
+                        name:'data_partenza.timestamp'
+                    },
                     {data: 'documenti'},
-                    {data: 'whatsapp_stato', className: 'text-center'},
-                    {data: 'threads', name: 'threads'},
+                    {data: 'thread', name: 'thread'},
+                    {data: 'whatsapp_stato', className: 'text-center', sortable: false},
+                    {data: 'cambi'},
+                    {data: 'importo_stay'},
+                    {data: 'kit_base'},
+                    // {data: 'op_check_in'},
+                    {data: 'threads', name: 'threads', sortable: false},
+
                 ],
 
                 rowCallback: function(row, data, index) {
@@ -215,7 +244,11 @@
                     // $('td:eq(2)', row).addClass('bg-'+houses_color[data.casa]);
                     $('td:eq(3)', row).addClass('alert-warning text-left');
                     $('td:eq(4)', row).addClass('alert-warning');
+                    $('td:eq(4)', row).append('<p class="mt-2">h: '+data.tx_mask_t1_ora_checkin+'</p>');
+                    $('td:eq(4)', row).append('<p class="mt-2 font-size-sm">'+data.op_pulizie+'</p>');
                     $('td:eq(5)', row).addClass('alert-danger');
+                    $('td:eq(5)', row).append('<p class="mt-2">h: '+data.tx_mask_t1_ora_checkout+'</p>');
+                    $('td:eq(5)', row).append('<p class="mt-2 font-size-sm">'+data.op_check_out+'</p>');
                     $('td:eq(8)', row).html('<i class="icon-2x la text-dark-50 socicon-whatsapp"></i>' +
                         '<br>' +
                         '<input type="range" class="whatsappRange" min="-1" max="4" data-id="'+data.whatsapp_id+'" value="'+data.whatsapp_stato+'" list="tickmarks">' +
@@ -251,7 +284,7 @@
                 responsive: {
                     details: {
                         type: 'column',
-                        target: 'th',
+                        target: 'tr',
                     }
                 },
                 columnDefs: [
@@ -259,7 +292,7 @@
                     { width: '5%', targets: 1}, //house
                     { width: '5%', targets: 2}, //site
                     { width: '5%', targets: 3}, //uid
-                    { width: '30%', targets: 4}, //Nominativo
+                    { width: '20%', targets: 4}, //Nominativo
                     { width: '10%', targets: 5}, //arrivo
                     { width: '10%', targets: 6}, //partenza
                     { width: '8%', targets: 7}, //doc
@@ -320,6 +353,20 @@
                         console.log('Error:', data);
                     }
                 })
+            });
+
+            $("input[type=range]").mousemove(function (e) {
+                var val = ($(this).val() - $(this).attr('min')) / ($(this).attr('max') - $(this).attr('min'));
+                var percent = val * 100;
+
+                $(this).css('background-image',
+                    '-webkit-gradient(linear, left top, right top, ' +
+                    'color-stop(' + percent + '%, #34B7F1), ' +
+                    'color-stop(' + percent + '%, #FFF)' +
+                    ')');
+
+                $(this).css('background-image',
+                    '-moz-linear-gradient(left center, #34B7F1 0%, #34B7F1 ' + percent + '%, #FFF ' + percent + '%, #FFF 100%)');
             });
 
         });

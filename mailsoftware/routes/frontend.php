@@ -35,7 +35,9 @@ Route::post('/viste/table',[\App\Http\Controllers\Frontend\Views\VisteController
 
 Route::get('/viste/mensile', [\App\Http\Controllers\Frontend\Views\MensileController::class, 'index']);
 Route::get('/viste/mensile/operatori', [\App\Http\Controllers\Frontend\Views\MensileController::class, 'indexOperatori']);
+Route::get('/viste/mensile/totali_operatori', [\App\Http\Controllers\Frontend\Views\MensileController::class, 'indexTotaliOperatori']);
 Route::get('/viste/mensile/dataoperatori', [\App\Http\Controllers\Frontend\Views\MensileController::class, 'getDataOperatori'])->name('viste.operatori');
+Route::get('/viste/mensile/datatotalioperatori', [\App\Http\Controllers\Frontend\Views\MensileController::class, 'getDataTotaliOperatori'])->name('viste.totali_operatori');
 Route::get('/viste/mensile/datas', [\App\Http\Controllers\Frontend\Views\MensileController::class, 'getDataTables'])->name('viste.datas');
 
 Route::get('/viste/mensile/simonetta', [\App\Http\Controllers\Frontend\Views\SimonettaController::class, 'index']);

@@ -128,13 +128,12 @@ class MensileController extends Controller
                 })
                 ->addColumn('data_partenza', function ($row){
                     $h = $row->tx_mask_t1_ora_checkout ? $row->tx_mask_t1_ora_checkout : '<span class="text-danger">NaN</span>';
-                    return $row->tx_mask_p_data_arrivo . ' </br> <span class="text-dark-75">h</span> '. $h;
+                    return $row->tx_mask_p_data_partenza . ' </br> <span class="text-dark-75">h</span> '. $h;
                 })
                 ->addColumn('city_tax', function ($row) {
                     return '<span class="font-weight-bolder">€ '.number_format($row->tx_mask_t3_p_city_tax_amount, 2, ',', '.').'</span>';
                 })
                 ->addColumn('costo_orario', function($row) {
-
                     return '<span class="font-weight-bolder">€ '.number_format($row->costo_orario, 2, ',', '.').'</span>';
                 })
                 ->addColumn('totale_pulizie', function($row) {
@@ -269,7 +268,7 @@ class MensileController extends Controller
                 })
                 ->addColumn('data_partenza', function ($row){
                     $h = $row->tx_mask_t1_ora_checkout ? $row->tx_mask_t1_ora_checkout : '<span class="text-danger">NaN</span>';
-                    return $row->tx_mask_p_data_arrivo . ' </br> <span class="text-dark-75">h</span> '. $h;
+                    return $row->tx_mask_p_data_partenza . ' </br> <span class="text-dark-75">h</span> '. $h;
                 })
                 ->addColumn('city_tax', function ($row) {
                     return '<span class="font-weight-bolder">€ '.number_format($row->tx_mask_t3_p_city_tax_amount, 2, ',', '.').'</span>';
@@ -385,7 +384,78 @@ class MensileController extends Controller
                 'error'           => 'Non ci sono prenotazioni per il mese selezionato!',
             ]);
         }
+    }
 
+    public function indexTotaliOperatori(Request $request)
+    {
+        $typo = new Typo();
+        $years = $this->getYears();
+        $months = $typo->months;
+
+        return view('frontend.viste.mensile.totali_operatori')
+            ->with(compact('years'))
+            ->with(compact('months'));
+    }
+
+    public function getDataTotaliOperatori(Request $request)
+    {
+        $month = $request->month ? $request->month : now()->month;
+        $year = $request->year ? $request->year : now()->year;
+
+        $pulizie = Booking::select('tx_mask_t1_op_pulizie')
+            ->selectRaw('SUM(totale_pulizie)')
+            ->selectRaw('SUM(tx_mask_t3_p_extra_p)')
+            ->where(function ($q) use ($year) {
+                $q->where(Typo::raw('YEAR(tx_mask_p_data_arrivo)'), '=', $year)
+                    ->orWhere(Typo::raw('YEAR(tx_mask_p_data_partenza)'), '=', $year);
+            })
+            ->where(function ($q) use ($month) {
+                $q->where(Typo::raw('MONTH(tx_mask_p_data_arrivo)'), '=', $month)
+                    ->orWhere(Typo::raw('MONTH(tx_mask_p_data_partenza)'), '=', $month);
+            })
+            ->where('tx_mask_cod_reservation_status', '!=', "CANC")
+            ->groupBy('tx_mask_t1_op_pulizie')
+            ->get();
+
+        $data = Booking::where('tx_mask_t1_op_pulizie', function($q){
+                $q->select('tx_mask_t1_op_pulizie')
+                    ->selectRaw('SUM(totale_pulizie)')
+                    ->selectRaw('SUM(tx_mask_t3_p_extra_p)');
+            })
+            ->where('tx_mask_t1_op_checkout', function($q){
+                $q->select('tx_mask_t1_op_checkout')
+                    ->selectRaw('SUM(costo_co)')
+                    ->selectRaw('SUM(tx_mask_t3_p_s_ex_checkout)')
+                    ->selectRaw('SUM(tx_mask_t3_p_cash_op_cout)');
+            })
+            ->where(function ($q) use ($year) {
+                $q->where(Typo::raw('YEAR(tx_mask_p_data_arrivo)'), '=', $year)
+                    ->orWhere(Typo::raw('YEAR(tx_mask_p_data_partenza)'), '=', $year);
+            })
+            ->where(function ($q) use ($month) {
+                $q->where(Typo::raw('MONTH(tx_mask_p_data_arrivo)'), '=', $month)
+                    ->orWhere(Typo::raw('MONTH(tx_mask_p_data_partenza)'), '=', $month);
+            });
+
+        dd($data);
+
+//        $check_out = Booking::select([
+//            'tx_mask_t1_op_checkout',
+//            Typo::raw('SUM(costo_co) AS "costo_c_out"'),
+//            Typo::raw('SUM(tx_mask_t3_p_s_ex_checkout) AS "costo_extra_c_out"'),
+//            Typo::raw('SUM(tx_mask_t3_p_cash_op_cout) AS "cash_op_c_out"')
+//        ])
+//            ->where(function ($q) use ($year) {
+//                $q->where(Typo::raw('YEAR(tx_mask_p_data_arrivo)'), '=', $year)
+//                    ->orWhere(Typo::raw('YEAR(tx_mask_p_data_partenza)'), '=', $year);
+//            })
+//            ->where(function ($q) use ($month) {
+//                $q->where(Typo::raw('MONTH(tx_mask_p_data_arrivo)'), '=', $month)
+//                    ->orWhere(Typo::raw('MONTH(tx_mask_p_data_partenza)'), '=', $month);
+//            })
+//            ->where('tx_mask_cod_reservation_status', '!=', "CANC")
+//            ->groupBy('tx_mask_t1_op_checkout')
+//            ->get();
 
     }
 

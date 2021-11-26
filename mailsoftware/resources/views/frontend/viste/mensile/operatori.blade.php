@@ -85,10 +85,12 @@
                                     </th>
                                     <th class="all">Arrivo</th>
                                     <th class="all">Op. Pulizie</th>
+                                    <th class="desktop">Supervisor <br> Pulizie</th>
                                     <th class="all">kit base</th>
                                     <th class="all">Partenza</th>
                                     <th class="all">Op. <br> C-OUT</th>
                                     <th class="all">Cash <br> Op. C-OUT</th>
+                                    <th class="desktop">Costi Extra <br> Op. Bi.</th>
 
                                     <th class="none">Note</th>
                                     <th class="none">CityTax</th>
@@ -196,9 +198,10 @@
                             return operatore;
                         },
                     },
-                    {data: 'kit_base'},                                         //td:eq(3)
-                    {data: 'data_partenza'},                                    //td:eq(4)
-                    {data: 'tx_mask_t1_op_checkout',                            //td:eq(5)
+                    {data: 'supervisor_pulizie'},                               //td:eq(3)
+                    {data: 'kit_base'},                                         //td:eq(4)
+                    {data: 'data_partenza'},                                    //td:eq(5)
+                    {data: 'tx_mask_t1_op_checkout',                            //td:eq(6)
                         render: function (data, type, row)
                         {
                             if(data in op_check_out) {
@@ -209,12 +212,13 @@
                             return operatore;
                         },
                     },
-                    {data: 'cash_operatore_co'},                                //td:eq(6)
+                    {data: 'cash_operatore_co'},                                //td:eq(7)
+                    {data: 'costo_extra_op_bi'},                                //td:eq(7)
 
 
-                    {data: 'tx_mask_t1_op_note'},                               //td:eq(7)
-                    {data: 'city_tax'},                                         //td:eq(8)
-                    {data: 'extra_cash_ospite'},                                //td:eq(9)
+                    {data: 'tx_mask_t1_op_note'},                               //td:eq(8)
+                    {data: 'city_tax'},                                         //td:eq(9)
+                    {data: 'extra_cash_ospite'},                                //td:eq(10)
                     {data: 'costo_orario'},                                     //td:eq(11)
                     {data: null,                                                //td:eq(12)
                         render: function (data, type, row)
@@ -228,7 +232,7 @@
                     {data: 'costo_ex_co'},                                      //td:eq(13)
                     {data: 'costi_costo_operatore_cambio_biancheria'},          //td:eq(14)
                     {data: 'extra_mondezza'},                                   //td:eq(15)
-                    {data: 'tx_mask_t1_op_chechin',                            //td:eq(5)
+                    {data: 'tx_mask_t1_op_chechin',                            //td:eq(16)
                         render: function (data, type, row)
                         {
                             if(data in op_check_out) {
@@ -239,10 +243,10 @@
                             return operatore;
                         },
                     },                            //td:eq(15)
-                    {data: 'cash_simo_co'},                                     //td:eq(16)
+                    {data: 'cash_simo_co'},                                     //td:eq(17)
 
 
-                    {data: 'tx_mask_p_sito',                                    //td:eq(17)
+                    {data: 'tx_mask_p_sito',                                    //td:eq(18)
                         render: function (data, type, row)
                         {
                             if(data in sites_array){
@@ -254,7 +258,7 @@
                             return sites;
                         }, className:'text-left', sortable: false,
                     },
-                    {data: 'header', className: 'text-capitalize'},             //td:eq(18)
+                    {data: 'header', className: 'text-capitalize'},             //td:eq(19)
 
 
                 ],
@@ -264,13 +268,10 @@
                     $('td:eq(0)', row).addClass('text-center');                             //CASA
                     $('td:eq(1)', row).addClass('alert-warning');                           //DATA-ARRIVO
                     $('td:eq(2)', row).addClass('alert-warning');                           //OP. PULIZIE
-                    $('td:eq(3)', row).addClass('alert-warning');                           //KIT BASE
-                    $('td:eq(4)', row).addClass('alert-danger');                           //DATA-PARTENZA
-                    $('td:eq(5)', row).addClass('alert-danger');                           //OP. C-OUT
-
-                    // if(data.mancia_cli_or < 0){
-                    //     $('td:eq(17)', row).addClass('text-danger');
-                    // }
+                    $('td:eq(3)', row).addClass('alert-warning');                           //SUPERVISOR
+                    $('td:eq(4)', row).addClass('alert-warning');                           //KIT BASE
+                    $('td:eq(5)', row).addClass('alert-danger');                           //DATA-PARTENZA
+                    $('td:eq(6)', row).addClass('alert-danger');                           //OP. C-OUT
                 },
 
                 // setup buttons extentension: http://datatables.net/extensions/buttons/
@@ -292,11 +293,13 @@
                     { className: 'control', targets:   0, width: '3%' }, //plus
                     { width: '5%', targets: 1},         //house
                     { width: '10%', targets: 2},        //data-arrivo
-                    { width: '17%', targets: 3},        //OP.PULIZIE
-                    { width: '31%', targets: 4},        //KIT BASE
-                    { width: '10%', targets: 5},       //data-partenza
-                    { width: '17%', targets: 6},       //OP.C-OUT
-                    { width: '10%', targets: 7},       //CASH
+                    { width: '11%', targets: 3},        //OP.PULIZIE
+                    { width: '10%', targets: 4},        //SUPERVISOR
+                    { width: '17%', targets: 5},        //KIT BASE
+                    { width: '10%', targets: 6},       //data-partenza
+                    { width: '11%', targets: 7},       //OP.C-OUT
+                    { width: '10%', targets: 8},       //CASH
+                    { width: '10%', targets: 9},       //EXTRA
 
                 ],
 

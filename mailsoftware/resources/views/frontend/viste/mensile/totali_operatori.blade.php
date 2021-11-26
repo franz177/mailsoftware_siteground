@@ -74,14 +74,13 @@
                                 <tr>
                                     <th class="none"></th>
                                     <th class="all">OPERATORE</th>
+                                    <th class="all">TOTALE <br>CHECK-IN</th>
                                     <th class="all">TOTALE <br>PULIZIE</th>
                                     <th class="all">SUPERVISOR <br>PULIZIE</th>
                                     <th class="all">COSTO <br>C-OUT</th>
                                     <th class="all">COSTO EXTRA <br>C-OUT</th>
                                     <th class="all">CASH OP. <br>C-OUT</th>
-                                    <th class="all">Cash <br> Op. C-OUT</th>
-
-                                    <th class="none">COSTO <br>OP. CAMBIO</th>
+                                    <th class="all">COSTO <br>OP. CAMBIO</th>
 
                                 </tr>
                                 </thead>
@@ -151,26 +150,27 @@
                         sortable: false
                     },
 
-                    {data: 'null'},                                      //td:eq(1)
-                    {data: 'null'},                                      //td:eq(2)
-                    {data: 'null'},                                      //td:eq(3)
-                    {data: 'null'},                                      //td:eq(4)
-                    {data: 'null'},                                      //td:eq(5)
-                    {data: 'null'},                                      //td:eq(6)
-                    {data: 'null'},                                      //td:eq(7)
+                    {data: 'uid'},                                      //td:eq(1)
+                    {data: 'costi_cin'},                                      //td:eq(2)
+                    {data: 'totale_pulizie'},                                      //td:eq(2)
+                    {data: 'supervisor_pulizie'},                                      //td:eq(3)
+                    {data: 'costo_co'},                                      //td:eq(4)
+                    {data: 'extra_co'},                                      //td:eq(5)
+                    {data: 'cash_op_co'},                                      //td:eq(6)
+                    {data: 'costi_costo_operatore_cambio_biancheria'},                                      //td:eq(7)
 
 
 
                 ],
 
                 rowCallback: function(row, data, index) {
-                    $('td:eq(1)', row).addClass('alert-warning');   // TOTALE PULIZIE
-                    $('td:eq(2)', row).addClass('alert-warning');   // SUPERVISOR PULIZIE
-                    $('td:eq(3)', row).addClass('alert-danger');    // COSTO C-OUT
-                    $('td:eq(4)', row).addClass('alert-danger');    // COSTO EXTRA C-OUT
-                    $('td:eq(5)', row).addClass('alert-danger');    // CASH OP. C-OUT
-                    $('td:eq(5)', row).addClass('alert-danger');    // Cash  Op. C-OUT
-                    $('td:eq(5)', row).addClass('alert-info');    // COSTO OP. CAMBIO
+                    $('td:eq(1)', row).addClass('alert-success');   // TOTALE CHECK-IN
+                    $('td:eq(2)', row).addClass('alert-warning');   // TOTALE PULIZIE
+                    $('td:eq(3)', row).addClass('alert-warning');   // SUPERVISOR PULIZIE
+                    $('td:eq(4)', row).addClass('alert-danger');    // COSTO C-OUT
+                    $('td:eq(5)', row).addClass('alert-danger');    // COSTO EXTRA C-OUT
+                    $('td:eq(6)', row).addClass('alert-danger');    // CASH OP. C-OUT
+                    $('td:eq(7)', row).addClass('alert-info');    // COSTO OP. CAMBIO
                 },
 
                 // setup buttons extentension: http://datatables.net/extensions/buttons/
@@ -190,13 +190,14 @@
                 },
                 columnDefs: [
                     { className: 'control', targets:   0, width: '3%' }, //plus
-                    { width: '5%', targets: 1},         //house
-                    { width: '10%', targets: 2},        //data-arrivo
-                    { width: '17%', targets: 3},        //OP.PULIZIE
-                    { width: '31%', targets: 4},        //KIT BASE
-                    { width: '10%', targets: 5},       //data-partenza
-                    { width: '17%', targets: 6},       //OP.C-OUT
-                    { width: '10%', targets: 7},       //CASH
+                    { width: '11%', targets: 1},         //house
+                    { width: '11%', targets: 2},        //data-arrivo
+                    { width: '11%', targets: 3},        //data-arrivo
+                    { width: '11%', targets: 4},        //OP.PULIZIE
+                    { width: '11%', targets: 5},        //KIT BASE
+                    { width: '11%', targets: 6},       //data-partenza
+                    { width: '11%', targets: 7},       //OP.C-OUT
+                    { width: '11%', targets: 8},       //CASH
 
                 ],
 

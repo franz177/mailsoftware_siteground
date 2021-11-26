@@ -46,7 +46,7 @@ return [
                             'new-tab' => false,
                         ],
                         [
-                            'title' => 'Simonetta',
+                            'title' => 'Costi Annuale per Mesi',
                             'bullet' => 'dot',
                             'page' => '/viste/mensile/simonetta',
                             'auth' => [1],
@@ -68,7 +68,7 @@ return [
                                 [
                                     'title' => 'Totali Mensili Operatori',
                                     'bullet' => 'dot',
-                                    'page' => '#',
+                                    'page' => '/viste/mensile/totali_operatori',
                                     'auth' => [1,3],
                                     'new-tab' => false,
                                 ],

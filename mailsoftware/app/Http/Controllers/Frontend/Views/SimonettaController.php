@@ -32,6 +32,7 @@ class SimonettaController extends Controller
     private $sum_tot_extra_co;
     private $sum_tot_commissioni_sitiweb;
     private $sum_tot_supervisor_pulizie;
+    private $sum_tot_totale_biancheria;
 
     public function getDataTables(Request $request)
     {
@@ -48,7 +49,7 @@ class SimonettaController extends Controller
             Booking::raw('SUM(costi_costo_operatore_cambio_biancheria) as costi_costo_operatore_cambio_biancheria'),
             Booking::raw('SUM(tx_mask_t1_op_costo_extra_cambio_biancheria) as tx_mask_t1_op_costo_extra_cambio_biancheria'),
             Booking::raw('SUM(tx_mask_t3_p_s_ex_checkout) as tx_mask_t3_p_s_ex_checkout'),
-            Booking::raw('SUM(tx_mask_p_perc_importo_fisso) as tx_mask_p_perc_importo_fisso'),
+            Booking::raw('(SUM(costi_costo_kit) + SUM(costi_costo_cambi)) as totale_biancheria')
             ])
             ->where(function ($q) use ($year) {
             $q->where(Typo::raw('YEAR(tx_mask_p_data_arrivo)'), '=', $year)
@@ -88,6 +89,9 @@ class SimonettaController extends Controller
             ->addColumn('tx_mask_p_perc_importo_fisso', function ($row) {
                 return '<span class="font-weight-bolder">€ '.number_format($row->tx_mask_p_perc_importo_fisso, 2, ',', '.').'</span>';
             })
+            ->addColumn('totale_biancheria', function ($row) {
+                return '<span class="font-weight-bolder">€ '.number_format($row->totale_biancheria, 2, ',', '.').'</span>';
+            })
             ->addColumn('sum_costo_cin', function ($row) {
                 $costo_cin = $row->costi_check_in_self_check_in + $row->tx_mask_t3_p_s_extra_checkin;
                 $this->sum_costo_cin = $this->sum_costo_cin + $costo_cin;
@@ -118,11 +122,15 @@ class SimonettaController extends Controller
                 $this->sum_tot_supervisor_pulizie = $this->sum_tot_supervisor_pulizie + $row->tx_mask_t3_p_extra_p;
                 return '<span class="font-weight-bolder">€ '.number_format($this->sum_tot_supervisor_pulizie, 2, ',', '.').'</span>';
             })
+            ->addColumn('sum_totale_biancheria', function ($row) {
+                $this->sum_tot_totale_biancheria = $this->sum_tot_totale_biancheria + $row->totale_biancheria;
+                return '<span class="font-weight-bolder">€ '.number_format($this->sum_tot_supervisor_pulizie, 2, ',', '.').'</span>';
+            })
 
             ->rawColumns([
                 'month', 'costo_cin', 'totale_pulizie', 'supervisor_pulizie', 'costo_co', 'costi_costo_operatore_cambio_biancheria',
-                'tx_mask_t3_p_s_ex_checkout', 'tx_mask_p_perc_importo_fisso',
-                'sum_costo_cin', 'sum_tot_pulizie', 'sum_tot_costo_co' , 'sum_tot_op_cambio', 'sum_tot_extra_co', 'sum_tot_commissioni_sitiweb', 'sum_tot_supervisor_pulizie'
+                'tx_mask_t3_p_s_ex_checkout', 'tx_mask_p_perc_importo_fisso', 'totale_biancheria',
+                'sum_costo_cin', 'sum_tot_pulizie', 'sum_tot_costo_co' , 'sum_tot_op_cambio', 'sum_tot_extra_co', 'sum_tot_commissioni_sitiweb', 'sum_tot_supervisor_pulizie', 'sum_totale_biancheria'
             ])
             ->make(true);
     }

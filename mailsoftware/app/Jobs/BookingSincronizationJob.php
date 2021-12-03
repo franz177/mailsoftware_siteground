@@ -110,6 +110,7 @@ class BookingSincronizationJob implements ShouldQueue
                             'costi_check_in_self_check_in' => 99,
                             'costi_costo_operatore_cambio_biancheria' => 0,
                             'costi_costo_kit' => 0,
+                            'costi_costo_cambi' => 0,
                         ]);
 
                     if ($store->wasRecentlyCreated === true) {

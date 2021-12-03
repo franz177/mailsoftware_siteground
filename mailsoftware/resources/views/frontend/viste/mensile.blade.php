@@ -12,7 +12,7 @@
                 <div class="card-header border-0 pt-5">
                     <h3 class="card-title align-items-start flex-column">
                             <span class="card-label font-weight-bolder text-dark text-uppercase">
-                                Costi Mensile
+                                Mensile Generale Costi
                             </span>
                         <span class="text-muted mt-3 font-weight-bold font-size-sm"></span>
                     </h3>
@@ -90,7 +90,7 @@
                                     <th class="all">Op. Pulizie</th>
                                     <th class="none">Ore Pulizie</th>
                                     <th class="none">Costo Ore Pulizie</th>
-                                    <th class="all">Costo <br> C-IN</th>
+                                    <th class="all">TOT Costo <br> C-IN</th>
                                     <th class="all">Tot <br> Pulizie</th>
                                     <th class="all">Supervisor <br> Pulizie</th>
                                     <th class="all">Partenza</th>
@@ -104,6 +104,11 @@
                                     <th class="all">Costo Op.Cambio</th>
                                     <th class="none">Extra Mondezza</th>
                                     <th class="none">Costi Extra Op Bi</th>
+                                    <th class="all">Totale Prenotazione</th>
+                                    <th class="none">Costo KIT</th>
+                                    <th class="none">Costo Cambio</th>
+                                    <th class="none">Costo CI</th>
+                                    <th class="none">Costo Extra CI</th>
                                 </tr>
                                 </thead>
 
@@ -119,7 +124,7 @@
                                     <th class="all"></th>
                                     <th class="none">Ore Pulizie</th>
                                     <th class="none">Costo Ore Pulizie</th>
-                                    <th class="all">Costo <br> C-IN</th>
+                                    <th class="all">Tot Costo <br> C-IN</th>
                                     <th class="all">Tot <br> Pulizie</th>
                                     <th class="all">Supervisor <br> Pulizie</th>
                                     <th class="all"></th>
@@ -133,6 +138,11 @@
                                     <th class="all">Costo Op.Cambio</th>
                                     <th class="none">Extra Mondezza</th>
                                     <th class="none">Costi Extra Op Bi</th>
+                                    <th class="all">Totale Prenotazione</th>
+                                    <th class="none">Costo KIT</th>
+                                    <th class="none">Costo Cambio</th>
+                                    <th class="none">Costo CI</th>
+                                    <th class="none">Costo Extra CI</th>
                                 </tr>
                                 </tfoot>
 
@@ -278,6 +288,11 @@
                     },                    //td:eq(19)
                     {data: 'extra_mondezza'},                    //td:eq(20)
                     {data: 'costi_extra_op_bi'},                    //td:eq(20)
+                    {data: 'totale_riga'},                    //td:eq(20)
+                    {data: 'costi_costo_kit'},                    //td:eq(20)
+                    {data: 'costi_costo_cambi'},                    //td:eq(20)
+                    {data: 'costi_check_in_self_check_in'},                    //td:eq(20)
+                    {data: 'tx_mask_t3_p_s_extra_checkin'},                    //td:eq(20)
                 ],
 
                 rowCallback: function(row, data, index) {
@@ -289,6 +304,8 @@
                     $('td:eq(12)', row).addClass('alert-danger');                //DATA-PARTENZA
                     $('td:eq(13)', row).addClass('alert-danger');                //OP. C-OUT
                     $('td:eq(18)', row).addClass('alert-success');                //MANCIA
+
+                    console.log(data);
 
                     // if(data.mancia_cli_or < 0){
                     //     $('td:eq(17)', row).addClass('text-danger');

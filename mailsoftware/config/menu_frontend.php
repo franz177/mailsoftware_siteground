@@ -39,7 +39,7 @@ return [
                     'new-tab' => false,
                     'submenu' => [
                         [
-                            'title' => 'Mensile Generale',
+                            'title' => 'Mensile Generale Costi',
                             'bullet' => 'dot',
                             'page' => '/viste/mensile',
                             'auth' => [1],

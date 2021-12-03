@@ -113,6 +113,13 @@ input[type="range"]::-webkit-slider-thumb {
     color: #333;
 }
 
+.table.dataTable td span.badge.costi,
+.table.dataTable td span.badge.costi > i,
+.table.dataTable td i {
+    font-size: 100%;
+    color: #333;
+}
+
 .table-bordered th, .table-bordered td {
     border: 1px solid #DDDDDD;
 }

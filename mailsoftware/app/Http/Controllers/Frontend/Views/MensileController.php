@@ -30,6 +30,7 @@ class MensileController extends Controller
     private $sum_cash_operatore_co;
     private $sum_cash_simo_co;
     private $sum_mancia_cli;
+    private $sum_costi_costo_kit;
 
     /**
      * Display a listing of the resource.
@@ -211,6 +212,22 @@ class MensileController extends Controller
                         $text_danger = 'text-danger';
                     return '<span class="font-weight-bolder '. $text_danger .'">€ '.number_format($tot, 2, ',', '.').'</span>';
                 })
+                ->addColumn('totale_riga', function ($row) {
+                    $totale =
+                        $row->costi_check_in_self_check_in +
+                        $row->tx_mask_t3_p_s_extra_checkin +
+                        $row->totale_pulizie +
+                        $row->tx_mask_t3_p_extra_p +
+                        $row->costo_co +
+                        $row->tx_mask_t3_p_s_ex_checkout +
+                        $row->costi_costo_operatore_cambio_biancheria +
+                        $row->tx_mask_t1_op_costo_extra_cambio_biancheria +
+                        $row->costi_costo_kit +
+                        $row->costi_costo_cambi
+
+                    ;
+                    return '<span class="font-weight-bolder">€ '.number_format($totale, 2, ',', '.').'</span>';
+                })
                 ->addColumn('extra_mondezza', function ($data) {
                     return '';
                 })
@@ -220,16 +237,16 @@ class MensileController extends Controller
                     'mancia_cli', 'mancia_cli_or', 'extra_cash_ospite', 'costi_extra_op_bi', 'costi_costo_operatore_cambio_biancheria',
                     'sum_tot_costo_cin', 'sum_tot_pulizie', 'sum_supervisor_pulizie', 'sum_costo_co',
                     'sum_ex_co', 'sum_cash_operatore_co', 'sum_cash_simo_co',
-                    'sum_mancia_cli', 'extra_mondezza'
+                    'sum_mancia_cli', 'extra_mondezza', 'totale_riga'
                 ])
                 ->make(true);
         } else {
             return response([
-                'draw'  => 0,
-                'recordsTotal'    => 0,
-                'recordsFiltered' => 0,
-                'data'            => [],
-                'error'           => 'Non ci sono prenotazioni per il mese selezionato!',
+                'draw'              => 0,
+                'recordsTotal'      => 0,
+                'recordsFiltered'   => 0,
+                'data'              => [],
+                'error'             => 'Non ci sono prenotazioni per il mese selezionato!',
             ]);
         }
 
@@ -261,6 +278,7 @@ class MensileController extends Controller
         $this->sum_cash_operatore_co = $data->sum('tx_mask_t3_p_cash_op_cout');
         $this->sum_cash_simo_co = $data->sum('tx_mask_t3_p_cash_simo');
         $this->sum_mancia_cli = $data->sum('mancia_cli');
+        $this->sum_costi_costo_kit = $data->sum('costi_costo_kit');
 
         if($data->count() > 0){
             return Datatables::of($data)
@@ -372,16 +390,17 @@ class MensileController extends Controller
                             ->where('uid',$row->tx_mask_t2_p_bianc)
                             ->first();
 
-                        $kit_base = $typo_el_bianc->header;
+                        $kit_base = $typo_el_bianc->header .' [<span class="">€ '.number_format($row->costi_costo_kit, 2, ',', '.').'</span>]';
                     }
 
                     $lenzuola = '';
                     $asciugamani = '';
+                    $cambio = '';
                     $icon = '';
                     $span = '';
 
                     if($row->tx_mask_t2_p_cambi_l > 0 || $row->tx_mask_t2_p_cambi_a > 0){
-                        $icon = '<span class="badge badge-warning"><i class="fas fa-exclamation" aria-hidden="true"></i>';
+                        $icon = '<span class="badge badge-warning costi"><i class="fa fa-copyright"></i><span class="font-weight-bolder">';
                         $span = '</span>';
                     }
 
@@ -392,7 +411,10 @@ class MensileController extends Controller
                     if($row->tx_mask_t2_p_cambi_a > 0)
                         $asciugamani = $row->tx_mask_t2_p_cambi_a .' Asc';
 
-                    return $kit_base . '</br>' . $icon . ' ' . $lenzuola . ' ' . $asciugamani . $span;
+                    if($row->costi_costo_cambi > 0)
+                        $cambio = ' <span class="font-size-xs">['.number_format($row->costi_costo_cambi, 2, ',', '.').']</span>';
+
+                    return $kit_base . '</br>' . $icon . ' ' . $lenzuola . ' ' . $asciugamani . $span . $cambio . $span;
 
                 })
                 ->rawColumns([

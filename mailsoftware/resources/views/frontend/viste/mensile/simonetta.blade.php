@@ -33,6 +33,7 @@
                                     <th class="all">Tot Check-Out</th>
                                     <th class="all">Tot Op-Cambio</th>
                                     <th class="all">Tot sitiweb</th>
+                                    <th class="all">Tot Biancheria</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
@@ -45,6 +46,7 @@
                                     <th class="all">Tot Check-Out</th>
                                     <th class="all">Tot Op-Cambio</th>
                                     <th class="all">Tot sitiweb</th>
+                                    <th class="all">Tot Biancheria</th>
                                 </tr>
                                 </tfoot>
 
@@ -72,6 +74,7 @@
                                     <th class="all">Tot Check-Out</th>
                                     <th class="all">Tot Op-Cambio</th>
                                     <th class="all">Tot sitiweb</th>
+                                    <th class="all">Tot Biancheria</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
@@ -84,6 +87,7 @@
                                     <th class="all">Tot Check-Out</th>
                                     <th class="all">Tot Op-Cambio</th>
                                     <th class="all">Tot sitiweb</th>
+                                    <th class="all">Tot Biancheria</th>
                                 </tr>
                                 </tfoot>
                             </table>
@@ -104,6 +108,7 @@
                                         <th class="all">Tot Check-Out</th>
                                         <th class="all">Tot Op-Cambio</th>
                                         <th class="all">Tot sitiweb</th>
+                                        <th class="all">Tot Biancheria</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
@@ -116,6 +121,7 @@
                                     <th class="all">Tot Check-Out</th>
                                     <th class="all">Tot Op-Cambio</th>
                                     <th class="all">Tot sitiweb</th>
+                                    <th class="all">Tot Biancheria</th>
                                 </tr>
                                 </tfoot>
                             </table>
@@ -187,6 +193,7 @@
                     {data: 'costo_co'},                                 // TOT COSTO-CO
                     {data: 'costi_costo_operatore_cambio_biancheria'},  // TOT OP-CAMBIO
                     {data: 'tx_mask_p_perc_importo_fisso'},             // TOT COMMISSIONI SITIWEB
+                    {data: 'totale_biancheria'},                        // TOT BIANCHERIA
 
 
                 ],
@@ -198,6 +205,7 @@
                     $('td:eq(4)', row).addClass('text-right');     // TOT COSTO-CO
                     $('td:eq(5)', row).addClass('text-right');     // TOT OP-CAMBIO
                     $('td:eq(6)', row).addClass('text-right');     // TOT COMMISSIONI SITIWEB
+                    $('td:eq(7)', row).addClass('text-right');     // TOT BIANCHERIA
                 },
 
                 footerCallback: function(row, data, index) {
@@ -206,10 +214,11 @@
                     console.log(tot);
                     $( api.column( 2 ).footer() ).html(data[tot].sum_costo_cin);                  // CHECK-IN
                     $( api.column( 3 ).footer() ).html(data[tot].sum_tot_pulizie);                // TOT PULIZIE
-                    $( api.column( 4 ).footer() ).html(data[tot].sum_tot_supervisor_pulizie);                // TOT SUPERVISOR PULIZIE
+                    $( api.column( 4 ).footer() ).html(data[tot].sum_tot_supervisor_pulizie);     // TOT SUPERVISOR PULIZIE
                     $( api.column( 5 ).footer() ).html(data[tot].sum_tot_costo_co);               // TOT COSTO-CO
                     $( api.column( 6 ).footer() ).html(data[tot].sum_tot_op_cambio);              // TOT OP-CAMBIO
                     $( api.column( 7 ).footer() ).html(data[tot].sum_tot_commissioni_sitiweb);    // TOT COMMISSIONI SITIWEB
+                    $( api.column( 8 ).footer() ).html(data[tot].sum_tot_totale_biancheria);      // TOT BIANCHERIA
 
                     $( api.column( 2 ).footer() ).addClass('text-right');   // CHECK-IN
                     $( api.column( 3 ).footer() ).addClass('text-right');   // TOT PULIZIE
@@ -217,6 +226,7 @@
                     $( api.column( 5 ).footer() ).addClass('text-right');   // TOT COSTO-CO
                     $( api.column( 6 ).footer() ).addClass('text-right');   // TOT OP-CAMBIO
                     $( api.column( 7 ).footer() ).addClass('text-right');   // TOT COMMISSIONI SITIWEB
+                    $( api.column( 8 ).footer() ).addClass('text-right');   // TOT BIANCHERIA
                 },
 
                 // setup buttons extentension: http://datatables.net/extensions/buttons/
@@ -294,6 +304,7 @@
                     {data: 'costo_co'},                                 // TOT COSTO-CO
                     {data: 'costi_costo_operatore_cambio_biancheria'},  // TOT OP-CAMBIO
                     {data: 'tx_mask_p_perc_importo_fisso'},             // TOT COMMISSIONI SITIWEB
+                    {data: 'totale_biancheria'},                        // TOT BIANCHERIA
 
 
                 ],
@@ -305,17 +316,20 @@
                     $('td:eq(4)', row).addClass('text-right');     // TOT COSTO-CO
                     $('td:eq(5)', row).addClass('text-right');     // TOT OP-CAMBIO
                     $('td:eq(6)', row).addClass('text-right');     // TOT COMMISSIONI SITIWEB
+                    $('td:eq(7)', row).addClass('text-right');     // TOT BIANCHERIA
                 },
 
                 footerCallback: function(row, data, index) {
                     var api = this.api(), data;
                     var tot = data.length - 1;
+                    console.log(tot);
                     $( api.column( 2 ).footer() ).html(data[tot].sum_costo_cin);                  // CHECK-IN
                     $( api.column( 3 ).footer() ).html(data[tot].sum_tot_pulizie);                // TOT PULIZIE
-                    $( api.column( 4 ).footer() ).html(data[tot].sum_tot_supervisor_pulizie);                // TOT SUPERVISOR PULIZIE
+                    $( api.column( 4 ).footer() ).html(data[tot].sum_tot_supervisor_pulizie);     // TOT SUPERVISOR PULIZIE
                     $( api.column( 5 ).footer() ).html(data[tot].sum_tot_costo_co);               // TOT COSTO-CO
                     $( api.column( 6 ).footer() ).html(data[tot].sum_tot_op_cambio);              // TOT OP-CAMBIO
                     $( api.column( 7 ).footer() ).html(data[tot].sum_tot_commissioni_sitiweb);    // TOT COMMISSIONI SITIWEB
+                    $( api.column( 8 ).footer() ).html(data[tot].sum_tot_totale_biancheria);      // TOT BIANCHERIA
 
                     $( api.column( 2 ).footer() ).addClass('text-right');   // CHECK-IN
                     $( api.column( 3 ).footer() ).addClass('text-right');   // TOT PULIZIE
@@ -323,6 +337,7 @@
                     $( api.column( 5 ).footer() ).addClass('text-right');   // TOT COSTO-CO
                     $( api.column( 6 ).footer() ).addClass('text-right');   // TOT OP-CAMBIO
                     $( api.column( 7 ).footer() ).addClass('text-right');   // TOT COMMISSIONI SITIWEB
+                    $( api.column( 8 ).footer() ).addClass('text-right');   // TOT BIANCHERIA
                 },
 
                 // setup buttons extentension: http://datatables.net/extensions/buttons/
@@ -400,6 +415,7 @@
                     {data: 'costo_co'},                                 // TOT COSTO-CO
                     {data: 'costi_costo_operatore_cambio_biancheria'},  // TOT OP-CAMBIO
                     {data: 'tx_mask_p_perc_importo_fisso'},             // TOT COMMISSIONI SITIWEB
+                    {data: 'totale_biancheria'},                        // TOT BIANCHERIA
 
 
                 ],
@@ -411,17 +427,20 @@
                     $('td:eq(4)', row).addClass('text-right');     // TOT COSTO-CO
                     $('td:eq(5)', row).addClass('text-right');     // TOT OP-CAMBIO
                     $('td:eq(6)', row).addClass('text-right');     // TOT COMMISSIONI SITIWEB
+                    $('td:eq(7)', row).addClass('text-right');     // TOT BIANCHERIA
                 },
 
                 footerCallback: function(row, data, index) {
                     var api = this.api(), data;
                     var tot = data.length - 1;
+                    console.log(tot);
                     $( api.column( 2 ).footer() ).html(data[tot].sum_costo_cin);                  // CHECK-IN
                     $( api.column( 3 ).footer() ).html(data[tot].sum_tot_pulizie);                // TOT PULIZIE
-                    $( api.column( 4 ).footer() ).html(data[tot].sum_tot_supervisor_pulizie);                // TOT SUPERVISOR PULIZIE
+                    $( api.column( 4 ).footer() ).html(data[tot].sum_tot_supervisor_pulizie);     // TOT SUPERVISOR PULIZIE
                     $( api.column( 5 ).footer() ).html(data[tot].sum_tot_costo_co);               // TOT COSTO-CO
                     $( api.column( 6 ).footer() ).html(data[tot].sum_tot_op_cambio);              // TOT OP-CAMBIO
                     $( api.column( 7 ).footer() ).html(data[tot].sum_tot_commissioni_sitiweb);    // TOT COMMISSIONI SITIWEB
+                    $( api.column( 8 ).footer() ).html(data[tot].sum_tot_totale_biancheria);      // TOT BIANCHERIA
 
                     $( api.column( 2 ).footer() ).addClass('text-right');   // CHECK-IN
                     $( api.column( 3 ).footer() ).addClass('text-right');   // TOT PULIZIE
@@ -429,6 +448,7 @@
                     $( api.column( 5 ).footer() ).addClass('text-right');   // TOT COSTO-CO
                     $( api.column( 6 ).footer() ).addClass('text-right');   // TOT OP-CAMBIO
                     $( api.column( 7 ).footer() ).addClass('text-right');   // TOT COMMISSIONI SITIWEB
+                    $( api.column( 8 ).footer() ).addClass('text-right');   // TOT BIANCHERIA
                 },
 
                 // setup buttons extentension: http://datatables.net/extensions/buttons/

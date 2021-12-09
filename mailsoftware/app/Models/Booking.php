@@ -575,7 +575,7 @@ class Booking extends Model
      */
     public function setCostiCostoKitAttribute($value)
     {
-        if($this->attributes['tx_mask_t2_p_bianc']){
+        if($this->attributes['tx_mask_t2_p_bianc'] > 0){
             $typo_el_bianc = Typo::select('uid','header', 'subheader', 'tx_mask_bianc_tradit', 'tx_mask_bianc_traden', 'tx_mask_t1_bianc_qy_m', 'tx_mask_t1_bianc_qy_s', 'tx_mask_t1_bianc_qy_ba', 'tx_mask_t1_bianc_qy_v', 'tx_mask_t1_bianc_qy_f', 'tx_mask_t1_bianc_qy_bi')
                 ->where('Ctype', 'mask_db_alg_el_bianc')
                 ->where('uid',$this->attributes['tx_mask_t2_p_bianc'])

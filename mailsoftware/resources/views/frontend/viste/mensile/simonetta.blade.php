@@ -12,7 +12,7 @@
                 <div class="card-header border-0 pt-5">
                     <h3 class="card-title align-items-start flex-column">
                             <span class="card-label font-weight-bolder text-dark text-uppercase">
-                                Costi Mensile - {{ $message }}
+                                Costi Annuale per Mesi
                             </span>
                         <span class="text-muted mt-3 font-weight-bold font-size-sm"></span>
                     </h3>
@@ -34,9 +34,10 @@
                                     <th class="all">Tot Op-Cambio</th>
                                     <th class="all">Tot sitiweb</th>
                                     <th class="all">Tot Biancheria</th>
+                                    <th class="all font-weight-bolder">Tot Riga</th>
                                 </tr>
                                 </thead>
-                                <tfoot>
+                                <tfoot class="total-row">
                                 <tr>
                                     <th></th>
                                     <th class="all"></th>
@@ -47,6 +48,7 @@
                                     <th class="all">Tot Op-Cambio</th>
                                     <th class="all">Tot sitiweb</th>
                                     <th class="all">Tot Biancheria</th>
+                                    <th class="all">Tot Riga</th>
                                 </tr>
                                 </tfoot>
 
@@ -75,9 +77,10 @@
                                     <th class="all">Tot Op-Cambio</th>
                                     <th class="all">Tot sitiweb</th>
                                     <th class="all">Tot Biancheria</th>
+                                    <th class="all font-weight-bolder">Tot Riga</th>
                                 </tr>
                                 </thead>
-                                <tfoot>
+                                <tfoot class="total-row">
                                 <tr>
                                     <th></th>
                                     <th class="all"></th>
@@ -88,6 +91,7 @@
                                     <th class="all">Tot Op-Cambio</th>
                                     <th class="all">Tot sitiweb</th>
                                     <th class="all">Tot Biancheria</th>
+                                    <th class="all">Tot Riga</th>
                                 </tr>
                                 </tfoot>
                             </table>
@@ -109,9 +113,10 @@
                                         <th class="all">Tot Op-Cambio</th>
                                         <th class="all">Tot sitiweb</th>
                                         <th class="all">Tot Biancheria</th>
+                                        <th class="all font-weight-bolder">Tot Riga</th>
                                     </tr>
                                 </thead>
-                                <tfoot>
+                                <tfoot class="total-row">
                                 <tr>
                                     <th></th>
                                     <th class="all"></th>
@@ -122,6 +127,7 @@
                                     <th class="all">Tot Op-Cambio</th>
                                     <th class="all">Tot sitiweb</th>
                                     <th class="all">Tot Biancheria</th>
+                                    <th class="all">Tot Riga</th>
                                 </tr>
                                 </tfoot>
                             </table>
@@ -194,6 +200,7 @@
                     {data: 'costi_costo_operatore_cambio_biancheria'},  // TOT OP-CAMBIO
                     {data: 'tx_mask_p_perc_importo_fisso'},             // TOT COMMISSIONI SITIWEB
                     {data: 'totale_biancheria'},                        // TOT BIANCHERIA
+                    {data: 'sum_row'},                                  // TOT RIGA
 
 
                 ],
@@ -206,6 +213,7 @@
                     $('td:eq(5)', row).addClass('text-right');     // TOT OP-CAMBIO
                     $('td:eq(6)', row).addClass('text-right');     // TOT COMMISSIONI SITIWEB
                     $('td:eq(7)', row).addClass('text-right');     // TOT BIANCHERIA
+                    $('td:eq(8)', row).addClass('text-right');     // TOT RIGA
                 },
 
                 footerCallback: function(row, data, index) {
@@ -219,6 +227,7 @@
                     $( api.column( 6 ).footer() ).html(data[tot].sum_tot_op_cambio);              // TOT OP-CAMBIO
                     $( api.column( 7 ).footer() ).html(data[tot].sum_tot_commissioni_sitiweb);    // TOT COMMISSIONI SITIWEB
                     $( api.column( 8 ).footer() ).html(data[tot].sum_tot_totale_biancheria);      // TOT BIANCHERIA
+                    $( api.column( 9 ).footer() ).html(data[tot].sum_tot_totale_row);      // TOT RIGA
 
                     $( api.column( 2 ).footer() ).addClass('text-right');   // CHECK-IN
                     $( api.column( 3 ).footer() ).addClass('text-right');   // TOT PULIZIE
@@ -227,6 +236,7 @@
                     $( api.column( 6 ).footer() ).addClass('text-right');   // TOT OP-CAMBIO
                     $( api.column( 7 ).footer() ).addClass('text-right');   // TOT COMMISSIONI SITIWEB
                     $( api.column( 8 ).footer() ).addClass('text-right');   // TOT BIANCHERIA
+                    $( api.column( 9 ).footer() ).addClass('text-right');   // TOT RIGA
                 },
 
                 // setup buttons extentension: http://datatables.net/extensions/buttons/
@@ -246,6 +256,7 @@
                 },
                 columnDefs: [
                     { className: 'control', targets:   0, width: '3%' }, //plus
+                    { className: 'total-column', targets: 9},
                     { width: '5%', targets: 1}, //house
                 ],
 
@@ -305,6 +316,7 @@
                     {data: 'costi_costo_operatore_cambio_biancheria'},  // TOT OP-CAMBIO
                     {data: 'tx_mask_p_perc_importo_fisso'},             // TOT COMMISSIONI SITIWEB
                     {data: 'totale_biancheria'},                        // TOT BIANCHERIA
+                    {data: 'sum_row'},                                  // TOT RIGA
 
 
                 ],
@@ -317,6 +329,7 @@
                     $('td:eq(5)', row).addClass('text-right');     // TOT OP-CAMBIO
                     $('td:eq(6)', row).addClass('text-right');     // TOT COMMISSIONI SITIWEB
                     $('td:eq(7)', row).addClass('text-right');     // TOT BIANCHERIA
+                    $('td:eq(8)', row).addClass('text-right');     // TOT RIGA
                 },
 
                 footerCallback: function(row, data, index) {
@@ -330,6 +343,7 @@
                     $( api.column( 6 ).footer() ).html(data[tot].sum_tot_op_cambio);              // TOT OP-CAMBIO
                     $( api.column( 7 ).footer() ).html(data[tot].sum_tot_commissioni_sitiweb);    // TOT COMMISSIONI SITIWEB
                     $( api.column( 8 ).footer() ).html(data[tot].sum_tot_totale_biancheria);      // TOT BIANCHERIA
+                    $( api.column( 9 ).footer() ).html(data[tot].sum_tot_totale_row);      // TOT RIGA
 
                     $( api.column( 2 ).footer() ).addClass('text-right');   // CHECK-IN
                     $( api.column( 3 ).footer() ).addClass('text-right');   // TOT PULIZIE
@@ -338,6 +352,7 @@
                     $( api.column( 6 ).footer() ).addClass('text-right');   // TOT OP-CAMBIO
                     $( api.column( 7 ).footer() ).addClass('text-right');   // TOT COMMISSIONI SITIWEB
                     $( api.column( 8 ).footer() ).addClass('text-right');   // TOT BIANCHERIA
+                    $( api.column( 9 ).footer() ).addClass('text-right');   // TOT RIGA
                 },
 
                 // setup buttons extentension: http://datatables.net/extensions/buttons/
@@ -357,6 +372,7 @@
                 },
                 columnDefs: [
                     { className: 'control', targets:   0, width: '3%' }, //plus
+                    { className: 'total-column', targets: 9},
                     { width: '5%', targets: 1}, //house
                 ],
 
@@ -416,6 +432,7 @@
                     {data: 'costi_costo_operatore_cambio_biancheria'},  // TOT OP-CAMBIO
                     {data: 'tx_mask_p_perc_importo_fisso'},             // TOT COMMISSIONI SITIWEB
                     {data: 'totale_biancheria'},                        // TOT BIANCHERIA
+                    {data: 'sum_row'},                                  // TOT RIGA
 
 
                 ],
@@ -428,6 +445,7 @@
                     $('td:eq(5)', row).addClass('text-right');     // TOT OP-CAMBIO
                     $('td:eq(6)', row).addClass('text-right');     // TOT COMMISSIONI SITIWEB
                     $('td:eq(7)', row).addClass('text-right');     // TOT BIANCHERIA
+                    $('td:eq(8)', row).addClass('text-right');     // TOT RIGA
                 },
 
                 footerCallback: function(row, data, index) {
@@ -441,6 +459,7 @@
                     $( api.column( 6 ).footer() ).html(data[tot].sum_tot_op_cambio);              // TOT OP-CAMBIO
                     $( api.column( 7 ).footer() ).html(data[tot].sum_tot_commissioni_sitiweb);    // TOT COMMISSIONI SITIWEB
                     $( api.column( 8 ).footer() ).html(data[tot].sum_tot_totale_biancheria);      // TOT BIANCHERIA
+                    $( api.column( 9 ).footer() ).html(data[tot].sum_tot_totale_row);             // TOT RIGA
 
                     $( api.column( 2 ).footer() ).addClass('text-right');   // CHECK-IN
                     $( api.column( 3 ).footer() ).addClass('text-right');   // TOT PULIZIE
@@ -449,6 +468,7 @@
                     $( api.column( 6 ).footer() ).addClass('text-right');   // TOT OP-CAMBIO
                     $( api.column( 7 ).footer() ).addClass('text-right');   // TOT COMMISSIONI SITIWEB
                     $( api.column( 8 ).footer() ).addClass('text-right');   // TOT BIANCHERIA
+                    $( api.column( 9 ).footer() ).addClass('text-right');   // TOT RIGA
                 },
 
                 // setup buttons extentension: http://datatables.net/extensions/buttons/
@@ -468,6 +488,7 @@
                 },
                 columnDefs: [
                     { className: 'control', targets:   0, width: '3%' }, //plus
+                    { className: 'total-column', targets: 9},
                     { width: '5%', targets: 1}, //house
                 ],
 

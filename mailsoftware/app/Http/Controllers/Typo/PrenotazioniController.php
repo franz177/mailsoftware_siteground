@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Typo;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\BookingSincronizationJob;
+use App\Models\Booking;
 use App\Models\Flow;
 use App\Models\House;
 use App\Models\Thread;
@@ -59,23 +60,23 @@ class PrenotazioniController extends Controller
 
         if ($request->ajax()){
             $this->users = $this->getAllUsersArray();
-            $data = Typo::select(['tt_content.uid', 'tt_content.tx_mask_p_tot_ospiti', 'tt_content.tx_mask_p_data_arrivo', 'tt_content.tx_mask_p_data_partenza',
-                'tt_content.tx_mask_p_data_prenotazione', 'tt_content.tx_mask_t1_op_chechin', 'tt_content.tx_mask_t0_tel', 'tt_content.tx_mask_t0_email',
+            $data = Booking::select(['uid', 'tx_mask_p_tot_ospiti', 'tx_mask_p_data_arrivo', 'tx_mask_p_data_partenza',
+                'tx_mask_p_data_prenotazione', 'tx_mask_t1_op_chechin', 'tx_mask_t0_tel', 'tx_mask_t0_email',
                 'tx_mask_t1_op_pulizie', 'tx_mask_t1_op_checkout', 'tx_mask_t1_op_chechin', 'tx_mask_t1_ora_checkin', 'tx_mask_t1_ora_checkout',
                 'tx_mask_t2_p_cambi_l','tx_mask_t2_p_cambi_a', 'tx_mask_t2_p_bianc', 'tx_mask_t3_p_stay', 'tx_mask_t3_p_city_tax_amount',
-                'tx_mask_contatto_riferimento',
-                Typo::raw('IF(tt_content.tx_mask_t0_country = "" OR tx_mask_t0_country IS NULL, "NaN", tx_mask_t0_country) tx_mask_t0_country'),
-                Typo::raw('LCASE(tt_content.header) as headerl'),
-                Typo::raw('IFNULL(tt_content.tx_mask_p_sito, tt_content.tx_mask_t5_kross_cod_channel) tx_mask_p_sito'),
-                Typo::raw('IF(tt_content.tx_mask_doc_inviati = 0, "Attesa", "INVIATI") as documenti'),
-                Typo::raw('IFNULL(tt_content.tx_mask_p_casa,0) casa')])
-                ->where('tt_content.CType', $this->CType)
-                ->where('tt_content.hidden', '=', 0)
-                ->where('tt_content.deleted', '=', 0)
-                ->where('tt_content.tx_mask_p_data_partenza', '>', $today)
-                ->where('tt_content.tx_mask_cod_reservation_status', '!=', "CANC")
-                ->whereIn('tt_content.tx_mask_p_casa', $hs)
-                ->orderBy('tt_content.tx_mask_p_data_arrivo', 'ASC')
+                'tx_mask_contatto_riferimento', 'tx_mask_t3_p_s_checkout', 'tx_mask_t3_p_s_chin', 'tx_mask_t2_p_c_extra_kit','tx_mask_t2_p_c_extra_b',
+                Booking::raw('IF(tx_mask_t0_country = "" OR tx_mask_t0_country IS NULL, "NaN", tx_mask_t0_country) tx_mask_t0_country'),
+                Booking::raw('LCASE(header) as headerl'),
+                Booking::raw('IFNULL(tx_mask_p_sito, tx_mask_t5_kross_cod_channel) tx_mask_p_sito'),
+                Booking::raw('IF(tx_mask_doc_inviati = 0, "Attesa", "INVIATI") as documenti'),
+                Booking::raw('IFNULL(tx_mask_p_casa,0) casa')])
+//                ->where('CType', $this->CType)
+                ->where('hidden', '=', 0)
+                ->where('deleted', '=', 0)
+                ->where('tx_mask_p_data_partenza', '>', $today)
+                ->where('tx_mask_cod_reservation_status', '!=', "CANC")
+                ->whereIn('tx_mask_p_casa', $hs)
+                ->orderBy('tx_mask_p_data_arrivo', 'ASC')
                 ->get();
 
             return Datatables::of($data)
@@ -134,19 +135,37 @@ class PrenotazioniController extends Controller
                     return $threads->flow->typeanswer->color->colore_bg;
                 })
                 ->addColumn('data_arrivo', function ($row){
+                    $data = Carbon::createFromFormat('d-m-y', $row->tx_mask_p_data_arrivo)->format('d-m-Y');
                     $data_arrivo = array();
-                    $data_arrivo["display"] = $row->tx_mask_p_data_arrivo;
-                    $data_arrivo["timestamp"] = strtotime($row->tx_mask_p_data_arrivo);
+                    $data_arrivo["display"] = $data;
+                    $data_arrivo["timestamp"] = strtotime($data);
 
                     return $data_arrivo;
 
                 })
+                ->addColumn('alert_booking_arrivo', function ($row){
+                    $data = Carbon::createFromFormat('d-m-y', $row->tx_mask_p_data_arrivo)->format('Y-m-d');
+                    $data_arrivo = Carbon::parse($data);
+                    $today = Carbon::today();
+                    $date_diff = $data_arrivo->diffInDays($today);
+                    return $date_diff;
+
+                })
                 ->addColumn('data_partenza', function ($row){
+                    $data = Carbon::createFromFormat('d-m-y', $row->tx_mask_p_data_partenza)->format('d-m-Y');
                     $data_partenza = array();
-                    $data_partenza["display"] = $row->tx_mask_p_data_partenza;
-                    $data_partenza["timestamp"] = strtotime($row->tx_mask_p_data_partenza);
+                    $data_partenza["display"] = $data;
+                    $data_partenza["timestamp"] = strtotime($data);
 
                     return $data_partenza;
+
+                })
+                ->addColumn('alert_booking_partenza', function ($row){
+                    $data = Carbon::createFromFormat('d-m-y', $row->tx_mask_p_data_partenza)->format('Y-m-d');
+                    $data_arrivo = Carbon::parse($data);
+                    $today = Carbon::today();
+                    $date_diff = $data_arrivo->diffInDays($today);
+                    return $date_diff;
 
                 })
                 ->addColumn('whatsapp_stato', function ($row) {
@@ -243,25 +262,34 @@ class PrenotazioniController extends Controller
                         return $threads;
                     }
                 })
-                ->rawColumns(['gestore_casa','city_tax', 'header', 'thread', 'color', 'whatsapp_id', 'whatsapp_stato', 'cambi', 'op_pulizie', 'op_check_out', 'op_check_in', 'threads', 'data_arrivo', 'data_partenza', 'kit_base', 'importo_stay'])
+                ->addColumn('extra_checkout', function ($row){
+                    return '<span class="font-weight-bolder">€ '.number_format($row->tx_mask_t3_p_s_checkout, 2, ',', '.').'</span>';
+                })
+                ->addColumn('saldo_cash_cin', function ($row){
+                    return '<span class="font-weight-bolder">€ '.number_format($row->tx_mask_t3_p_s_chin, 2, ',', '.').'</span>';
+                })
+                ->addColumn('extra_kit', function ($row){
+                    return '<span class="font-weight-bolder">€ '.number_format($row->tx_mask_t2_p_c_extra_kit, 2, ',', '.').'</span>';
+                })
+                ->addColumn('extra_biancheria', function ($row){
+                    return '<span class="font-weight-bolder">€ '.number_format($row->tx_mask_t2_p_c_extra_b, 2, ',', '.').'</span>';
+                })
+                ->rawColumns([
+                    'gestore_casa','city_tax', 'header', 'thread', 'color', 'whatsapp_id', 'whatsapp_stato',
+                    'cambi', 'op_pulizie', 'op_check_out', 'op_check_in', 'threads', 'data_arrivo', 'data_partenza',
+                    'kit_base', 'importo_stay', 'extra_checkout', 'alert_booking_arrivo', 'alert_booking_partenza', 'saldo_cash_cin', 'extra_kit', 'extra_biancheria'
+                ])
                 ->make(true);
         }
 
-        $pren = Typo::select('uid', 'tx_mask_t5_kross_cod_channel', 'tx_mask_p_casa')
-            ->where('tt_content.CType', $this->CType)
-            ->where('tt_content.hidden', '=', 0)
-            ->where('tt_content.deleted', '=', 0)
-            ->where('tt_content.tx_mask_p_data_arrivo', '>=', $today)
-            ->where('tt_content.tx_mask_cod_reservation_status', '!=', "CANC")
+        $pren = Booking::select('uid', 'tx_mask_t5_kross_cod_channel', 'tx_mask_p_casa')
+//            ->where('CType', $this->CType)
+            ->where('hidden', '=', 0)
+            ->where('deleted', '=', 0)
+            ->where('tx_mask_p_data_arrivo', '>=', $today)
+            ->where('tx_mask_cod_reservation_status', '!=', "CANC")
             ->get();
 
-        $count_pren = Typo::select([
-                Typo::raw('COUNT(IF(tx_mask_cod_reservation_status = "CONF",1,NULL))  CONF'),
-                Typo::raw('COUNT(IF(tx_mask_cod_reservation_status = "WAIT",1,NULL))  WAIT'),
-                Typo::raw('COUNT(IF(tx_mask_cod_reservation_status = "CANC",1,NULL))  CANC'),
-                ])
-            ->where('tt_content.tx_mask_p_data_arrivo', '>=', $today)
-            ->first();
 
         // Inserimento per nuove prenotazioni
         foreach ($pren as $p) {
@@ -309,7 +337,6 @@ class PrenotazioniController extends Controller
             ->with(compact('page_title'))
             ->with(compact('page_description'))
             ->with(compact('pren'))
-            ->with(compact('count_pren'))
             ->with(compact('houses_color'))
             ->with(compact('houses_typo'))
             ->with(compact('houses_gestore'))

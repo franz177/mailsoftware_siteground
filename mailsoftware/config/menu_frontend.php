@@ -26,27 +26,34 @@ return [
             'auth' => [1,3],
             'submenu' => [
                 [
-                    'title' => 'Dashboard',
+                    'title' => 'Dashboard Prenotazioni [01]',
                     'bullet' => 'dot',
                     'page' => '/viste/dashboard',
                     'auth' => [1],
                     'new-tab' => false,
                 ],
                 [
-                    'title' => 'Mensile',
+                    'title' => 'Costi',
                     'bullet' => 'dot',
                     'auth' => [1,3],
                     'new-tab' => false,
                     'submenu' => [
                         [
-                            'title' => 'Mensile Generale Costi',
+                            'title' => 'Mensile Generale Prenotazioni [02]',
                             'bullet' => 'dot',
                             'page' => '/viste/mensile',
                             'auth' => [1],
                             'new-tab' => false,
                         ],
                         [
-                            'title' => 'Costi Annuale per Mesi',
+                            'title' => 'Costi Annuale per Mesi [03]',
+                            'bullet' => 'dot',
+                            'page' => '/viste/mensile/simonetta',
+                            'auth' => [1],
+                            'new-tab' => false,
+                        ],
+                        [
+                            'title' => 'Costi Annuale per Anni [04]',
                             'bullet' => 'dot',
                             'page' => '/viste/mensile/simonetta',
                             'auth' => [1],
@@ -59,14 +66,14 @@ return [
                             'new-tab' => false,
                             'submenu' => [
                                 [
-                                    'title' => 'Mensile Operatori',
+                                    'title' => 'Mensile Operatori [05]',
                                     'bullet' => 'dot',
                                     'page' => '/viste/mensile/operatori',
                                     'auth' => [1,3],
                                     'new-tab' => false,
                                 ],
                                 [
-                                    'title' => 'Totali Mensili Operatori',
+                                    'title' => 'Totali Mensili Operatori [05.1]',
                                     'bullet' => 'dot',
                                     'page' => '/viste/mensile/totali_operatori',
                                     'auth' => [1,3],
@@ -75,6 +82,107 @@ return [
                             ]
                         ],
 
+                    ],
+                ],
+                [
+                    'title' => 'Incassi',
+                    'bullet' => 'dot',
+                    'auth' => [1,3],
+                    'new-tab' => false,
+                    'submenu' => [
+                        [
+                            'title' => 'Mensile Generale Prenotazioni [06]',
+                            'bullet' => 'dot',
+                            'page' => '/viste/mensile',
+                            'auth' => [1],
+                            'new-tab' => false,
+                        ],
+                        [
+                            'title' => 'Annuale per Mesi [07]',
+                            'bullet' => 'dot',
+                            'page' => '/viste/mensile',
+                            'auth' => [1],
+                            'new-tab' => false,
+                        ],
+                        [
+                            'title' => 'Annuale per Anni [08]',
+                            'bullet' => 'dot',
+                            'page' => '/viste/mensile',
+                            'auth' => [1],
+                            'new-tab' => false,
+                        ],
+                    ],
+                ],
+                [
+                    'title' => 'Marketing',
+                    'bullet' => 'dot',
+                    'auth' => [1,3],
+                    'new-tab' => false,
+                    'submenu' => [
+                        [
+                            'title' => 'Paesi',
+                            'bullet' => 'dot',
+                            'page' => '/viste/mensile',
+                            'auth' => [1],
+                            'new-tab' => false,
+                        ],
+                        [
+                            'title' => 'Siti Web',
+                            'bullet' => 'dot',
+                            'page' => '/viste/mensile',
+                            'auth' => [1],
+                            'new-tab' => false,
+                        ],
+                        [
+                            'title' => 'Numero Prenotazioni',
+                            'bullet' => 'dot',
+                            'page' => '/viste/mensile',
+                            'auth' => [1],
+                            'new-tab' => false,
+                        ],
+                        [
+                            'title' => 'Data Prenotazioni',
+                            'bullet' => 'dot',
+                            'page' => '/viste/mensile',
+                            'auth' => [1],
+                            'new-tab' => false,
+                        ],
+                        [
+                            'title' => 'Numero Ospiti',
+                            'bullet' => 'dot',
+                            'page' => '/viste/mensile',
+                            'auth' => [1],
+                            'new-tab' => false,
+                        ],
+                        [
+                            'title' => 'Notti',
+                            'bullet' => 'dot',
+                            'page' => '/viste/mensile',
+                            'auth' => [1],
+                            'new-tab' => false,
+                        ],
+                    ],
+                ],
+                [
+                    'title' => 'Tabelle Operative',
+                    'bullet' => 'dot',
+                    'auth' => [1,3],
+                    'new-tab' => false,
+                    'submenu' => [
+                        [
+                            'title' => 'Sinottico',
+                            'bullet' => 'dot',
+                            'page' => '/viste/mensile',
+                            'auth' => [1],
+                            'new-tab' => false,
+                        ],
+                        [
+                            'title' => 'Andamento Prenotazioni',
+                            'bullet' => 'dot',
+                            'page' => '/viste/mensile',
+                            'auth' => [1],
+                            'new-tab' => false,
+                        ],
                     ],
                 ],
             ]

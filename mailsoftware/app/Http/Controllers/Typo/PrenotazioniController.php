@@ -60,16 +60,12 @@ class PrenotazioniController extends Controller
 
         if ($request->ajax()){
             $this->users = $this->getAllUsersArray();
-            $data = Booking::select(['uid', 'tx_mask_p_tot_ospiti', 'tx_mask_p_data_arrivo', 'tx_mask_p_data_partenza',
-                'tx_mask_p_data_prenotazione', 'tx_mask_t1_op_chechin', 'tx_mask_t0_tel', 'tx_mask_t0_email',
-                'tx_mask_t1_op_pulizie', 'tx_mask_t1_op_checkout', 'tx_mask_t1_op_chechin', 'tx_mask_t1_ora_checkin', 'tx_mask_t1_ora_checkout',
-                'tx_mask_t2_p_cambi_l','tx_mask_t2_p_cambi_a', 'tx_mask_t2_p_bianc', 'tx_mask_t3_p_stay', 'tx_mask_t3_p_city_tax_amount',
-                'tx_mask_contatto_riferimento', 'tx_mask_t3_p_s_checkout', 'tx_mask_t3_p_s_chin', 'tx_mask_t2_p_c_extra_kit','tx_mask_t2_p_c_extra_b',
-                Booking::raw('IF(tx_mask_t0_country = "" OR tx_mask_t0_country IS NULL, "NaN", tx_mask_t0_country) tx_mask_t0_country'),
-                Booking::raw('LCASE(header) as headerl'),
-                Booking::raw('IFNULL(tx_mask_p_sito, tx_mask_t5_kross_cod_channel) tx_mask_p_sito'),
-                Booking::raw('IF(tx_mask_doc_inviati = 0, "Attesa", "INVIATI") as documenti'),
-                Booking::raw('IFNULL(tx_mask_p_casa,0) casa')])
+            $data = Booking::select('*')
+                ->selectRaw('IF(tx_mask_t0_country = "" OR tx_mask_t0_country IS NULL, "NaN", tx_mask_t0_country) tx_mask_t0_country')
+                ->selectRaw('LCASE(header) as headerl')
+                ->selectRaw('IFNULL(tx_mask_p_sito, tx_mask_t5_kross_cod_channel) tx_mask_p_sito')
+                ->selectRaw('IF(tx_mask_doc_inviati = 0, "Attesa", "INVIATI") as documenti')
+                ->selectRaw('IFNULL(tx_mask_p_casa,0) casa')
 //                ->where('CType', $this->CType)
                 ->where('hidden', '=', 0)
                 ->where('deleted', '=', 0)
@@ -195,9 +191,13 @@ class PrenotazioniController extends Controller
                 })
                 ->addColumn('cambi', function ($row) {
 
+                    $operatore_cambio = $row->tx_mask_t1_op_cambio_biancheria ?  $row->tx_mask_t1_op_cambio_biancheria : 19;
+
                     $lenzuola = '';
                     $asciugamani = '';
+                    $costo = '';
                     $icon = '';
+                    $operatore_nome = null;
 
                     if($row->tx_mask_t2_p_cambi_l > 0 || $row->tx_mask_t2_p_cambi_a > 0)
                         $icon = '<i class="fa fa-exclamation text-warning" aria-hidden="true"></i>';
@@ -208,10 +208,16 @@ class PrenotazioniController extends Controller
                     if($row->tx_mask_t2_p_cambi_a > 0)
                         $asciugamani = $row->tx_mask_t2_p_cambi_a .' Asc';
 
-                    $header = '
-                                <p> '.$icon.' '.$lenzuola.' '.$asciugamani.'</p>
+                    if($row->costi_costo_cambi > 0) {
+                        $costo = '[<span class="">€ ' . number_format($row->costi_costo_cambi, 2, ',', '.') . '</span>]';
+                        $operatore_nome = TypoUser::select('first_name')
+                            ->where('uid', '=', $operatore_cambio)
+                            ->first();
 
-                                ';
+                        $operatore_nome = $operatore_nome->first_name;
+                    }
+
+                    $header = '<p> '.$icon.' '.$lenzuola.' '.$asciugamani.' <br> '.$costo.' '. $operatore_nome .' </p>';
 
                     return $header;
                 })

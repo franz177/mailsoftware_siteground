@@ -30,7 +30,7 @@ class StoricoController extends Controller
         $today = Carbon::today();
 
         $page_title = 'Dashboard';
-        $page_description = 'Prenotazioni';
+        $page_description = 'Storico Prenotazioni';
 
         $houses = House::with('color')->get();
         $houses_color = $houses->pluck('color.colore_bg', 'uid');
@@ -51,28 +51,24 @@ class StoricoController extends Controller
         }
 
         if ($request->ajax()){
-            $this->users = $this->getAllUsersArray();
-            $data = Booking::select(['uid', 'tx_mask_p_tot_ospiti', 'tx_mask_p_data_arrivo', 'tx_mask_p_data_partenza',
-                'tx_mask_p_data_prenotazione', 'tx_mask_t1_op_chechin', 'tx_mask_t0_tel', 'tx_mask_t0_email',
-                'tx_mask_t1_op_pulizie', 'tx_mask_t1_op_checkout', 'tx_mask_t1_op_chechin', 'tx_mask_t1_ora_checkin', 'tx_mask_t1_ora_checkout',
-                'tx_mask_t2_p_cambi_l','tx_mask_t2_p_cambi_a', 'tx_mask_t2_p_bianc', 'tx_mask_t3_p_stay', 'tx_mask_t3_p_city_tax_amount',
-                'tx_mask_contatto_riferimento',
-                Typo::raw('IF(tx_mask_t0_country = "" OR tx_mask_t0_country IS NULL, "NaN", tx_mask_t0_country) tx_mask_t0_country'),
-                Typo::raw('LCASE(header) as headerl'),
-                Typo::raw('IFNULL(tx_mask_p_sito, tx_mask_t5_kross_cod_channel) tx_mask_p_sito'),
-                Typo::raw('IF(tx_mask_doc_inviati = 0, "Attesa", "INVIATI") as documenti'),
-                Typo::raw('IFNULL(tx_mask_p_casa,0) casa')])
+            $this->users = $this->getAllUsers();
+            $data = Booking::select('*')
+                ->selectRaw('IF(tx_mask_t0_country = "" OR tx_mask_t0_country IS NULL, "NaN", tx_mask_t0_country) tx_mask_t0_country')
+                ->selectRaw('LCASE(header) as headerl')
+                ->selectRaw('IFNULL(tx_mask_p_sito, tx_mask_t5_kross_cod_channel) tx_mask_p_sito')
+                ->selectRaw('IF(tx_mask_doc_inviati = 0, "Attesa", "INVIATI") as documenti')
+                ->selectRaw('IFNULL(tx_mask_p_casa,0) casa')
+//                ->where('CType', $this->CType)
                 ->where('hidden', '=', 0)
                 ->where('deleted', '=', 0)
                 ->where('tx_mask_p_data_partenza', '<', $today)
-//                ->where('tx_mask_cod_reservation_status', '!=', "CANC")
+                ->where('tx_mask_cod_reservation_status', '!=', "CANC")
                 ->whereIn('tx_mask_p_casa', $hs)
-                ->orderBy('tx_mask_p_data_arrivo', 'ASC')
+                ->orderBy('tx_mask_p_data_arrivo', 'DESC')
                 ->get();
 
             return Datatables::of($data)
                 ->addColumn('gestore_casa', function($row){
-                    return 0;
                     if($row->tx_mask_contatto_riferimento > 0){
                         $contatto_riferimento = TypoUser::select('first_name')
                             ->where('uid', '=', $row->tx_mask_contatto_riferimento)
@@ -83,12 +79,10 @@ class StoricoController extends Controller
                     }
                 })
                 ->addColumn('city_tax', function ($row) {
-                    return 0;
 
                     return '<span class="font-weight-bolder">€ '.number_format($row->tx_mask_t3_p_city_tax_amount, 2, ',', '.').'</span>';
                 })
                 ->addColumn('header', function ($row) {
-                    return 0;
                     if($row->tx_mask_t0_country != 'NaN'){
                         $country = $this->getCountriesArray($row->tx_mask_t0_country);
                         $country = $country->name;
@@ -109,7 +103,6 @@ class StoricoController extends Controller
                     return $header;
                 })
                 ->addColumn('thread', function ($row) {
-                    return 0;
                     $threads = Thread::where('uid','=',$row->uid)->with('flow.typeanswer.color')->latest('created_at')->first();
 
                     if(!$threads){
@@ -120,7 +113,6 @@ class StoricoController extends Controller
                     return $threads->title;
                 })
                 ->addColumn('color', function ($row) {
-                    return 0;
                     $threads = Thread::where('uid','=',$row->uid)->with('flow.typeanswer.color')->latest('created_at')->first();
 
                     if(!$threads){
@@ -131,58 +123,59 @@ class StoricoController extends Controller
                     return $threads->flow->typeanswer->color->colore_bg;
                 })
                 ->addColumn('data_arrivo', function ($row){
-                    return 0;
+                    $data = Carbon::createFromFormat('d-m-y', $row->tx_mask_p_data_arrivo)->format('d-m-Y');
                     $data_arrivo = array();
-                    $data_arrivo["display"] = $row->tx_mask_p_data_arrivo;
-                    $data_arrivo["timestamp"] = strtotime($row->tx_mask_p_data_arrivo);
+                    $data_arrivo["display"] = $data;
+                    $data_arrivo["timestamp"] = strtotime($data);
 
                     return $data_arrivo;
 
                 })
                 ->addColumn('data_partenza', function ($row){
-                    return 0;
+                    $data = Carbon::createFromFormat('d-m-y', $row->tx_mask_p_data_partenza)->format('d-m-Y');
                     $data_partenza = array();
-                    $data_partenza["display"] = $row->tx_mask_p_data_partenza;
-                    $data_partenza["timestamp"] = strtotime($row->tx_mask_p_data_partenza);
+                    $data_partenza["display"] = $data;
+                    $data_partenza["timestamp"] = strtotime($data);
 
                     return $data_partenza;
 
                 })
                 ->addColumn('whatsapp_stato', function ($row) {
-                    return 0;
                     $whatsapp_status = Whatsapp::find($row->uid);
-
-                    return $whatsapp_status->stato;
+                    if($whatsapp_status)
+                        return $whatsapp_status->stato;
+                    return 0;
                 })
                 ->addColumn('whatsapp_id', function ($row) {
-                    return 0;
                     $whatsapp_id = Whatsapp::find($row->uid);
-
-                    return $whatsapp_id->uid;
+                    if($whatsapp_id)
+                        return $whatsapp_id->uid;
+                    return 0;
                 })
                 ->addColumn('op_pulizie', function($row){
-                    return 0;
                     $user = $this->users;
 
                     return $row->tx_mask_t1_op_pulizie ? $user[$row->tx_mask_t1_op_pulizie] : "NaN";
                 })
                 ->addColumn('op_check_out', function($row){
-                    return 0;
                     $user = $this->users;
 
                     return $row->tx_mask_t1_op_checkout ? $user[$row->tx_mask_t1_op_checkout] : "NaN";
                 })
                 ->addColumn('op_check_in', function($row){
-                    return 0;
                     $user = $this->users;
 
                     return $row->tx_mask_t1_op_chechin ? $user[$row->tx_mask_t1_op_chechin] : "NaN";
                 })
                 ->addColumn('cambi', function ($row) {
 
+                    $operatore_cambio = $row->tx_mask_t1_op_cambio_biancheria ?  $row->tx_mask_t1_op_cambio_biancheria : 19;
+
                     $lenzuola = '';
                     $asciugamani = '';
+                    $costo = '';
                     $icon = '';
+                    $operatore_nome = null;
 
                     if($row->tx_mask_t2_p_cambi_l > 0 || $row->tx_mask_t2_p_cambi_a > 0)
                         $icon = '<i class="fa fa-exclamation text-warning" aria-hidden="true"></i>';
@@ -193,10 +186,16 @@ class StoricoController extends Controller
                     if($row->tx_mask_t2_p_cambi_a > 0)
                         $asciugamani = $row->tx_mask_t2_p_cambi_a .' Asc';
 
-                    $header = '
-                                <p> '.$icon.' '.$lenzuola.' '.$asciugamani.'</p>
+                    if($row->costi_costo_cambi > 0) {
+                        $costo = '[<span class="">€ ' . number_format($row->costi_costo_cambi, 2, ',', '.') . '</span>]';
+                        $operatore_nome = TypoUser::select('first_name')
+                            ->where('uid', '=', $operatore_cambio)
+                            ->first();
 
-                                ';
+                        $operatore_nome = $operatore_nome->first_name;
+                    }
+
+                    $header = '<p> '.$icon.' '.$lenzuola.' '.$asciugamani.' <br> '.$costo.' '. $operatore_nome .' </p>';
 
                     return $header;
                 })
@@ -247,30 +246,37 @@ class StoricoController extends Controller
                         return $threads;
                     }
                 })
-                ->rawColumns(['gestore_casa','city_tax', 'header', 'thread', 'color', 'whatsapp_id', 'whatsapp_stato', 'cambi', 'op_pulizie', 'op_check_out', 'op_check_in', 'threads', 'data_arrivo', 'data_partenza', 'kit_base', 'importo_stay'])
+                ->addColumn('extra_checkout', function ($row){
+                    return '<span class="font-weight-bolder">€ '.number_format($row->tx_mask_t3_p_s_checkout, 2, ',', '.').'</span>';
+                })
+                ->addColumn('saldo_cash_cin', function ($row){
+                    return '<span class="font-weight-bolder">€ '.number_format($row->tx_mask_t3_p_s_chin, 2, ',', '.').'</span>';
+                })
+                ->addColumn('extra_kit', function ($row){
+                    return '<span class="font-weight-bolder">€ '.number_format($row->tx_mask_t2_p_c_extra_kit, 2, ',', '.').'</span>';
+                })
+                ->addColumn('extra_biancheria', function ($row){
+                    return '<span class="font-weight-bolder">€ '.number_format($row->tx_mask_t2_p_c_extra_b, 2, ',', '.').'</span>';
+                })
+                ->rawColumns([
+                    'gestore_casa','city_tax', 'header', 'thread', 'color', 'whatsapp_id', 'whatsapp_stato',
+                    'cambi', 'op_pulizie', 'op_check_out', 'op_check_in', 'threads', 'data_arrivo', 'data_partenza',
+                    'kit_base', 'importo_stay', 'extra_checkout', 'alert_booking_arrivo', 'alert_booking_partenza', 'saldo_cash_cin', 'extra_kit', 'extra_biancheria'
+                ])
                 ->make(true);
         }
 
-        $pren = Typo::select('uid', 'tx_mask_t5_kross_cod_channel', 'tx_mask_p_casa')
-            ->where('tt_content.CType', $this->CType)
-            ->where('tt_content.hidden', '=', 0)
-            ->where('tt_content.deleted', '=', 0)
-            ->where('tt_content.tx_mask_p_data_arrivo', '<', $today)
+        $pren = Booking::select('uid', 'tx_mask_t5_kross_cod_channel', 'tx_mask_p_casa')
+            ->where('hidden', '=', 0)
+            ->where('deleted', '=', 0)
+            ->where('tx_mask_p_data_arrivo', '<', $today)
             ->get();
 
-        $count_pren = Typo::select([
-            Typo::raw('COUNT(IF(tx_mask_cod_reservation_status = "CONF",1,NULL))  CONF'),
-            Typo::raw('COUNT(IF(tx_mask_cod_reservation_status = "WAIT",1,NULL))  WAIT'),
-            Typo::raw('COUNT(IF(tx_mask_cod_reservation_status = "CANC",1,NULL))  CANC'),
-        ])
-            ->where('tt_content.tx_mask_p_data_arrivo', '<', $today)
-            ->first();
 
         return view('frontend.storico.index')
             ->with(compact('page_title'))
             ->with(compact('page_description'))
             ->with(compact('pren'))
-            ->with(compact('count_pren'))
             ->with(compact('houses_color'))
             ->with(compact('houses_typo'))
             ->with(compact('houses_gestore'))

@@ -183,6 +183,13 @@ class Controller extends BaseController
 
         return $users;
     }
+    protected function getAllUsers()
+    {
+        $users = TypoUser::select('uid', 'name')
+            ->pluck('name', 'uid');
+
+        return $users;
+    }
 
     protected function getCountriesArray($country_id)
     {

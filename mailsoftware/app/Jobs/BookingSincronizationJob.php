@@ -48,19 +48,10 @@ class BookingSincronizationJob implements ShouldQueue
             ->where('deleted', 0)
             ->whereIn(Typo::raw('MONTH(FROM_UNIXTIME(tstamp))'), $months)
             ->where(Typo::raw('YEAR(FROM_UNIXTIME(tstamp))'), '=', $year)
-//            ->whereNotNull('tx_mask_p_sito')
             ->whereNotNull('tx_mask_p_casa')
             ->where(Typo::raw('YEAR(tx_mask_p_data_arrivo)'), '>', 2020)
-//            ->where('header', 'not like', "%test%")
             ->orderBy('uid', 'desc')
             ->get();
-
-//        $bookings = Typo::where('CType','mask_db_alg_pren')
-//            ->where('hidden', 0)
-//            ->where('deleted', 0)
-//            ->whereIn('uid', [1465,1466,1467,1446])
-//            ->orderBy('uid', 'desc')
-//            ->get();
 
         if($bookings){
             $bookings->each(function ($booking) {

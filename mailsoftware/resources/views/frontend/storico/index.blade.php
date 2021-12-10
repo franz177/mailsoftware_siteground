@@ -14,7 +14,7 @@
                     Show -
                 </div>
                 <div class="card-body">
-                    <p>Dashboard - Attive [{{ $count_pren->CONF }}] - Waiting [{{ $count_pren->WAIT }}] - Cancellate [{{ $count_pren->CANC }}]</p>
+
                 </div>
             </div>
         </div>
@@ -23,15 +23,14 @@
     <div class="row">
         <div class="col-lg-12 col-xxl-12">
             <div class="card card-custom card-stretch gutter-b">
-                <div class="card-header border-0 pt-5">
-                    <h3 class="card-title align-items-start flex-column">
-                            <span class="card-label font-weight-bolder text-dark text-uppercase">
-                                Confermate
-                            </span>
-                        <span class="text-muted mt-3 font-weight-bold font-size-sm"></span>
-                    </h3>
-                </div>
-                <div class="card-body pt-0 pb-3">
+                {{--                <div class="card-header border-0 pt-5">--}}
+                {{--                    <h3 class="card-title align-items-start flex-column">--}}
+                {{--                            <span class="card-label font-weight-bolder text-dark text-uppercase">--}}
+                {{--                            </span>--}}
+                {{--                        <span class="text-muted mt-3 font-weight-bold font-size-sm"></span>--}}
+                {{--                    </h3>--}}
+                {{--                </div>--}}
+                <div class="card-body pb-3">
                     <div class="tab-content">
                         <!--begin::Table-->
                         <div class="table-responsive" >
@@ -70,7 +69,10 @@
                                     <th class="all">Cambi</th>
                                     <th class="none">Importo STAY</th>
                                     <th class="none">KIT Biancheria</th>
-                                    {{--                                        <th class="none">Check-In</th>--}}
+                                    <th class="none">Cash CI</th>
+                                    <th class="none">Extra Cash CO</th>
+                                    <th class="none">Extra Kit</th>
+                                    <th class="none">Extra Biancheria</th>
                                     <th class="none">Threads</th>
                                 </tr>
                                 </thead>
@@ -130,8 +132,8 @@
             var houses_typo = {!! $houses_typo !!};
             var houses_gestore = {!! $houses_gestore !!};
             var sites_kross = {!! $sites_kross !!};
+            var sites = {!! $sites !!};
             var op_checkin = {!! $op_checkin !!};
-            let wa_friendly;
 
             var table = $('#sample_20');
 
@@ -160,7 +162,7 @@
 
                 columns: [
                     {
-                        className:      '',
+                        className:      'hidden',
                         orderable:      false,
                         searchable:     false,
                         data:           null,
@@ -215,7 +217,10 @@
                     {data: 'cambi'},
                     {data: 'importo_stay'},
                     {data: 'kit_base'},
-                    // {data: 'op_check_in'},
+                    {data: 'saldo_cash_cin'},
+                    {data: 'extra_checkout'},
+                    {data: 'extra_kit'},
+                    {data: 'extra_biancheria'},
                     {data: 'threads', name: 'threads', sortable: false},
 
                 ],
@@ -239,6 +244,9 @@
                         $('td:eq(8)', row).addClass('bg-whatsapp-0');
                         wa_friendly = ' (MAIL)';
                     }
+
+                    console.log(data.alert_booking);
+
 
                     $('td:eq(0)', row).addClass('bg-'+houses_color[data.casa]);
                     // $('td:eq(2)', row).addClass('bg-'+houses_color[data.casa]);

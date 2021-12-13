@@ -14,7 +14,7 @@
                     Show -
                 </div>
                 <div class="card-body">
-                    <p>Dashboard - Attive [{{ $count_pren->CONF }}] - Waiting [{{ $count_pren->WAIT }}] - Cancellate [{{ $count_pren->CANC }}]</p>
+
                 </div>
             </div>
         </div>
@@ -69,7 +69,10 @@
                                         <th class="all">Cambi</th>
                                         <th class="none">Importo STAY</th>
                                         <th class="none">KIT Biancheria</th>
-{{--                                        <th class="none">Check-In</th>--}}
+                                        <th class="none">Cash CI</th>
+                                        <th class="none">Extra Cash CO</th>
+                                        <th class="none">Extra Kit</th>
+                                        <th class="none">Extra Biancheria</th>
                                         <th class="none">Threads</th>
                                     </tr>
                                 </thead>
@@ -214,7 +217,10 @@
                     {data: 'cambi'},
                     {data: 'importo_stay'},
                     {data: 'kit_base'},
-                    // {data: 'op_check_in'},
+                    {data: 'saldo_cash_cin'},
+                    {data: 'extra_checkout'},
+                    {data: 'extra_kit'},
+                    {data: 'extra_biancheria'},
                     {data: 'threads', name: 'threads', sortable: false},
 
                 ],
@@ -239,13 +245,22 @@
                         wa_friendly = ' (MAIL)';
                     }
 
+                    console.log(data.alert_booking);
+
+
                     $('td:eq(0)', row).addClass('bg-'+houses_color[data.casa]);
                     // $('td:eq(2)', row).addClass('bg-'+houses_color[data.casa]);
                     $('td:eq(3)', row).addClass('alert-warning text-left');
                     $('td:eq(4)', row).addClass('alert-warning');
+                    if(data.alert_booking_arrivo == 0 || data.alert_booking_arrivo < 2){
+                        $('td:eq(4)', row).addClass('booking_alert');
+                    }
                     $('td:eq(4)', row).append('<p class="mt-2">h: '+data.tx_mask_t1_ora_checkin+'</p>');
                     $('td:eq(4)', row).append('<p class="mt-2 font-size-sm">'+data.op_pulizie+'</p>');
                     $('td:eq(5)', row).addClass('alert-danger');
+                    if(data.alert_booking_partenza == 0 || data.alert_booking_partenza < 2){
+                        $('td:eq(5)', row).addClass('booking_alert');
+                    }
                     $('td:eq(5)', row).append('<p class="mt-2">h: '+data.tx_mask_t1_ora_checkout+'</p>');
                     $('td:eq(5)', row).append('<p class="mt-2 font-size-sm">'+data.op_check_out+'</p>');
                     $('td:eq(8)', row).html('<i class="icon-2x la text-dark-50 socicon-whatsapp"></i>' +

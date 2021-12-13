@@ -6,14 +6,13 @@
 @endsection
 
 @section('content')
-
     <div class="row">
         <div class="col-lg-12 col-xxl-12">
             <div class="card card-custom card-stretch gutter-b">
                 <div class="card-header border-0 pt-5">
                     <h3 class="card-title align-items-start flex-column">
                             <span class="card-label font-weight-bolder text-dark text-uppercase">
-                                Costi Mensile
+                                Mensile Generale Costi
                             </span>
                         <span class="text-muted mt-3 font-weight-bold font-size-sm"></span>
                     </h3>
@@ -91,6 +90,7 @@
                                     <th class="all">Op. Pulizie</th>
                                     <th class="none">Ore Pulizie</th>
                                     <th class="none">Costo Ore Pulizie</th>
+                                    <th class="all">TOT Costo <br> C-IN</th>
                                     <th class="all">Tot <br> Pulizie</th>
                                     <th class="all">Supervisor <br> Pulizie</th>
                                     <th class="all">Partenza</th>
@@ -103,6 +103,12 @@
                                     <th class="none">Extra Cash dell'ospite al C-OUT</th>
                                     <th class="all">Costo Op.Cambio</th>
                                     <th class="none">Extra Mondezza</th>
+                                    <th class="none">Costi Extra Op Bi</th>
+                                    <th class="all">Totale Prenotazione</th>
+                                    <th class="none">Costo KIT</th>
+                                    <th class="none">Costo Cambio</th>
+                                    <th class="none">Costo CI</th>
+                                    <th class="none">Costo Extra CI</th>
                                 </tr>
                                 </thead>
 
@@ -118,6 +124,7 @@
                                     <th class="all"></th>
                                     <th class="none">Ore Pulizie</th>
                                     <th class="none">Costo Ore Pulizie</th>
+                                    <th class="all">Tot Costo <br> C-IN</th>
                                     <th class="all">Tot <br> Pulizie</th>
                                     <th class="all">Supervisor <br> Pulizie</th>
                                     <th class="all"></th>
@@ -130,6 +137,12 @@
                                     <th class="all"></th>
                                     <th class="all">Costo Op.Cambio</th>
                                     <th class="none">Extra Mondezza</th>
+                                    <th class="none">Costi Extra Op Bi</th>
+                                    <th class="all">Totale Prenotazione</th>
+                                    <th class="none">Costo KIT</th>
+                                    <th class="none">Costo Cambio</th>
+                                    <th class="none">Costo CI</th>
+                                    <th class="none">Costo Extra CI</th>
                                 </tr>
                                 </tfoot>
 
@@ -241,16 +254,9 @@
                     },
                     {data: 'tx_mask_t1_ore_pulizie'},               //td:eq(7)
                     {data: 'costo_orario'},                         //td:eq(8)
+                    {data: 'costo_cin'},                         //td:eq(8)
                     {data: 'totale_pulizie'},                       //td:eq(9)
-                    {data: null,                                    //td:eq(10)
-                        render: function (data, type, row)
-                        {
-                            if(row.tx_mask_t0_fattura) {
-                                return row.tx_mask_t0_fattura + '<br><span class="font-weight-bolder">&euro; ' + row.tx_mask_t3_p_extra_p + '</span>';
-                            }
-                            return '<span class="font-weight-bolder">&euro; ' + row.tx_mask_t3_p_extra_p + '</span>';
-                        }
-                    },
+                    {data: 'supervisor_pulizie'},                    //td:eq(10)
                     {data: 'data_partenza'},              //td:eq(11)
                     {data: 'tx_mask_t1_op_checkout',                //td:eq(12)
                         render: function (data, type, row)
@@ -269,9 +275,24 @@
                     {data: 'cash_simo_co'},                         //td:eq(16)
                     {data: 'mancia_cli'},                           //td:eq(17)
                     {data: 'extra_cash_ospite'},                    //td:eq(18)
-                    {data: 'costi_costo_operatore_cambio_biancheria'},                    //td:eq(19)
+                    {data: 'costi_costo_operatore_cambio_biancheria',
+                        render: function (data, type, row)
+                        {
+                            if(row.tx_mask_t1_op_cambio_biancheria in op_check_out) {
+                                var operatore = op_check_out[row.tx_mask_t1_op_cambio_biancheria]+ ' ['+row.tx_mask_t1_op_cambio_biancheria+'] <br>' +row.costi_costo_operatore_cambio_biancheria ;
+                            } else {
+                                var operatore = 'NaN';
+                            }
+                            return operatore;
+                        },
+                    },                    //td:eq(19)
                     {data: 'extra_mondezza'},                    //td:eq(20)
-
+                    {data: 'costi_extra_op_bi'},                    //td:eq(20)
+                    {data: 'totale_riga'},                    //td:eq(20)
+                    {data: 'costi_costo_kit'},                    //td:eq(20)
+                    {data: 'costi_costo_cambi'},                    //td:eq(20)
+                    {data: 'costi_check_in_self_check_in'},                    //td:eq(20)
+                    {data: 'tx_mask_t3_p_s_extra_checkin'},                    //td:eq(20)
                 ],
 
                 rowCallback: function(row, data, index) {
@@ -280,9 +301,11 @@
                     // $('td:eq(2)', row).addClass('alert-warning text-left');     //CLIENTE
                     $('td:eq(3)', row).addClass('alert-warning');               //DATA-ARRIVO
                     $('td:eq(6)', row).addClass('alert-warning');               //OP. PULIZIE
-                    $('td:eq(11)', row).addClass('alert-danger');                //DATA-PARTENZA
-                    $('td:eq(12)', row).addClass('alert-danger');                //OP. C-OUT
-                    $('td:eq(17)', row).addClass('alert-success');                //MANCIA
+                    $('td:eq(12)', row).addClass('alert-danger');                //DATA-PARTENZA
+                    $('td:eq(13)', row).addClass('alert-danger');                //OP. C-OUT
+                    $('td:eq(18)', row).addClass('alert-success');                //MANCIA
+
+                    console.log(data);
 
                     // if(data.mancia_cli_or < 0){
                     //     $('td:eq(17)', row).addClass('text-danger');
@@ -291,14 +314,15 @@
 
                 footerCallback: function(row, data, index){
                     var api = this.api(), data;
-                    $( api.column( 10 ).footer() ).html(data[0].sum_tot_pulizie);
-                    $( api.column( 11 ).footer() ).html(data[0].sum_supervisor_pulizie);
-                    $( api.column( 14 ).footer() ).html(data[0].sum_costo_co);
-                    $( api.column( 15 ).footer() ).html(data[0].sum_ex_co);
-                    $( api.column( 16 ).footer() ).html(data[0].sum_cash_operatore_co);
-                    $( api.column( 17 ).footer() ).html(data[0].sum_cash_simo_co);
-                    $( api.column( 18 ).footer() ).html(data[0].sum_mancia_cli);
-                    $( api.column( 18 ).footer() ).addClass('alert-success');
+                    $( api.column( 10 ).footer() ).html(data[0].sum_tot_costo_cin);
+                    $( api.column( 11 ).footer() ).html(data[0].sum_tot_pulizie);
+                    $( api.column( 12 ).footer() ).html(data[0].sum_supervisor_pulizie);
+                    $( api.column( 15 ).footer() ).html(data[0].sum_costo_co);
+                    $( api.column( 16 ).footer() ).html(data[0].sum_ex_co);
+                    $( api.column( 17 ).footer() ).html(data[0].sum_cash_operatore_co);
+                    $( api.column( 18 ).footer() ).html(data[0].sum_cash_simo_co);
+                    $( api.column( 19 ).footer() ).html(data[0].sum_mancia_cli);
+                    $( api.column( 20 ).footer() ).addClass('alert-success');
                 },
 
                 // setup buttons extentension: http://datatables.net/extensions/buttons/

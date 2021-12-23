@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Typo;
 use App\Models\TypoCategories;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Yajra\DataTables\DataTables;
 
@@ -78,8 +79,8 @@ class SpeseController extends Controller
                 ->where('sys_category.parent', '!=', 1)
                 ->groupBy(Typo::raw('sys_category.parent'))
                 ->groupBy(Typo::raw('YEAR(tt_content.tx_mask_sp_data)'))
-                ->orderBy('sys_category.parent', 'ASC')
                 ->orderBy('year', 'DESC')
+                ->orderBy('sys_category.parent', 'ASC')
                 ->get();
 
         $years = Typo::selectRaw('YEAR(tt_content.tx_mask_sp_data) as year')
@@ -103,20 +104,58 @@ class SpeseController extends Controller
                         $this->sum_of_row = $this->sum_of_row + $data->tx_mask_db_importo;
                     }
                 });
+                $parents->each(function ($parent){
+                    if(!Arr::exists($this->data, $parent->title)){
+                        $this->data[$parent->title] = 0;
+                    }
+                });
                 $this->data['total_row'] = $this->sum_of_row;
                 $this->data_ok[] = $this->data;
             }
-
         });
 
-        return $this->data_ok;
 
         return Datatables::of($this->data_ok)
             ->addColumn('utenze_e_tasse', function($row) {
-//                return '<span class='. ($row['utenze_e_tasse'] > 0 ? "font-weight-bolder" : "font-weight-normal") .'>€ '.number_format($row['utenze_e_tasse'], 2, ',', '.').'</span>';
+                return '<span class='. ($row['utenze_e_tasse'] > 0 ? "font-weight-bolder" : "font-weight-normal") .'>€ '.number_format($row['utenze_e_tasse'], 2, ',', '.').'</span>';
             })
+            ->addColumn('promozione', function($row) {
+                return '<span class='. ($row['promozione'] > 0 ? "font-weight-bolder" : "font-weight-normal") .'>€ '.number_format($row['promozione'], 2, ',', '.').'</span>';
+            })
+            ->addColumn('partita_iva', function($row) {
+                return '<span class='. ($row['partita_iva'] > 0 ? "font-weight-bolder" : "font-weight-normal") .'>€ '.number_format($row['partita_iva'], 2, ',', '.').'</span>';
+            })
+            ->addColumn('manutenzione', function($row) {
+                return '<span class='. ($row['manutenzione'] > 0 ? "font-weight-bolder" : "font-weight-normal") .'>€ '.number_format($row['manutenzione'], 2, ',', '.').'</span>';
+            })
+            ->addColumn('acquisti_fornitura_case', function($row) {
+                return '<span class='. ($row['acquisti_fornitura_case'] > 0 ? "font-weight-bolder" : "font-weight-normal") .'>€ '.number_format($row['acquisti_fornitura_case'], 2, ',', '.').'</span>';
+            })
+            ->addColumn('gestione_ordinaria_clienti', function($row) {
+                return '<span class='. ($row['gestione_ordinaria_clienti'] > 0 ? "font-weight-bolder" : "font-weight-normal") .'>€ '.number_format($row['gestione_ordinaria_clienti'], 2, ',', '.').'</span>';
+            })
+            ->addColumn('total_row', function($row) {
+                return '<span class='. ($row['total_row'] > 0 ? "font-weight-bolder" : "font-weight-normal") .'>€ '.number_format($row['total_row'], 2, ',', '.').'</span>';
+            })
+
+            ->addColumn('pr_pubbliche_relazioni', function($row) {
+                return '<span class='. ($row['pr_pubbliche_relazioni'] > 0 ? "font-weight-bolder" : "font-weight-normal") .'>€ '.number_format($row['pr_pubbliche_relazioni'], 2, ',', '.').'</span>';
+            })
+            ->addColumn('altri_incassi', function($row) {
+                return '<span class='. ($row['altri_incassi'] > 0 ? "font-weight-bolder" : "font-weight-normal") .'>€ '.number_format($row['altri_incassi'], 2, ',', '.').'</span>';
+            })
+            ->addColumn('pulizie_e_lavanderia', function($row) {
+                return '<span class='. ($row['pulizie_e_lavanderia'] > 0 ? "font-weight-bolder" : "font-weight-normal") .'>€ '.number_format($row['pulizie_e_lavanderia'], 2, ',', '.').'</span>';
+            })
+            ->addColumn('anticipi', function($row) {
+                return '<span class='. ($row['anticipi'] > 0 ? "font-weight-bolder" : "font-weight-normal") .'>€ '.number_format($row['anticipi'], 2, ',', '.').'</span>';
+            })
+
             ->rawColumns([
-                'utenze_e_tasse'
+                'utenze_e_tasse', 'partita_iva', 'manutenzione', 'acquisti_fornitura_case',
+                'gestione_ordinaria_clienti', 'promozione', 'pr_pubbliche_relazioni', 'altri_incassi', 'pulizie_e_lavanderia',
+                'anticipi', 'total_row'
+
             ])
             ->make(true);
     }

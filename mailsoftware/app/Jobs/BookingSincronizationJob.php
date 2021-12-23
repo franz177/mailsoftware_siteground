@@ -49,7 +49,8 @@ class BookingSincronizationJob implements ShouldQueue
             ->whereIn(Typo::raw('MONTH(FROM_UNIXTIME(tstamp))'), $months)
             ->where(Typo::raw('YEAR(FROM_UNIXTIME(tstamp))'), '=', $year)
             ->whereNotNull('tx_mask_p_casa')
-            ->where(Typo::raw('YEAR(tx_mask_p_data_arrivo)'), '>', 2020)
+//            ->whereIn('uid', [1273,1274,1278,1366,1451,1467,1386])
+            ->where(Typo::raw('YEAR(tx_mask_p_data_arrivo)'), '>=', 2020)
             ->orderBy('uid', 'desc')
             ->get();
 
@@ -105,19 +106,31 @@ class BookingSincronizationJob implements ShouldQueue
                             'mancia_cli' => 0,
                             'prev_di_cui_pulizie_cliente' => 0,
                             'prev_tot_extra_cash_co' => 0,
+                            'prev_di_cui_biancheria_extra_a_pagamento' => 0,
+                            'prev_incasso_preventivo_con_extra' => 0,
+                            'cons_di_cui_incassi_banca' => 0,
                             'costi_check_in_self_check_in' => 99,
+                            'costi_spese_extra_operatore_check_in' => $booking['tx_mask_t3_p_s_extra_checkin'],
+                            'costi_totale_costo_check_in' => 0,
+                            'costi_costo_check_out' => 0,
+                            'costi_totale_costo_check_out' => 0,
+                            'costi_costo_pulizie' => 0,
+                            'costi_totale_costo_pulizie' => 0,
                             'costi_costo_operatore_cambio_biancheria' => 0,
                             'costi_costo_kit' => 0,
                             'costi_costo_cambi' => 0,
+                            'costi_costo_biancheria_extra_a_pagamento' => 0,
+                            'costi_totale_costo_per_cambio_biancheria_costo_lavanderia' => 1,
+                            'costi_totale_costi' => 0,
                         ]);
 
-                    if ($store->wasRecentlyCreated === true) {
-                        $message = 'Created';
-                    } else {
-                        $message = 'Updated';
-                    }
+//                    if ($store->wasRecentlyCreated === true) {
+//                        $message = 'Created';
+//                    } else {
+//                        $message = 'Updated';
+//                    }
 
-                    event(new BookingEvent($store, $message, $booking->uid));
+//                    event(new BookingEvent($store, $message, $booking->uid));
 
                 } catch (\Exception $e) {
                     event(new BookingErrorEvent('Insert Failed', $booking->uid, $e->getMessage()));

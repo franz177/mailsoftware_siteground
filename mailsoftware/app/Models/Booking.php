@@ -114,10 +114,7 @@ class Booking extends Model
      * */
 
     /**
-     * Set the Costo Orario
-     *
-     * @param  double  $value
-     * @return void
+     * Set Costo Orario
      */
     public function setCostoOrarioAttribute($value)
     {
@@ -146,10 +143,7 @@ class Booking extends Model
     }
 
     /**
-     * Set the Mancia Cliente
-     *
-     * @param  double  $value
-     * @return void
+     * Set Mancia Cliente
      */
     public function setManciaCliAttribute($value)
     {
@@ -157,10 +151,11 @@ class Booking extends Model
     }
 
     /**
-     * Set the Prev - Di Cui Pulizie Cliente
-     *
-     * @param  double  $value
-     * @return void
+     *  INCASSI CONSUNTIVO
+     */
+
+    /**
+     * Set Prev - Di Cui Pulizie Cliente
      */
     public function setPrevDiCuiPulizieClienteAttribute($value){
         if($this->attributes['tx_mask_t3_p_cleaning_fee_amount'] != 0) {
@@ -171,20 +166,14 @@ class Booking extends Model
     }
 
     /**
-     * Set the Prev - Tot Extra Cash CO
-     *
-     * @param  double  $value
-     * @return void
+     * Set Prev - Tot Extra Cash CO
      */
     public function setPrevTotExtraCashCoAttribute($value){
         return $this->attributes['prev_tot_extra_cash_co'] =  $this->attributes['tx_mask_t3_p_s_checkout'] + $this->attributes['tx_mask_t3_p_city_tax_amount'];
     }
 
     /**
-     * Set the Prev - Di Cui Biancheria Extra A pagamento
-     *
-     * @param  double  $value
-     * @return void
+     * Set Prev - Di Cui Biancheria Extra A pagamento
      */
     public function setPrevDiCuiBiancheriaExtraApagamentoAttribute($value)
     {
@@ -204,6 +193,10 @@ class Booking extends Model
                 ->where('hidden', 0)
                 ->where('deleted', 0)
                 ->first();
+
+            if(!$typo_bianc_cs_periodo){
+                return $this->attributes['prev_di_cui_biancheria_extra_a_pagamento'] = 0;
+            }
 
             $typo_costi_biancheria = Typo::select('uid', 'header',
                 'tx_mask_bianc_cs_m', 'tx_mask_bianc_cs_s', 'tx_mask_bianc_cs_ba', 'tx_mask_bianc_cs_v', 'tx_mask_bianc_cs_f', 'tx_mask_bianc_cs_bi',
@@ -234,10 +227,7 @@ class Booking extends Model
     }
 
     /**
-     * Set the Prev - Incasso Preventivo Con Extra
-     *
-     * @param  double  $value
-     * @return void
+     * Set Prev - Incasso Preventivo Con Extra
      */
     public function setPrevIncassoPreventivoConExtraAttribute($value)
     {
@@ -245,25 +235,12 @@ class Booking extends Model
     }
 
     /**
-     * Set the Prev - Incasso Preventivo Con Extra
+     * COSTI
      *
-     * @param  double  $value
-     * @return void
      */
-    public function setConsDiCuiIncassiBancaAttribute($value)
-    {
-        if($this->attributes['tx_mask_p_sito'] == 47) {
-            return $this->attributes['cons_di_cui_incassi_banca'] = ($this->attributes['tx_mask_t3_p_stay'] - $this->attributes['tx_mask_t3_p_s_chin'] - $this->attributes['tx_mask_t3_p_s_b']);
-        } else {
-            return $this->attributes['cons_di_cui_incassi_banca'] = $this->attributes['tx_mask_t3_p_stay'] - $this->attributes['tx_mask_p_perc_importo_fisso'];
-        }
-    }
 
     /**
-     * Set the Costi - Costo Check-In e Self Check-In
-     *
-     * @param  double  $value
-     * @return void
+     * Set Costi - Costo Check-In e Self Check-In
      */
     public function setCostiCheckInSelfCheckInAttribute($value){
         $id_op_cin = [
@@ -314,9 +291,6 @@ class Booking extends Model
 
     /**
      * Set Costi - Costi Totale Costo Check In
-     *
-     * @param  double  $value
-     * @return void
      */
     public function setCostiTotaleCostoCheckInAttribute($value)
     {
@@ -325,9 +299,6 @@ class Booking extends Model
 
     /**
      * Set Costi - Costo CheckOut: RANGE A
-     *
-     * @param  double  $value
-     * @return void
      */
     public function setCostoCoAttribute($value)
     {
@@ -363,9 +334,6 @@ class Booking extends Model
 
     /**
      * Set Costi - Costo CheckOut: RANGE A Duplicato per sbaglio ma ormai c'è...
-     *
-     * @param  double  $value
-     * @return void
      */
     public function setCostiCostoCheckOutAttribute($value)
     {
@@ -374,9 +342,6 @@ class Booking extends Model
 
     /**
      * Set Costi - Totale Costo CheckOut
-     *
-     * @param  double  $value
-     * @return void
      */
     public function setCostiTotaleCostoCheckOutAttribute($value)
     {
@@ -385,9 +350,6 @@ class Booking extends Model
 
     /**
      * Set Costi - Costo Pulizie: RANGE A
-     *
-     * @param  double  $value
-     * @return void
      */
     public function setTotalePulizieAttribute($value)
     {
@@ -443,6 +405,10 @@ class Booking extends Model
                                 ->where('deleted', 0)
                                 ->first();
 
+                            if(!$range){
+                                return $this->attributes['totale_pulizie'] = 0;
+                            }
+
                             $range_mm = TypoRangeMM::select('tx_mask_r_mm_min', 'tx_mask_r_mm_max','tx_mask_r_mm_importo')
                                 ->where('parentid', $range['uid'])
                                 ->where('tx_mask_r_mm_max','>=', $this->attributes['tx_mask_t3_p_stay'])
@@ -468,9 +434,6 @@ class Booking extends Model
 
     /**
      * Set Costi - Costo Pulizie: RANGE A
-     *
-     * @param  double  $value
-     * @return void
      */
     public function setCostiCostoPulizieAttribute($value)
     {
@@ -478,10 +441,7 @@ class Booking extends Model
     }
 
     /**
-     * Set Costi - Costo Pulizie: RANGE A
-     *
-     * @param  double  $value
-     * @return void
+     * Set Costi - Totale Costo Pulizie: RANGE A
      */
     public function setCostiTotaleCostoPulizieAttribute($value)
     {
@@ -489,10 +449,7 @@ class Booking extends Model
     }
 
     /**
-     * Set the Costi - Costo Operatore Cambio Biancheria
-     *
-     * @param  double  $value
-     * @return void
+     * Set Costi - Costo Operatore Cambio Biancheria
      */
     public function setCostiCostoOperatoreCambioBiancheriaAttribute($value)
     {
@@ -523,10 +480,7 @@ class Booking extends Model
     private $tot_asciugamani = 0;
 
     /**
-     * Set the Costi - Costo Kit
-     *
-     * @param  double  $value
-     * @return void
+     * Set Costi - Costo Kit
      */
     public function setCostiCostoKitAttribute($value)
     {
@@ -547,39 +501,42 @@ class Booking extends Model
                 ->where('deleted', 0)
                 ->first();
 
-            $typo_costi_biancheria = Typo::select('uid', 'header',
-                'tx_mask_bianc_cs_m', 'tx_mask_bianc_cs_s', 'tx_mask_bianc_cs_ba', 'tx_mask_bianc_cs_v', 'tx_mask_bianc_cs_f', 'tx_mask_bianc_cs_bi',
-                'tx_mask_bianc_cs_ta', 'tx_mask_bianc_cs_to', 'tx_mask_bianc_cs_periodo',)
-                ->where('Ctype', 'mask_db_alg_cos_bianc')
-                ->where('uid', $typo_bianc_cs_periodo->parentid)
-                ->first();
+            if($typo_bianc_cs_periodo){
+                $typo_costi_biancheria = Typo::select('uid', 'header',
+                    'tx_mask_bianc_cs_m', 'tx_mask_bianc_cs_s', 'tx_mask_bianc_cs_ba', 'tx_mask_bianc_cs_v', 'tx_mask_bianc_cs_f', 'tx_mask_bianc_cs_bi',
+                    'tx_mask_bianc_cs_ta', 'tx_mask_bianc_cs_to', 'tx_mask_bianc_cs_periodo',)
+                    ->where('Ctype', 'mask_db_alg_cos_bianc')
+                    ->where('uid', $typo_bianc_cs_periodo->parentid)
+                    ->first();
 
-            $this->tot_lenzuola = (
-                ($typo_el_bianc->tx_mask_t1_bianc_qy_m * $typo_costi_biancheria->tx_mask_bianc_cs_m) +
-                ($typo_el_bianc->tx_mask_t1_bianc_qy_s * $typo_costi_biancheria->tx_mask_bianc_cs_s) +
-                ($typo_el_bianc->tx_mask_t1_bianc_qy_f * $typo_costi_biancheria->tx_mask_bianc_cs_f)
-            );
-            $this->tot_asciugamani = (
-                ($typo_el_bianc->tx_mask_t1_bianc_qy_ba * $typo_costi_biancheria->tx_mask_bianc_cs_ba) +
-                ($typo_el_bianc->tx_mask_t1_bianc_qy_v * $typo_costi_biancheria->tx_mask_bianc_cs_v) +
-                ($typo_el_bianc->tx_mask_t1_bianc_qy_bi * $typo_costi_biancheria->tx_mask_bianc_cs_bi) +
-                ($typo_house->tx_mask_casa_bagni * $typo_costi_biancheria->tx_mask_bianc_cs_ta) +
-                ($typo_house->tx_mask_casa_torcioni * $typo_costi_biancheria->tx_mask_bianc_cs_to)
-            );
+                $this->tot_lenzuola = (
+                    ($typo_el_bianc->tx_mask_t1_bianc_qy_m * $typo_costi_biancheria->tx_mask_bianc_cs_m) +
+                    ($typo_el_bianc->tx_mask_t1_bianc_qy_s * $typo_costi_biancheria->tx_mask_bianc_cs_s) +
+                    ($typo_el_bianc->tx_mask_t1_bianc_qy_f * $typo_costi_biancheria->tx_mask_bianc_cs_f)
+                );
+                $this->tot_asciugamani = (
+                    ($typo_el_bianc->tx_mask_t1_bianc_qy_ba * $typo_costi_biancheria->tx_mask_bianc_cs_ba) +
+                    ($typo_el_bianc->tx_mask_t1_bianc_qy_v * $typo_costi_biancheria->tx_mask_bianc_cs_v) +
+                    ($typo_el_bianc->tx_mask_t1_bianc_qy_bi * $typo_costi_biancheria->tx_mask_bianc_cs_bi) +
+                    ($typo_house->tx_mask_casa_bagni * $typo_costi_biancheria->tx_mask_bianc_cs_ta) +
+                    ($typo_house->tx_mask_casa_torcioni * $typo_costi_biancheria->tx_mask_bianc_cs_to)
+                );
 
-            $total = $this->tot_lenzuola + $this->tot_asciugamani;
+                $total = $this->tot_lenzuola + $this->tot_asciugamani;
 
-            return $this->attributes['prev_di_cui_biancheria_extra_a_pagamento'] = $total;
+                return $this->attributes['costi_costo_kit'] = $total;
+            } else {
+                return $this->attributes['costi_costo_kit'] = 0;
+            }
+
+
         } else {
-            return $this->attributes['prev_di_cui_biancheria_extra_a_pagamento'] = $value;
+            return $this->attributes['costi_costo_kit'] = $value;
         }
     }
 
     /**
-     * Set the Costi - Costo Costo Cambi
-     *
-     * @param  double  $value
-     * @return void
+     * Set Costi - Costo Costo Cambi
      */
     public function setCostiCostoCambiAttribute($value)
     {
@@ -597,10 +554,7 @@ class Booking extends Model
     }
 
     /**
-     * Set the Costi - Costi Costo Biancheria Extra a Pagamento
-     *
-     * @param  double  $value
-     * @return void
+     * Set Costi - Costi Costo Biancheria Extra a Pagamento
      */
     public function setCostiCostoBiancheriaExtraApagamentoAttribute($value)
     {
@@ -608,10 +562,7 @@ class Booking extends Model
     }
 
     /**
-     * Set the Costi - Costi Totale Costo Per Cambio Biancheria Costo Lavanderia
-     *
-     * @param  double  $value
-     * @return void
+     * Set Costi - Costi Totale Costo Per Cambio Biancheria Costo Lavanderia
      */
     public function setCostiTotaleCostoPerCambioBiancheriaCostoLavanderiaAttribute($value)
     {
@@ -619,14 +570,152 @@ class Booking extends Model
     }
 
     /**
-     * Set the Costi - Costi Totale Costo Per Cambio Biancheria Costo Lavanderia
-     *
-     * @param  double  $value
-     * @return void
+     * Set Costi - Costi Totale Costo Per Cambio Biancheria Costo Lavanderia
      */
     public function setCostiTotaleCostiAttribute($value)
     {
         return $this->attributes['costi_totale_costi'] = $this->attributes['tx_mask_p_perc_importo_fisso'] + $this->attributes['costi_totale_costo_check_in'] + $this->attributes['costi_totale_costo_check_out'] + $this->attributes['costi_totale_costo_pulizie'] + $this->attributes['costi_totale_costo_per_cambio_biancheria_costo_lavanderia'];
+    }
+
+    /**
+     *  INCASSI CONSUNTIVO
+     */
+
+    /**
+     * Set Cons - Di Cui Incassi Banca
+     */
+    public function setConsDiCuiIncassiBancaAttribute($value)
+    {
+        if($this->attributes['tx_mask_p_sito'] == 47) {
+            return $this->attributes['cons_di_cui_incassi_banca'] = ($this->attributes['tx_mask_t3_p_stay'] - $this->attributes['tx_mask_t3_p_s_chin'] - $this->attributes['tx_mask_t3_p_s_b']);
+        } else {
+            return $this->attributes['cons_di_cui_incassi_banca'] = $this->attributes['tx_mask_t3_p_stay'] - $this->attributes['tx_mask_p_perc_importo_fisso'];
+        }
+    }
+
+    /**
+     * Set Cons - Tot Ingresso Banca
+     */
+    public function setConsTotIngressoBancaAttribute($value)
+    {
+        return $this->attributes['cons_tot_ingresso_banca'] =  $this->attributes['cons_di_cui_incassi_banca'] + $this->attributes['tx_mask_t3_p_s_b'];
+    }
+
+    /**
+     * Set Cons - Totale Extra Cash Ritirato Al Co
+     */
+    public function setConsTotaleExtraCashRitiratoAlCoAttribute($value)
+    {
+        return $this->attributes['cons_totale_extra_cash_ritirato_al_co'] =  $this->attributes['tx_mask_t3_p_cash_simo'] + $this->attributes['tx_mask_t3_p_cash_op_cout'];
+    }
+
+    /**
+     * Set Cons - Tassa Soggiorno Da Ritirare
+     */
+    public function setConsTassaSoggiornoDaRitirareAttribute($value)
+    {
+        return $this->attributes['cons_tassa_soggiorno_da_ritirare'] =  ($this->attributes['cons_totale_extra_cash_ritirato_al_co'] - $this->attributes['tx_mask_t3_p_s_checkout'] - $this->attributes['tx_mask_t3_p_city_tax_amount']);
+    }
+
+    /**
+     * Set Cons - Incasso Consuntivo Totale Con Extra No Siti Web
+     */
+    public function setConsIncassoConsuntivoTotaleConExtraNoSitiWebAttribute($value)
+    {
+        return $this->attributes['cons_incasso_consuntivo_totale_con_extra_no_siti_web'] =  (($this->attributes['cons_tot_ingresso_banca'] + $this->attributes['tx_mask_t3_p_s_chin'] + $this->attributes['cons_totale_extra_cash_ritirato_al_co']) - $this->attributes['tx_mask_t3_p_city_tax_amount']);
+    }
+
+    /**
+     * Set Cons - Diff Cons Prev
+     */
+    public function setConsDiffConsPrevAttribute($value)
+    {
+        return $this->attributes['cons_diff_cons_prev'] = ($this->attributes['prev_incasso_preventivo_con_extra'] - $this->attributes['cons_incasso_consuntivo_totale_con_extra_no_siti_web']);
+    }
+
+    /**
+     * Set Cons - Incasso Consuntivo Totale Con Extra Siti Web
+     */
+    public function setConsIncassoConsuntivoTotaleConExtraSitiWebAttribute($value)
+    {
+        return $this->attributes['cons_incasso_consuntivo_totale_con_extra_siti_web'] = ($this->attributes['cons_incasso_consuntivo_totale_con_extra_no_siti_web'] + $this->attributes['tx_mask_p_perc_importo_fisso']);
+    }
+
+    /**
+     * Set Cons - Totale Costi
+     */
+    public function setConsTotaleCostiAttribute($value)
+    {
+        return $this->attributes['cons_totale_costi'] = $this->attributes['costi_totale_costi'];
+    }
+
+    /**
+     * Set Cons - Guadagno (INCASSI - COSTI)
+     */
+    public function setConsGuadagnoAttribute($value)
+    {
+        return $this->attributes['cons_guadagno'] = $this->attributes['prev_incasso_preventivo_con_extra'] - $this->attributes['costi_totale_costi'];
+    }
+
+    /**
+     * PROPRIETARIO
+     */
+
+    /**
+     * Set Prop - Percentuale Proprietario
+     */
+    public function setPropPercentualeProprietarioAttribute($value)
+    {
+        $proprietario = Typo::select('tt_content.uid', 'tt_content.tx_mask_propr_casa', 'tt_content.tx_mask_propr_dal', 'tt_content.tx_mask_propr_al',
+            'tx_mask_propr_mm.tx_mask_propr_mm_min', 'tx_mask_propr_mm.tx_mask_propr_mm_max', 'tx_mask_propr_mm.tx_mask_propr_mm_percentuale')
+            ->join('tx_mask_propr_mm', 'tx_mask_propr_mm.parentid', '=', 'tt_content.uid')
+            ->where('tt_content.CType', 'mask_perc_pr')
+            ->where('tt_content.tx_mask_propr_casa', 'like', '%'. $this->attributes['tx_mask_p_casa'] .'%')
+            ->where('tt_content.tx_mask_propr_dal', '<=', $this->attributes['tx_mask_p_data_arrivo'])
+            ->where('tt_content.tx_mask_propr_al', '>=', $this->attributes['tx_mask_p_data_arrivo'])
+            ->where('tx_mask_propr_mm.tx_mask_propr_mm_min', '<=', $this->attributes['tx_mask_t3_p_stay'])
+            ->where('tx_mask_propr_mm.tx_mask_propr_mm_max', '>=', $this->attributes['tx_mask_t3_p_stay'])
+            ->first();
+
+        if (!$proprietario)
+            return $this->attributes['prop_percentuale_proprietario'] = 0;
+
+        return $this->attributes['prop_percentuale_proprietario'] = ($this->attributes['cons_incasso_consuntivo_totale_con_extra_no_siti_web']/100) * $proprietario->tx_mask_propr_mm_percentuale;
+    }
+
+    /**
+     * Set Prop - Percentuale Simonetta
+     */
+    public function setPropPercentualeSimonettaAttribute($value)
+    {
+        if ($this->attributes['prop_percentuale_proprietario'] == 0)
+            return $this->attributes['prop_percentuale_simonetta'] = 0;
+
+        return $this->attributes['prop_percentuale_simonetta'] = ($this->attributes['cons_incasso_consuntivo_totale_con_extra_no_siti_web'] - $this->attributes['prop_percentuale_proprietario']);
+    }
+
+    /**
+     * Set Prop - Costo Medio A Notte
+     */
+    public function setPropCostoMedioAnotteAttribute($value)
+    {
+        /**
+         * TODO
+         * prendere tx_mask_p_tot_ospiti
+         */
+
+        $ospiti = $this->attributes['tx_mask_p_tot_ospiti'];
+
+        $arrivo = Carbon::parse($this->attributes['tx_mask_p_data_arrivo']);
+        $partenza = Carbon::parse($this->attributes['tx_mask_p_data_partenza']);
+        $notti = $partenza->diffInDays($arrivo);
+
+        $extra = TypoExtra::select()
+            ->where('parentid', $this->attributes['tx_mask_p_casa']);
+
+        if($this->attributes['tx_mask_t3_p_cleaning_fee_amount'])
+
+        return $this->attributes['prop_costo_medio_a_notte'] = $ospiti;
     }
 
 }

@@ -46,10 +46,11 @@ class BookingSincronizationJob implements ShouldQueue
         $bookings = Typo::where('CType','mask_db_alg_pren')
             ->where('hidden', 0)
             ->where('deleted', 0)
-            ->whereIn(Typo::raw('MONTH(FROM_UNIXTIME(tstamp))'), $months)
-            ->where(Typo::raw('YEAR(FROM_UNIXTIME(tstamp))'), '=', $year)
+//            ->whereIn(Typo::raw('MONTH(FROM_UNIXTIME(tstamp))'), $months)
+//            ->where(Typo::raw('YEAR(FROM_UNIXTIME(tstamp))'), '=', $year)
             ->whereNotNull('tx_mask_p_casa')
-//            ->whereIn('uid', [1273,1274,1278,1366,1451,1467,1386])
+            ->whereIn('uid', [1386])
+            ->where('tx_mask_cod_reservation_status', '!=', 'CANC')
             ->where(Typo::raw('YEAR(tx_mask_p_data_arrivo)'), '>=', 2020)
             ->orderBy('uid', 'desc')
             ->get();
@@ -108,7 +109,7 @@ class BookingSincronizationJob implements ShouldQueue
                             'prev_tot_extra_cash_co' => 0,
                             'prev_di_cui_biancheria_extra_a_pagamento' => 0,
                             'prev_incasso_preventivo_con_extra' => 0,
-                            'cons_di_cui_incassi_banca' => 0,
+
                             'costi_check_in_self_check_in' => 99,
                             'costi_spese_extra_operatore_check_in' => $booking['tx_mask_t3_p_s_extra_checkin'],
                             'costi_totale_costo_check_in' => 0,
@@ -122,6 +123,20 @@ class BookingSincronizationJob implements ShouldQueue
                             'costi_costo_biancheria_extra_a_pagamento' => 0,
                             'costi_totale_costo_per_cambio_biancheria_costo_lavanderia' => 1,
                             'costi_totale_costi' => 0,
+
+                            'cons_di_cui_incassi_banca' => 0,
+                            'cons_tot_ingresso_banca' => 0,
+                            'cons_totale_extra_cash_ritirato_al_co' => 0,
+                            'cons_tassa_soggiorno_da_ritirare' => 0,
+                            'cons_incasso_consuntivo_totale_con_extra_no_siti_web' => 0,
+                            'cons_diff_cons_prev' => 0,
+                            'cons_incasso_consuntivo_totale_con_extra_siti_web' => 0,
+                            'cons_totale_costi' => 0,
+                            'cons_guadagno' => 0,
+
+                            'prop_percentuale_proprietario' => 0,
+                            'prop_percentuale_simonetta' => 0,
+//                            'prop_costo_medio_a_notte' => 0,
                         ]);
 
 //                    if ($store->wasRecentlyCreated === true) {

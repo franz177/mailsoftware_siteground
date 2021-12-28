@@ -155,6 +155,7 @@
 
                 processing: true,
                 serverSide: true,
+                fixedHeader: true,
 
                 ajax: {
                     url:"{{ route('prenotazioni.index') }}"

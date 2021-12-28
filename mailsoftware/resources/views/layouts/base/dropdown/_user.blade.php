@@ -115,6 +115,7 @@
             @csrf
         </form>
         <a href="{{ route('booking_force') }}" class="btn btn-light-warning font-weight-bold float-right">{{ __('Ricarica Prenotazioni') }}</a>
+        {{--                        <a href="{{ route('booking.export') }}" class="btn btn-light-warning font-weight-bold float-right">{{ __('Scarica Excel Prenotazioni') }}</a>--}}
         <form id="booking-force" action="{{ route('booking_force') }}" method="POST" class="d-none">
             @csrf
         </form>

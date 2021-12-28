@@ -6,14 +6,13 @@
 @endsection
 
 @section('content')
-
     <div class="row">
         <div class="col-lg-12 col-xxl-12">
             <div class="card card-custom card-stretch gutter-b">
                 <div class="card-header border-0 pt-5">
                     <h3 class="card-title align-items-start flex-column">
                             <span class="card-label font-weight-bolder text-dark text-uppercase">
-                                Totali Operatori
+                                Costi Aziendali per Mesi
                             </span>
                         <span class="text-muted mt-3 font-weight-bold font-size-sm"></span>
                     </h3>
@@ -27,29 +26,30 @@
                                     <div class="mb-2 d-flex flex-column">
                                         <div class="input-group has-validation">
                                             <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                    <i class="far fa-calendar-alt"></i>
-                                                </span>
+                                                        <span class="input-group-text">
+                                                            <i class="far fa-calendar-alt"></i>
+                                                        </span>
                                             </div>
-                                            <select class="form-control" id="year" name="year">
-                                                @foreach($years as $year)
-                                                    <option value="{{ $year->year }}" {{ $year->year == now()->year ? 'selected' : '' }}>{{ $year->year }}</option>
+                                            <select multiple="multiple" class="form-control" id="months" name="months[]" style="min-height: 150px;">
+                                                @foreach($months as $month => $name)
+                                                    <option value="{{ $month }}">{{ $name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
+                                    <a href="javascript:void(0)" class="btn btn-light btn-sm btn-block" id="clearMonths" name="clearMonths">Pulisci</a>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="mb-2 d-flex flex-column">
                                         <div class="input-group has-validation">
                                             <div class="input-group-prepend">
-                                                            <span class="input-group-text">
-                                                                <i class="far fa-calendar-alt"></i>
-                                                            </span>
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-home"></i>
+                                                </span>
                                             </div>
-                                            <select class="form-control" id="month" name="month">
-                                                @foreach($months as $month => $name)
-                                                    <option value="{{ $month }}" {{ $month == now()->month ? 'selected' : '' }}>{{ $name }}</option>
+                                            <select multiple="multiple" class="form-control" id="houses" name="houses[]" style="min-height: 150px;">
+                                                @foreach($houses_typo as $uid => $name)
+                                                    <option value="{{ $uid }}">{{ $name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -67,37 +67,43 @@
                 </div>
                 <div class="card-body pt-0 pb-3">
                     <div class="tab-content">
+                        <h3> Anno 2021 </h3>
                         <p class="font-weight-bold font-size-s mb-2 pb-5">
-                            I calcoli sono effettuati dalla data di arrivo colore
-                                <span class="symbol symbol-20 symbol-warning mx-1">
+                            I calcoli sono effettuati sulla data di arrivo colore
+                            <span class="symbol symbol-20 symbol-warning mx-1">
                                     <span class="symbol-label"></span>
                                 </span>
-                            Giallo, della data di partenza colore
-                            <span class="symbol symbol-20 symbol-danger mx-1">
-                                <span class="symbol-label"></span>
-                            </span>rosa
+                            Giallo
                         </p>
                         <!--begin::Table-->
                         <div class="table-responsive" >
                             <table class="table table-striped table-bordered  dt-responsive" id="sample_21">
-                                <thead>
+                                <thead class="text-uppercase">
                                 <tr>
-                                    <th class="none"></th>
-                                    <th class="all">OPERATORE</th>
-                                    <th class="all alert-warning">TOTALE <br>CHECK-IN</th>
-                                    <th class="all alert-warning">TOTALE <br>PULIZIE</th>
-                                    <th class="all alert-warning">SUPERVISOR <br>PULIZIE</th>
-                                    <th class="all alert-danger">COSTO <br>C-OUT</th>
-                                    <th class="all alert-danger">COSTO EXTRA <br>C-OUT</th>
-                                    <th class="all alert-danger">CASH OP. <br>C-OUT</th>
-                                    <th class="all alert-danger">COSTO <br>OP. CAMBIO</th>
+                                    <th></th>
+                                    <th class="all">Case</th>
+                                    <th class="all">Carta Igienica</th>
+                                    <th class="all">Case Sel</th>
 
                                 </tr>
                                 </thead>
+                                <tfoot class="total-row">
+                                <tr>
+                                    <th></th>
+                                    <th class="all"></th>
+                                    <th class="all"></th>
+                                    <th class="all"></th>
+
+                                </tr>
+                                </tfoot>
 
                             </table>
                         </div>
                     </div>
+                </div>
+                <div class="card-footer justify-content-between">
+                    <p class="text-muted font-weight-bold font-size-s mb-2">Per tutte le colonne vengono calcolati i <strong>Costi Extra</strong>.</p>
+                    <p class="text-muted font-weight-bold font-size-s mb-2">Cambio biancheria è moltiplicato per il cambio lenzuola.</p>
                 </div>
             </div>
         </div>
@@ -120,9 +126,8 @@
                 }
             });
 
-            var tables = $('#sample_21');
-
-            var oTable = tables.DataTable({
+            var table_21 = $('#sample_21');
+            var oTable = table_21.DataTable({
                 // Internationalisation. For more info refer to http://datatables.net/manual/i18n
                 "language": {
                     "aria": {
@@ -140,18 +145,23 @@
 
                 processing: true,
                 serverSide: true,
+                searching: false,
+                lengthChange: false,
+                paging:   false,
+                ordering: false,
+                info:     false,
 
                 ajax: {
-                    url:"{{ route('viste.totali_operatori') }}",
+                    url:"{{ route('costi_aziendali.data') }}",
                     data: function (d) {
-                        d.year = $('select[name=year] option').filter(':selected').val();
-                        d.month = $('select[name=month] option').filter(':selected').val();
+                        d.months = $('#months').val();
+                        d.houses = $('#houses').val();
                     }
                 },
 
                 columns: [
                     {
-                        className:      'hidden',
+                        className:      '',
                         orderable:      false,
                         searchable:     false,
                         data:           null,
@@ -159,29 +169,12 @@
                         cellType: "th",
                         sortable: false
                     },
-
-                    {data: 'uid'},                                      //td:eq(1)
-                    {data: 'costi_cin'},                                      //td:eq(2)
-                    {data: 'totale_pulizie'},                                      //td:eq(2)
-                    {data: 'supervisor_pulizie'},                                      //td:eq(3)
-                    {data: 'costo_co'},                                      //td:eq(4)
-                    {data: 'extra_co'},                                      //td:eq(5)
-                    {data: 'cash_op_co'},                                      //td:eq(6)
-                    {data: 'costi_costo_operatore_cambio_biancheria'},                                      //td:eq(7)
-
+                    {data: 'case'},
+                    {data: 'carta_igienica'},
+                    {data: 'case_sel'},
 
 
                 ],
-
-                rowCallback: function(row, data, index) {
-                    $('td:eq(1)', row).addClass('alert-warning');   // TOTALE CHECK-IN
-                    $('td:eq(2)', row).addClass('alert-warning');   // TOTALE PULIZIE
-                    $('td:eq(3)', row).addClass('alert-warning');   // SUPERVISOR PULIZIE
-                    $('td:eq(4)', row).addClass('alert-danger');    // COSTO C-OUT
-                    $('td:eq(5)', row).addClass('alert-danger');    // COSTO EXTRA C-OUT
-                    $('td:eq(6)', row).addClass('alert-danger');    // CASH OP. C-OUT
-                    $('td:eq(7)', row).addClass('alert-danger');    // COSTO OP. CAMBIO
-                },
 
                 // setup buttons extentension: http://datatables.net/extensions/buttons/
                 buttons: [
@@ -195,20 +188,13 @@
                 responsive: {
                     details: {
                         type: 'column',
-                        target: 'tr',
+                        target: 'th',
                     }
                 },
                 columnDefs: [
                     { className: 'control', targets:   0, width: '3%' }, //plus
-                    { width: '11%', targets: 1},         //house
-                    { width: '11%', targets: 2},        //data-arrivo
-                    { width: '11%', targets: 3},        //data-arrivo
-                    { width: '11%', targets: 4},        //OP.PULIZIE
-                    { width: '11%', targets: 5},        //KIT BASE
-                    { width: '11%', targets: 6},       //data-partenza
-                    { width: '11%', targets: 7},       //OP.C-OUT
-                    { width: '11%', targets: 8},       //CASH
-
+                    // { className: 'total-column', targets: 9},
+                    { width: '5%', targets: 1}, //house
                 ],
 
                 "lengthMenu": [
@@ -221,6 +207,8 @@
 
                 "dom": "<'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'B f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", // horizobtal scrollable datatable
             });
+
+
             $('#submit').on('click', function(e) {
                 oTable.draw();
                 e.preventDefault();

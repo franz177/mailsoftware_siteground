@@ -40,9 +40,25 @@ Route::get('/viste/mensile/dataoperatori', [\App\Http\Controllers\Frontend\Views
 Route::get('/viste/mensile/datatotalioperatori', [\App\Http\Controllers\Frontend\Views\MensileController::class, 'getDataTotaliOperatori'])->name('viste.totali_operatori');
 Route::get('/viste/mensile/datas', [\App\Http\Controllers\Frontend\Views\MensileController::class, 'getDataTables'])->name('viste.datas');
 
-Route::get('/viste/mensile/simonetta', [\App\Http\Controllers\Frontend\Views\SimonettaController::class, 'index']);
-Route::get('/viste/mensile/simonetta/data', [\App\Http\Controllers\Frontend\Views\SimonettaController::class, 'getDataTables'])->name('simonetta.data');
+// COSTI ANNUALI MESI E ANNO
+Route::get('/viste/mensile/costi_annuale_mesi', [\App\Http\Controllers\Frontend\Views\SimonettaController::class, 'index']);
+Route::get('/viste/mensile/costi_annuale_mesi/data', [\App\Http\Controllers\Frontend\Views\SimonettaController::class, 'getDataTables'])->name('costi_annuale_mesi.data');
+Route::get('/viste/mensile/costi_annuale_anno', [\App\Http\Controllers\Frontend\Views\SimonettaController::class, 'indexAnno']);
+Route::get('/viste/mensile/costi_annuale_anno/data', [\App\Http\Controllers\Frontend\Views\SimonettaController::class, 'getDataTablesYears'])->name('costi_annuale_anno.data');
 
 Route::get('/booking', [\App\Http\Controllers\BookingController::class, 'index']);
 Route::get('/booking/force', [\App\Http\Controllers\BookingController::class, 'force'])->name('booking_force');
 
+// SPESE
+Route::get('/spese/categorie', [\App\Http\Controllers\Frontend\Storico\TypoCategoriesController::class, 'index']);
+Route::get('/spese/costi_aziendali', [\App\Http\Controllers\Frontend\Views\Spese\SpeseController::class, 'indexCostiAziendali']);
+Route::get('/spese/costi_aziendali/data', [\App\Http\Controllers\Frontend\Views\Spese\SpeseController::class, 'getDataCostiAziendali'])->name('costi_aziendali.data');
+Route::get('/spese/costi_aziendali/data_anno', [\App\Http\Controllers\Frontend\Views\Spese\SpeseController::class, 'getDataCostiAziendaliAnno'])->name('costi_aziendali_anno.data');
+
+
+// MARKETING
+Route::get('/marketing/countries', [\App\Http\Controllers\Frontend\Views\Marketing\CountriesController::class, 'index'])->name('countries.index');
+Route::get('/marketing/countries/data', [\App\Http\Controllers\Frontend\Views\Marketing\CountriesController::class, 'getCountriesTable'])->name('countries.table');
+
+// EXPORT GLOBALE DELLE PRENOTAZIONI IN EXCEL
+Route::get('/booking/export/excel', [\App\Http\Controllers\BookingController::class, 'bookingsExport'])->name('booking.export');

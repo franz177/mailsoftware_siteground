@@ -176,6 +176,8 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Yajra\DataTables\DataTablesServiceProvider::class,
+        ConsoleTVs\Charts\ChartsServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
     ],
 
@@ -234,6 +236,7 @@ return [
         'Menu' => App\Classes\Theme\Menu::class,
 
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 
     ],
 

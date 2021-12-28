@@ -55,6 +55,22 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-2">
+                                    <div class="mb-2 d-flex flex-column">
+                                        <div class="input-group has-validation">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-home"></i>
+                                                </span>
+                                            </div>
+                                            <select multiple="multiple" class="form-control" id="house" name="house[]" style="min-height: 150px;">
+                                                @foreach($houses_typo as $uid => $name)
+                                                    <option value="{{ $uid }}">{{ $name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-md-4">
                                     <div class="btn-group" role="group" aria-label="Basic example">
                                         <button type="button" class="btn btn-light-instagram" name="removeFilter" id="removeFilter">Rimuovi Filtri</button>
@@ -67,6 +83,16 @@
                 </div>
                 <div class="card-body pt-0 pb-3">
                     <div class="tab-content">
+                        <p class="font-weight-bold font-size-s mb-2 pb-5">
+                            I calcoli sono effettuati dalla data di arrivo colore
+                            <span class="symbol symbol-20 symbol-warning mx-1">
+                                    <span class="symbol-label"></span>
+                                </span>
+                            Giallo, della data di partenza colore
+                            <span class="symbol symbol-20 symbol-danger mx-1">
+                                <span class="symbol-label"></span>
+                            </span>rosa
+                        </p>
                         <!--begin::Table-->
                         <div class="table-responsive" >
                             <table class="table table-striped table-bordered  dt-responsive" id="sample_21">
@@ -164,6 +190,7 @@
                     data: function (d) {
                         d.year = $('select[name=year] option').filter(':selected').val();
                         d.month = $('select[name=month] option').filter(':selected').val();
+                        d.house = $('#house').val();
                     }
                 },
 

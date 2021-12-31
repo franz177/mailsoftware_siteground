@@ -27,7 +27,7 @@ class Booking extends Model
         'tx_mask_t3_p_s_b', 'tx_mask_t3_p_s_checkout', 'tx_mask_t3_p_s_chin', 'tx_mask_t3_p_s_ex_checkout', 'tx_mask_t3_p_s_extra_checkin',
         'tx_mask_t3_p_saldo_ric_b', 'tx_mask_t3_p_stay', 'tx_mask_t4_azioni', 'tx_mask_t4_test_email', 'tx_mask_t5_kross_city_tax_amount',
         'tx_mask_t5_kross_cleaning_fee_amount', 'tx_mask_t5_kross_cod_channel', 'tx_mask_t5_kross_email', 'tx_mask_t5_kross_id', 'tx_mask_t5_kross_new',
-        'tx_mask_t5_kross_ota_commissions_collected', 'tx_mask_t5_kross_ota_id', 'tx_mask_t5_kross_other_extra_total_amount', 'tx_mask_t5_kross_payment_total_amount', 'tx_mask_t6_assistenza_interventol_lastminute',
+        'tx_mask_t5_kross_ota_commissions_collected', 'tx_mask_t5_kross_ota_id', 'tx_mask_t5_kross_other_extra_total_amount', 'tx_mask_t5_kross_payments', 'tx_mask_t5_kross_payment_total_amount', 'tx_mask_t6_assistenza_interventol_lastminute',
         'tx_mask_t6_intervento_lastminute', 'costo_orario', 'totale_pulizie', 'costo_co', 'mancia_cli',
         'prev_di_cui_pulizie_cliente', 'prev_tot_extra_cash_co', 'prev_di_cui_ac_wifi_non_selezionato', 'prev_di_cui_biancheria_extra_a_pagamento', 'prev_incasso_preventivo_con_extra',
         'cons_di_cui_incassi_banca', 'cons_tot_ingresso_banca', 'cons_totale_extra_cash_ritirato_al_co', 'cons_tassa_soggiorno_da_ritirare', 'cons_diff_cons_prev',
@@ -53,7 +53,7 @@ class Booking extends Model
         'tx_mask_t3_p_s_b', 'tx_mask_t3_p_s_checkout', 'tx_mask_t3_p_s_chin', 'tx_mask_t3_p_s_ex_checkout', 'tx_mask_t3_p_s_extra_checkin',
         'tx_mask_t3_p_saldo_ric_b', 'tx_mask_t3_p_stay', 'tx_mask_t4_azioni', 'tx_mask_t4_test_email', 'tx_mask_t5_kross_city_tax_amount',
         'tx_mask_t5_kross_cleaning_fee_amount', 'tx_mask_t5_kross_cod_channel', 'tx_mask_t5_kross_email', 'tx_mask_t5_kross_id', 'tx_mask_t5_kross_new',
-        'tx_mask_t5_kross_ota_commissions_collected', 'tx_mask_t5_kross_ota_id', 'tx_mask_t5_kross_other_extra_total_amount', 'tx_mask_t5_kross_payment_total_amount', 'tx_mask_t6_assistenza_interventol_lastminute',
+        'tx_mask_t5_kross_ota_commissions_collected', 'tx_mask_t5_kross_ota_id', 'tx_mask_t5_kross_other_extra_total_amount', 'tx_mask_t5_kross_payments', 'tx_mask_t5_kross_payment_total_amount', 'tx_mask_t6_assistenza_interventol_lastminute',
         'tx_mask_t6_intervento_lastminute', 'costo_orario', 'totale_pulizie', 'costo_co', 'mancia_cli',
         'prev_di_cui_pulizie_cliente', 'prev_tot_extra_cash_co', 'prev_di_cui_ac_wifi_non_selezionato', 'prev_di_cui_biancheria_extra_a_pagamento', 'prev_incasso_preventivo_con_extra',
         'cons_di_cui_incassi_banca', 'cons_tot_ingresso_banca', 'cons_totale_extra_cash_ritirato_al_co', 'cons_tassa_soggiorno_da_ritirare', 'cons_diff_cons_prev',
@@ -704,18 +704,38 @@ class Booking extends Model
          * prendere tx_mask_p_tot_ospiti
          */
 
-        $ospiti = $this->attributes['tx_mask_p_tot_ospiti'];
-
         $arrivo = Carbon::parse($this->attributes['tx_mask_p_data_arrivo']);
         $partenza = Carbon::parse($this->attributes['tx_mask_p_data_partenza']);
-        $notti = $partenza->diffInDays($arrivo);
 
-        $extra = TypoExtra::select()
-            ->where('parentid', $this->attributes['tx_mask_p_casa']);
+        $nights = $partenza->diffInDays($arrivo);
 
-        if($this->attributes['tx_mask_t3_p_cleaning_fee_amount'])
+        $p_stay = ($this->attributes['tx_mask_t3_p_stay'] ? ($this->attributes['tx_mask_t3_p_stay'] > 0 ? $this->attributes['tx_mask_t3_p_stay'] : 0) : 0);
+        $p_tot_ospiti = ($this->attributes['tx_mask_p_tot_ospiti'] ? ($this->attributes['tx_mask_p_tot_ospiti'] > 0 ? $this->attributes['tx_mask_p_tot_ospiti'] : 0) : 0);
+        $p_cleaning_fee_amount = ($this->attributes['tx_mask_t3_p_cleaning_fee_amount'] ? ($this->attributes['tx_mask_t3_p_cleaning_fee_amount'] > 0 ? $this->attributes['tx_mask_t3_p_cleaning_fee_amount'] : $this->attributes['tx_mask_t5_kross_cleaning_fee_amount']) : $this->attributes['tx_mask_t5_kross_cleaning_fee_amount']);
 
-        return $this->attributes['prop_costo_medio_a_notte'] = $ospiti;
+        if ($p_tot_ospiti > 0){
+
+            $extra_by_guest = 'tx_mask_t12_extra'.intval($p_tot_ospiti);
+
+            $extra = TypoExtra::select('parentid', 'tx_mask_t5_metodo_dal', 'tx_mask_t5_metodo_al', $extra_by_guest)
+                ->where('parentid', $this->attributes['tx_mask_p_casa'])
+                ->where('tx_mask_t5_metodo_dal', '<=', $this->attributes['tx_mask_p_data_arrivo'])
+                ->where('tx_mask_t5_metodo_al', '>=', $this->attributes['tx_mask_p_data_arrivo'])
+                ->where('hidden', 0)
+                ->where('deleted', 0)
+                ->first();
+
+            if($p_stay > 0){
+                if (!$extra){
+                    return  $this->attributes['prop_costo_medio_a_notte'] = (($this->attributes['tx_mask_t3_p_stay'] - $p_cleaning_fee_amount) / $nights);
+                }
+
+                return $this->attributes['prop_costo_medio_a_notte'] = (($this->attributes['tx_mask_t3_p_stay'] - $p_cleaning_fee_amount) - ($extra->$extra_by_guest * $nights)) / $nights;
+            }
+        }
+
+        return  $this->attributes['prop_costo_medio_a_notte'] = 0;
+
     }
 
 }

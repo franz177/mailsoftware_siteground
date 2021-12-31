@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Models\Booking;
 use Illuminate\Contracts\Support\Responsable;
+use Illuminate\Support\Facades\Schema;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -44,9 +45,7 @@ class BookingsExport implements FromCollection, Responsable, WithHeadings, Shoul
 
     public function headings(): array
     {
-        $bookings = Booking::first();
-        $header = array_keys($bookings->toArray());
-        return $header;
+        return Schema::getColumnListing('bookings');
     }
 
     public function styles(Worksheet $sheet)

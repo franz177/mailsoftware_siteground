@@ -85,7 +85,7 @@ class Menu
                     $target = 'target="_blank"';
                 }
 
-                echo '<a ' . $target . ' href="' . $url . '" class="menu-link ' . (isset($item['submenu']) ? 'menu-toggle' : '') . '">';
+                echo '<a ' . $target . ' href="' . $url . '" class="menu-link ' . (isset($item['submenu']) ? 'menu-toggle' : '') . ' ' . (isset($item['a-class']) ? $item['a-class'] : '') . '">';
             }
 
             // Menu arrow
@@ -112,7 +112,7 @@ class Menu
             }
 
             // Badge
-            echo '<span class="menu-text">' . $item['title'] . '</span>';
+            echo '<span class="menu-text ' . (isset($item['a-span-class']) ? $item['a-span-class'] : '') . '">' . $item['title'] . '</span>';
             if (isset($item['label'])) {
                 echo '<span class="menu-badge"><span class="label ' . $item['label']['type'] . '">' . $item['label']['value'] . '</span></span>';
             }
@@ -292,7 +292,7 @@ class Menu
                         $target = 'target="_blank"';
                     }
 
-                    echo '<a '.$target.' href="'.$url.'" class="menu-link '.(isset($item['submenu']) ? 'menu-toggle' : '').'">';
+                    echo '<a '.$target.' href="'.$url.'" class="menu-link '.(isset($item['submenu']) ? 'menu-toggle' : '').' ' . (isset($item['a-class']) ? $item['a-class'] : '') . '">';
                 } else {
                     echo '<h3 class="menu-heading menu-toggle">';
                 }
@@ -321,7 +321,7 @@ class Menu
                 }
 
                 // Badge
-                echo '<span class="menu-text">' . $item['title'] . '</span>';
+                echo '<span class="menu-text ' . (isset($item['a-span-class']) ? $item['a-span-class'] : '') . '">' . $item['title'] . '</span>';
 
                 if (isset($item['label'])) {
                     echo '<span class="menu-badge"><span class="label ' . $item['label']['type'] . '">' . $item['label']['value'] . '</span></span>';

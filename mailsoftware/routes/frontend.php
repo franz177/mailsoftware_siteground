@@ -61,4 +61,7 @@ Route::get('/marketing/countries', [\App\Http\Controllers\Frontend\Views\Marketi
 Route::get('/marketing/countries/data', [\App\Http\Controllers\Frontend\Views\Marketing\CountriesController::class, 'getCountriesTable'])->name('countries.table');
 
 // EXPORT GLOBALE DELLE PRENOTAZIONI IN EXCEL
-Route::get('/booking/export/excel', [\App\Http\Controllers\BookingController::class, 'bookingsExport'])->name('booking.export');
+Route::get('/excel', [\App\Http\Controllers\Frontend\Excel\ExcelController::class, 'index'])->name('excel.index');
+Route::get('/excel/export', [\App\Http\Controllers\Frontend\Excel\ExcelController::class, 'bookingsExport'])->name('excel.export');
+Route::post('/excel/custom_export', [\App\Http\Controllers\Frontend\Excel\ExcelController::class, 'bookingsCustomExport'])->name('excel.custom_export');
+Route::get('/excel/download_custom_export/{filename?}', [\App\Http\Controllers\Frontend\Excel\ExcelController::class, 'downloadBookingCustomExport'])->name('excel.download_custom_export');

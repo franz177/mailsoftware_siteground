@@ -142,6 +142,7 @@
             </div>
         </div>
     @endif
+
     <div id="success-alert" class="alert alert-custom alert-notice alert-light-success fade mb-5" role="alert">
         <div class="alert-icon">
             <i class="flaticon-warning"></i>
@@ -183,7 +184,8 @@
                         <span class="text-muted mt-3 font-weight-bold font-size-sm"></span>
                     </h3>
                     <div class="card-toolbar">
-                        <a href="/backend/flusso_testi/create/{{ $text->id }}" class="btn btn-light-warning btn-sm font-weight-bolder font-size-sm py-3 px-6">Aggiungi</a>
+                        <a href="/backend/flusso_testi/create/{{ $text->id }}" class="btn btn-light-warning btn-sm font-weight-bolder font-size-sm mr-3 py-3 px-6">Aggiungi</a>
+                        <a href="javascript:void(0)" id="deleteAllFlowText" class="btn btn-light-danger btn-sm font-weight-bolder font-size-sm py-3 px-6">Elimina Flussi</a>
                     </div>
                 </div>
                 <!--end::Header-->
@@ -406,7 +408,7 @@
                 responsive: {
                     details: {
                         type: 'column',
-                        target: 'tr'
+                        target: 'th'
                     }
                 },
                 columnDefs: [
@@ -497,22 +499,56 @@
                 var flow_text_id = $(this).data("id");
                 var text_id = {!! $text->id !!};
 
-                confirm("Si vuole procedere all'eliminazione del flusso selezionato?");
-                $.ajax({
-                    type: "POST",
-                    url: "{{ route('flusso_testi.destroy') }}",
-                    data: { _method:'DELETE', _token:token, flow_text_id:flow_text_id, text_id:text_id},
-                    success: function (data) {
-                        $('#message_delete').html(data.message_delete);
-                        $("#deleted-alert").fadeTo(2000, 500).slideUp(500, function() {
-                            $("#deleted-alert").slideUp(500);
-                        });
-                        oTable.draw();
-                    },
-                    error: function (data) {
-                        console.log('Error:', data);
-                    }
-                });
+                var r = confirm("Si vuole procedere all'eliminazione del flusso selezionato?");
+
+                if(r == true) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('flusso_testi.destroy') }}",
+                        data: {_method: 'DELETE', _token: token, flow_text_id: flow_text_id, text_id: text_id},
+                        success: function (data) {
+                            $('#message_delete').html(data.message_delete);
+                            $("#deleted-alert").fadeTo(2000, 500).slideUp(500, function () {
+                                $("#deleted-alert").slideUp(500);
+                            });
+                            oTable.draw();
+                        },
+                        error: function (data) {
+                            console.log('Error:', data);
+                        }
+                    });
+                }
+            });
+            $('body').on('click', '#deleteAllFlowText', function () {
+
+                var text_id = {!! $text->id !!};
+                var text_id_to_delete = {!! $text->id !!};
+
+                var r = confirm("Si vuole procedere all'eliminazione ti tutti i flussi assegnati?");
+
+                if(r == true) {
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('flusso_testi.destroy') }}",
+                        data: {
+                            _method: 'DELETE',
+                            _token: token,
+                            text_id: text_id,
+                            text_id_to_delete: text_id_to_delete
+                        },
+                        success: function (data) {
+                            $('#message_delete').html(data.message_delete);
+                            $("#deleted-alert").fadeTo(2000, 500).slideUp(500, function () {
+                                $("#deleted-alert").slideUp(500);
+                            });
+                            oTable.draw();
+                        },
+                        error: function (data) {
+                            console.log('Error:', data);
+                        }
+                    });
+                }
             });
 
 

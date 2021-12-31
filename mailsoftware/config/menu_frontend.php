@@ -210,6 +210,13 @@ return [
                 ],
             ]
         ],
+        [
+            'title' => 'Scarica Excel',
+            'root' => true,
+            'page' => '/excel',
+            'new-tab' => false,
+            'auth' => [1],
+        ],
     ]
 
 ];

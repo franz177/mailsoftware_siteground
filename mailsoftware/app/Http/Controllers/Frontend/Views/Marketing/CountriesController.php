@@ -41,27 +41,19 @@ class CountriesController extends Controller
             ->select('uid','tx_mask_t0_country')
             ->selectRaw('COUNT(tx_mask_t0_country) as totale')
             ->when($year, function ($q, $year){
-                return $q->where(Booking::raw('YEAR(tx_mask_p_data_arrivo)'), '=', $year)
-                    ->where(Booking::raw('YEAR(tx_mask_p_data_partenza)'), '=', $year)->whereNotNull('tx_mask_t0_country')->where('tx_mask_t0_country', '!=', '');
-            }, function ($q) {
-                $q->whereNotNull('tx_mask_t0_country')->where('tx_mask_t0_country', '!=', '');
+                return $q->whereRaw('(YEAR(tx_mask_p_data_arrivo) = '.$year.' OR YEAR(tx_mask_p_data_partenza) = '.$year.')');
             })
-//            ->where(function ($q) use ($year) {
-//                $q->where(Booking::raw('YEAR(tx_mask_p_data_arrivo)'), '=', $year)
-//                    ->where(Booking::raw('YEAR(tx_mask_p_data_partenza)'), '=', $year);
-//            })
             ->when($house, function ($q, $house){
                 return $q->whereIn('tx_mask_p_casa', $house);
             })
+            ->whereNotNull('tx_mask_t0_country')->where('tx_mask_t0_country', '!=', '')
+            ->where('tx_mask_cod_reservation_status', '!=', 'CANC')
             ->orderBy('totale', 'DESC')
             ->groupBy('tx_mask_t0_country')
             ->get();
-//            ->pluck('totale', 'country.cn_short_it');
 
+//        return $bookings->toJson();
         $this->tot_percent = $bookings->sum('totale');
-
-//        $bookings_upper = $bookings->where('totale', '>', 15)->pluck('totale', 'country.cn_short_it');
-//        $bookings_under = $bookings->where('totale', '<', 15)->pluck('totale', 'country.cn_short_it');
 
         return Datatables::of($bookings)
             ->addColumn('percent', function ($row) {

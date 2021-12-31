@@ -79,7 +79,7 @@
                                 <tfoot>
                                 <tr>
                                     <th></th>
-                                    <th class="all text-center"></th>
+                                    <th class="all text-right text-uppercase">Totale</th>
                                     <th class="none text-left"></th>
                                     <th class="all text-uppercase"></th>
                                 </tr>
@@ -153,8 +153,8 @@
                         sortable:       false
                     },
                     {data: 'country.cn_short_it'},                             //td:eq(13)
-                    {data: 'totale'},                          //td:eq(14)
-                    {data: 'percent'},                    //td:eq(15)
+                    {data: 'totale', className: 'text-right',},                          //td:eq(14)
+                    {data: 'percent', className: 'text-right'},                    //td:eq(15)
                 ],
 
                 rowCallback: function(row, data, index) {

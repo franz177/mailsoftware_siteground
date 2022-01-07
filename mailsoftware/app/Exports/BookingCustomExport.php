@@ -20,17 +20,24 @@ class BookingCustomExport implements FromQuery, Responsable, WithHeadings, Shoul
     protected $column = null;
     protected $year = null;
     protected $house = null;
+    protected $bookings_status = null;
 
-    public function __construct($column, $year, $house)
+    public function __construct($column_default, $column, $year, $house, $bookings_status)
     {
+        if ($column_default)
+            $this->column = $column_default;
+
         if ($column)
-            $this->column = $column;
+            $this->column = array_merge($this->column, $column) ;
 
         if ($year)
             $this->year = implode(',', $year);
 
         if ($house)
             $this->house = $house;
+
+        if ($bookings_status)
+            $this->bookings_status = $bookings_status;
 
     }
 
@@ -69,7 +76,11 @@ class BookingCustomExport implements FromQuery, Responsable, WithHeadings, Shoul
             })
             ->when($this->house, function ($q, $house){
                 return $q->whereIn('tx_mask_p_casa', $house);
+            })
+            ->when($this->bookings_status, function ($q, $bookings_status){
+                return $q->whereNotIn('tx_mask_cod_reservation_status', $bookings_status);
             });
+
     }
 
     public function headings(): array

@@ -44,8 +44,7 @@
                                                     <i class="fas fa-home"></i>
                                                 </span>
                                             </div>
-                                            <select multiple="multiple" class="form-control" id="house" name="house[]"
-                                                    style="min-height: 150px;">
+                                            <select multiple="multiple" class="form-control" id="house" name="house[]"style="min-height: 150px;">
                                                 @foreach($houses_typo as $uid => $name)
                                                     <option value="{{ $uid }}">{{ $name }}</option>
                                                 @endforeach
@@ -58,19 +57,51 @@
                                         <div class="input-group has-validation">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">
-                                                    <i class="fas fa-list"></i>
+                                                    <i class="fas fa-adjust"></i>
                                                 </span>
                                             </div>
-                                            <select multiple="multiple" class="form-control" id="column" name="column[]"
-                                                    style="min-height: 150px;">
-                                                @foreach($columns as $column)
-                                                    <option value="{{ $column }}">{{ $column }}</option>
+                                            <select multiple="multiple" class="form-control" id="bookings_status" name="bookings_status[]" style="min-height: 150px;">
+                                                @foreach($bookings_status as $booking_status)
+                                                    <option value="{{ $booking_status->tx_mask_cod_reservation_status }}">{{ $booking_status->tx_mask_cod_reservation_status }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-
+                                <div class="col-md-3">
+                                    <div class="mb-2 d-flex flex-column">
+                                        <div class="input-group has-validation">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-list"></i>
+                                                </span>
+                                            </div>
+                                            <select multiple="multiple" class="form-control" id="column_default" name="column_default[]"style="min-height: 150px;">
+                                                @foreach($columns_default as $column)
+                                                    <option value="{{ $column }}" {{ in_array($column, $columns_selected) ? 'selected' : '' }}>{{ $column }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-2 d-flex flex-column">
+                                        <div class="input-group has-validation">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-list"></i>
+                                                </span>
+                                            </div>
+                                            <select multiple="multiple" class="form-control" id="column" name="column[]"style="min-height: 150px;">
+                                                @foreach($columns as $column)
+                                                    @if(!in_array($column, $columns_default))
+                                                        <option value="{{ $column }}" {{ in_array($column, $columns_default) ? 'selected' : '' }}>{{ $column }}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -119,7 +150,9 @@
             $('#submit').on('click', function (e) {
                 let year = $('#years').val();
                 let house = $('#house').val();
+                let column_default = $('#column_default').val();
                 let column = $('#column').val();
+                let bookings_status = $('#bookings_status').val();
                 $.ajax({
                     type: "POST",
                     cache: false,
@@ -129,7 +162,9 @@
                         _token:token,
                         year:year,
                         house:house,
+                        column_default:column_default,
                         column:column,
+                        bookings_status:bookings_status,
                     },
                     success: function (response, textStauts, request) {
                         console.log(response.filename);

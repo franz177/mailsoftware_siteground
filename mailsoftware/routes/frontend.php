@@ -49,6 +49,10 @@ Route::get('/viste/mensile/costi_annuale_anno/data', [\App\Http\Controllers\Fron
 Route::get('/booking', [\App\Http\Controllers\BookingController::class, 'index']);
 Route::get('/booking/force', [\App\Http\Controllers\BookingController::class, 'force'])->name('booking_force');
 
+// INCASSI
+Route::get('/viste/incomes', [\App\Http\Controllers\Frontend\Views\IncomesController::class, 'index'])->name('incomes.index');
+Route::get('/viste/incomes/datas', [\App\Http\Controllers\Frontend\Views\IncomesController::class, 'getDataTables'])->name('incomes.datas');
+
 // SPESE
 Route::get('/spese/categorie', [\App\Http\Controllers\Frontend\Storico\TypoCategoriesController::class, 'index']);
 Route::get('/spese/costi_aziendali', [\App\Http\Controllers\Frontend\Views\Spese\SpeseController::class, 'indexCostiAziendali']);

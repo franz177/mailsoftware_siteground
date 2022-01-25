@@ -115,6 +115,7 @@
                                     <th class="all alert-warning">Arrivo</th>
                                     <th class="all">Stay</th>
                                     <th class="all">CHIN</th>
+                                    <th class="all">PAGAMENTO</th>
                                 </tr>
                                 </thead>
 
@@ -124,6 +125,7 @@
                                     <th class="all text-center"></th>
                                     <th class="none text-left"></th>
                                     <th class="all text-uppercase"></th>
+                                    <th class="all"></th>
                                     <th class="all"></th>
                                     <th class="all"></th>
                                     <th class="all"></th>
@@ -227,6 +229,7 @@
                     {data: 'data_arrivo'},                //td:eq(3)
                     {data: 'stay'},                         //td:eq(8)
                     {data: 'chin'},                         //td:eq(8)
+                    {data: 'payments'},                         //td:eq(8)
                 ],
 
                 rowCallback: function(row, data, index) {

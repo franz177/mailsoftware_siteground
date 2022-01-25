@@ -109,6 +109,21 @@ class IncomesController extends Controller
                 $h = $row->tx_mask_t1_ora_checkout ? $row->tx_mask_t1_ora_checkout : '<span class="text-danger">NaN</span>';
                 return $row->tx_mask_p_data_partenza . ' </br> <span class="text-dark-75">h</span> '. $h;
             })
+            ->addColumn('payments', function($row) {
+                $d = json_decode($row->tx_mask_t5_kross_payments);
+                if ($d) {
+                    $ret = [];
+
+                    foreach($d as $dr) {
+                        $ret[] = '<span class="font-weight-bolder">' .  $dr->date . ' - € '.number_format($dr->amount, 2, ',', '.').'</span>';
+                    }
+
+                    return join('<br>', $ret);
+                }
+                else {
+                    return '';
+                }
+            })
             ->addColumn('stay', function ($row) {
                 return '<span class="font-weight-bolder">€ '.number_format($row->tx_mask_t3_p_stay, 2, ',', '.').'</span>';
             })
@@ -116,7 +131,7 @@ class IncomesController extends Controller
                 return '<span class="font-weight-bolder">€ '.number_format($row->tx_mask_t3_p_s_chin, 2, ',', '.').'</span>';
             })
             ->rawColumns([
-                'note_alert', 'header', 'data_arrivo', 'data_partenza', 'stay', 'chin'
+                'note_alert', 'header', 'data_arrivo', 'data_partenza', 'stay', 'chin', 'payments'
             ])
             ->make(true);
     }

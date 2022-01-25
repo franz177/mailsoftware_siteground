@@ -113,30 +113,8 @@
                                     <th class="none text-left">Sito</th>
                                     <th class="all text-uppercase">Cliente</th>
                                     <th class="all alert-warning">Arrivo</th>
-                                    <th class="none">Note Operatore</th>
-                                    <th class="none">CityTax</th>
-                                    <th class="all alert-warning">Op. Pulizie</th>
-                                    <th class="none">Ore Pulizie</th>
-                                    <th class="none">Costo Ore Pulizie</th>
-                                    <th class="all alert-warning">TOT Costo <br> C-IN</th>
-                                    <th class="all alert-warning">Tot <br> Pulizie</th>
-                                    <th class="all alert-warning">Supervisor <br> Pulizie</th>
-                                    <th class="all alert-danger">Partenza</th>
-                                    <th class="all alert-danger">Op. <br> C-OUT</th>
-                                    <th class="all alert-danger">Costo <br> C-OUT</th>
-                                    <th class="all alert-danger">Costo <br> Extra <br> C-OUT</th>
-                                    <th class="all alert-danger">Cash <br> Op. C-OUT</th>
-                                    <th class="all alert-danger">Cash <br> Simo <br> C-OUT</th>
-                                    <th class="all">Mancia Cliente</th>
-                                    <th class="none">Extra Cash dell'ospite al C-OUT</th>
-                                    <th class="all alert-danger">Costo Op.Cambio</th>
-                                    <th class="none">Extra Mondezza</th>
-                                    <th class="none">Costi Extra Op Bi</th>
-                                    <th class="all">Totale Prenotazione</th>
-                                    <th class="none">Costo KIT</th>
-                                    <th class="none">Costo Cambio</th>
-                                    <th class="none">Costo CI</th>
-                                    <th class="none">Costo Extra CI</th>
+                                    <th class="all">Stay</th>
+                                    <th class="all">CHIN</th>
                                 </tr>
                                 </thead>
 
@@ -147,30 +125,8 @@
                                     <th class="none text-left"></th>
                                     <th class="all text-uppercase"></th>
                                     <th class="all"></th>
-                                    <th class="none"></th>
-                                    <th class="none"></th>
-                                    <th class="all"></th>
-                                    <th class="none">Ore Pulizie</th>
-                                    <th class="none">Costo Ore Pulizie</th>
-                                    <th class="all">Tot Costo <br> C-IN</th>
-                                    <th class="all">Tot <br> Pulizie</th>
-                                    <th class="all">Supervisor <br> Pulizie</th>
                                     <th class="all"></th>
                                     <th class="all"></th>
-                                    <th class="all">Costo <br> C-OUT</th>
-                                    <th class="all">Costo <br> Extra <br> C-OUT</th>
-                                    <th class="all">Cash <br> Op. C-OUT</th>
-                                    <th class="all">Cash <br> Simo <br> C-OUT</th>
-                                    <th class="all">Mancia Cliente</th>
-                                    <th class="all"></th>
-                                    <th class="all">Costo Op.Cambio</th>
-                                    <th class="none">Extra Mondezza</th>
-                                    <th class="none">Costi Extra Op Bi</th>
-                                    <th class="all">Totale Prenotazione</th>
-                                    <th class="none">Costo KIT</th>
-                                    <th class="none">Costo Cambio</th>
-                                    <th class="none">Costo CI</th>
-                                    <th class="none">Costo Extra CI</th>
                                 </tr>
                                 </tfoot>
 
@@ -269,70 +225,18 @@
                     },
                     {data: 'header', className: 'text-capitalize'}, //td:eq(2)
                     {data: 'data_arrivo'},                //td:eq(3)
-                    {data: 'tx_mask_t1_op_note'},                   //td:eq(4)
-                    {data: 'city_tax'},                             //td:eq(5)
-                    {data: 'tx_mask_t1_op_pulizie',                 //td:eq(6)
-                        render: function (data, type, row)
-                        {
-                            if(data in op_check_out) {
-                                var operatore = op_check_out[data]+ ' ['+data+']';
-                            } else {
-                                var operatore = 'NaN';
-                            }
-                            return operatore;
-                        },
-                    },
-                    {data: 'tx_mask_t1_ore_pulizie'},               //td:eq(7)
-                    {data: 'costo_orario'},                         //td:eq(8)
-                    {data: 'costo_cin'},                         //td:eq(8)
-                    {data: 'totale_pulizie'},                       //td:eq(9)
-                    {data: 'supervisor_pulizie'},                    //td:eq(10)
-                    {data: 'data_partenza'},              //td:eq(11)
-                    {data: 'tx_mask_t1_op_checkout',                //td:eq(12)
-                        render: function (data, type, row)
-                        {
-                            if(data in op_check_out) {
-                                var operatore = op_check_out[data]+ ' ['+data+']';
-                            } else {
-                                var operatore = 'NaN';
-                            }
-                            return operatore;
-                        },
-                    },
-                    {data: 'costo_co'},                             //td:eq(13)
-                    {data: 'costo_ex_co'},                          //td:eq(14)
-                    {data: 'cash_operatore_co'},                    //td:eq(15)
-                    {data: 'cash_simo_co'},                         //td:eq(16)
-                    {data: 'mancia_cli'},                           //td:eq(17)
-                    {data: 'extra_cash_ospite'},                    //td:eq(18)
-                    {data: 'costi_costo_operatore_cambio_biancheria',
-                        render: function (data, type, row)
-                        {
-                            if(row.tx_mask_t1_op_cambio_biancheria in op_check_out) {
-                                var operatore = op_check_out[row.tx_mask_t1_op_cambio_biancheria]+ ' ['+row.tx_mask_t1_op_cambio_biancheria+'] <br>' +row.costi_costo_operatore_cambio_biancheria ;
-                            } else {
-                                var operatore = 'NaN';
-                            }
-                            return operatore;
-                        },
-                    },                    //td:eq(19)
-                    {data: 'extra_mondezza'},                       //td:eq(20)
-                    {data: 'costi_extra_op_bi'},                    //td:eq(20)
-                    {data: 'totale_riga'},                          //td:eq(20)
-                    {data: 'costi_costo_kit'},                      //td:eq(20)
-                    {data: 'costi_costo_cambi'},                    //td:eq(20)
-                    {data: 'costi_check_in_self_check_in'},         //td:eq(20)
-                    {data: 'tx_mask_t3_p_s_extra_checkin'},         //td:eq(20)
+                    {data: 'stay'},                         //td:eq(8)
+                    {data: 'chin'},                         //td:eq(8)
                 ],
 
                 rowCallback: function(row, data, index) {
-                    $('td:eq(0)', row).addClass('bg-'+houses_color[data.tx_mask_p_casa]); //CASA
-                    $('td:eq(0)', row).addClass('text-center'); //CASA
-                    $('td:eq(3)', row).addClass('alert-warning');               //DATA-ARRIVO
-                    $('td:eq(6)', row).addClass('alert-warning');               //OP. PULIZIE
-                    $('td:eq(12)', row).addClass('alert-danger');                //DATA-PARTENZA
-                    $('td:eq(13)', row).addClass('alert-danger');                //OP. C-OUT
-                    $('td:eq(18)', row).addClass('alert-success');                //MANCIA
+                    // $('td:eq(0)', row).addClass('bg-'+houses_color[data.tx_mask_p_casa]); //CASA
+                    // $('td:eq(0)', row).addClass('text-center'); //CASA
+                    // $('td:eq(3)', row).addClass('alert-warning');               //DATA-ARRIVO
+                    // $('td:eq(6)', row).addClass('alert-warning');               //OP. PULIZIE
+                    // $('td:eq(12)', row).addClass('alert-danger');                //DATA-PARTENZA
+                    // $('td:eq(13)', row).addClass('alert-danger');                //OP. C-OUT
+                    // $('td:eq(18)', row).addClass('alert-success');                //MANCIA
 
                     console.log(data);
                 },
@@ -340,24 +244,13 @@
                 footerCallback: function(row, data, index){
                     var api = this.api(), data;
                     var tot = data.length - 1;
+                    return;
                     if(tot > 0){
-                        $( api.column( 10 ).footer() ).html(data[tot].sum_tot_costo_cin);
-                        $( api.column( 11 ).footer() ).html(data[tot].sum_tot_pulizie);
-                        $( api.column( 12 ).footer() ).html(data[tot].sum_supervisor_pulizie);
-                        $( api.column( 15 ).footer() ).html(data[tot].sum_costo_co);
-                        $( api.column( 16 ).footer() ).html(data[tot].sum_ex_co);
-                        $( api.column( 17 ).footer() ).html(data[tot].sum_cash_operatore_co);
-                        $( api.column( 18 ).footer() ).html(data[tot].sum_cash_simo_co);
-                        $( api.column( 19 ).footer() ).html(data[tot].sum_mancia_cli);
+                        $( api.column( 10 ).footer() ).html(data[tot].sum_tot_stay);
+                        $( api.column( 11 ).footer() ).html(data[tot].sum_saldo_cash);
                         $( api.column( 20 ).footer() ).addClass('alert-success');
                     } else {
                         $( api.column( 10 ).footer() ).html('');
-                        $( api.column( 11 ).footer() ).html('');
-                        $( api.column( 12 ).footer() ).html('');
-                        $( api.column( 15 ).footer() ).html('');
-                        $( api.column( 16 ).footer() ).html('');
-                        $( api.column( 17 ).footer() ).html('');
-                        $( api.column( 18 ).footer() ).html('');
                         $( api.column( 19 ).footer() ).html('');
                         $( api.column( 20 ).footer() ).addClass('alert-success');
                     }

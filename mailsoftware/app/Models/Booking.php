@@ -73,6 +73,11 @@ class Booking extends Model
         return $this->hasOne(Country::class, 'uid', 'tx_mask_t0_country');
     }
 
+    public function threads()
+    {
+        return $this->hasMany(Thread::class, 'uid', 'uid')->orderBy('created_at', 'desc');
+    }
+
     /*
      * DATA FORMAT CONVERSION
      * */

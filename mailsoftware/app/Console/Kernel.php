@@ -2,9 +2,6 @@
 
 namespace App\Console;
 
-use App\Jobs\ArtisanQueueWorkJob;
-use App\Jobs\BookingSincronizationJob;
-use App\Jobs\GetTypoBookingsJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -27,8 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->job(new BookingSincronizationJob)->everyMinute();
-        $schedule->command('queue:work', ['--stop-when-empty'])->everyThreeMinutes();
+        $schedule->command('sync:bookings')->hourly();
     }
 
     /**

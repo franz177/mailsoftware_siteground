@@ -43,22 +43,6 @@
                                         <div class="input-group has-validation">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">
-                                                    <i class="far fa-calendar-alt"></i>
-                                                </span>
-                                            </div>
-                                            <select class="form-control" id="month" name="month">
-                                                @foreach($months as $month => $name)
-                                                    <option value="{{ $month }}" {{ $month == now()->month ? 'selected' : '' }}>{{ $name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="mb-2 d-flex flex-column">
-                                        <div class="input-group has-validation">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">
                                                     <i class="fas fa-home"></i>
                                                 </span>
                                             </div>
@@ -88,43 +72,52 @@
                                     <span class="symbol-label"></span>
                                 </span>
                             Giallo
-                            sulla data di partenza colore
-                            <span class="symbol symbol-20 symbol-danger mx-1">
-                                    <span class="symbol-label"></span>
-                                </span>
-                            Rosa
                         </p>
                         <!--begin::Table-->
                         <div class="table-responsive" >
-                            <table class="table table-striped table-bordered  dt-responsive" id="sample_21">
+                            <table class="table table-striped table-bordered  dt-responsive" id="table-incassi">
                                 <thead>
                                 <tr>
-                                    <th class="none"></th>
-                                    <th class="all text-center">
-                                            <span class="svg-icon svg-icon-primary svg-icon-2x">
-                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                        <rect x="0" y="0" width="24" height="24"/>
-                                                        <path d="M3.95709826,8.41510662 L11.47855,3.81866389 C11.7986624,3.62303967 12.2013376,3.62303967 12.52145,3.81866389 L20.0429,8.41510557 C20.6374094,8.77841684 21,9.42493654 21,10.1216692 L21,19.0000642 C21,20.1046337 20.1045695,21.0000642 19,21.0000642 L4.99998155,21.0000673 C3.89541205,21.0000673 2.99998155,20.1046368 2.99998155,19.0000673 L2.99999828,10.1216672 C2.99999935,9.42493561 3.36258984,8.77841732 3.95709826,8.41510662 Z M10,13 C9.44771525,13 9,13.4477153 9,14 L9,17 C9,17.5522847 9.44771525,18 10,18 L14,18 C14.5522847,18 15,17.5522847 15,17 L15,14 C15,13.4477153 14.5522847,13 14,13 L10,13 Z" fill="#000000"/>
-                                                    </g>
-                                                </svg>
-                                            </span>
-                                    </th>
-                                    <th class="none text-left">Sito</th>
-                                    <th class="all text-uppercase">Cliente</th>
-                                    <th class="all alert-warning">Arrivo</th>
-                                    <th class="all">Stay</th>
-                                    <th class="all">CHIN</th>
-                                    <th class="all">PAGAMENTO</th>
+                                    <th></th>
+                                    <th class="all">Mese</th>
+                                    <th class="all alert-warning" title="Totale lordo incassi
+(STAY + Sito + Solo extra)">Lordo</th>
+                                    <th class="all alert-warning" title="Incasso lordo base">STAY</th>
+                                    <th class="all alert-warning" title="% sito web">Sito</th>
+                                    <th class="all alert-warning" title="Pulizie cliente">Pulizie</th>
+                                    <th class="all alert-warning">City tax</th>
+                                    <th class="all alert-warning" title="Extra cash che il cliente deve al check-out">Extra <br>Cash CO</th>
+                                    <th class="all alert-warning" title="Extra cash ritirato al check-out da operatore">Cash <br>Op. C-OUT</th>
+                                    <th class="all alert-warning" title="Extra cash ritirato al check-out da Simonetta">Cash <br>Simo C-OUT</th>
+                                    <th class="all alert-warning" title="Cash Op. C-OUT +  Cash Simo C-OUT - city tax">Solo <br>extra</th>
+                                    <th class="all alert-warning" title="Importo STAY con EXTRA (no siti) = INCASSO al netto della promozione web">STAY <br>+ extra</th>
+                                    <th class="all alert-warning" title="Caparra o pagamento in un'unica soluzione da sito web">Incassi <br>banca I</th>
+                                    <th class="all alert-warning" title="Saldo cash ospite al check-in">Cash CI</th>
+                                    <th class="all alert-warning" title="Saldo BANCA II dell'ospite">Saldo <br>banca II</th>
+                                    <th class="all alert-warning" title="API Kross">Pagamento</th>
+                                    <th class="all alert-warning" title="Consuntivo - preventivo
+(STAY + Extra cash CO) - (Pagamento + Solo extra)">Cons. - Prev.</th>
+                                    <th class="all alert-warning" title="Costo medio a notte
+(bisogna preparare il calcolo)">Costo <br>medio</th>                                    
                                 </tr>
                                 </thead>
 
-                                <tfoot>
+                                <tfoot class="total-row">
                                 <tr>
                                     <th></th>
-                                    <th class="all text-center"></th>
-                                    <th class="none text-left"></th>
-                                    <th class="all text-uppercase"></th>
+                                    <th class="all">Anno</th>
+                                    <th class="all"></th>
+                                    <th class="all"></th>
+                                    <th class="all"></th>
+                                    <th class="all"></th>
+                                    <th class="all"></th>
+                                    <th class="all"></th>
+                                    <th class="all"></th>
+                                    <th class="all"></th>
+                                    <th class="all"></th>
+                                    <th class="all"></th>
+                                    <th class="all"></th>
+                                    <th class="all"></th>
                                     <th class="all"></th>
                                     <th class="all"></th>
                                     <th class="all"></th>
@@ -157,13 +150,9 @@
                 }
             });
 
-            var houses_color = {!! $houses_color !!};
             var houses_typo = {!! $houses_typo !!};
-            var sites_kross = {!! $sites_kross !!};
-            var sites_array = {!! $sites_array !!};
-            var op_check_out = {!! $op_check_out !!};
 
-            var tables = $('#sample_21');
+            var tables = $('#table-incassi');
 
             var oTable = tables.DataTable({
                 // Internationalisation. For more info refer to http://datatables.net/manual/i18n
@@ -184,12 +173,14 @@
                 processing: true,
                 serverSide: true,
                 fixedHeader: true,
+                paging: false,
+                searching: false,
+                bSort: false,
 
                 ajax: {
                     url:"{{ route('incomes.datas') }}",
                     data: function (d) {
                         d.year = $('select[name=year] option').filter(':selected').val();
-                        d.month = $('select[name=month] option').filter(':selected').val();
                         d.house = $('#house').val();
                     }
                 },
@@ -204,59 +195,67 @@
                         cellType:       "th",
                         sortable:       false
                     },
-                    {
-                        data: null,                               //td:eq(0)
-                        render: function (data, type, row)
-                        {
-                            var houses = houses_typo[row.tx_mask_p_casa];
-                            return houses +'</br>' + row.note_alert;
-                        },
-                        sortable: false,
-                    },
-                    {data: 'tx_mask_p_sito',                                  //td:eq(1)
-                        render: function (data, type, row)
-                        {
-                            if(data in sites_array){
-                                var sites = sites_array[data];
-                                // var sites = sites_kross[data];
-                            } else {
-                                var sites = data;
-                            }
-                            return sites;
-                        }, className:'text-left', sortable: false,
-                    },
-                    {data: 'header', className: 'text-capitalize'}, //td:eq(2)
-                    {data: 'data_arrivo'},                //td:eq(3)
-                    {data: 'stay'},                         //td:eq(8)
-                    {data: 'chin'},                         //td:eq(8)
-                    {data: 'payments'},                         //td:eq(8)
+                    {data: 'month'},
+                    {data: 'tot_lordo_incassi'},
+                    {data: 'importo_stay'}, 
+                    {data: 'perc_sito'},
+                    {data: 'cleaning_fee_amount'},
+                    {data: 'city_tax_amount'},
+                    {data: 's_checkout'},
+                    {data: 'cash_op_cout'},
+                    {data: 'cash_simo'},
+                    {data: 'solo_extra'},
+                    {data: 'stay_extra'},
+                    {data: 'banca1'},
+                    {data: 's_chin'},
+                    {data: 's_b'},
+                    {data: 'kross_payment_total_amount'},
+                    {data: 'c_p'},
+                    {data: 'c_m'}
                 ],
 
                 rowCallback: function(row, data, index) {
-                    // $('td:eq(0)', row).addClass('bg-'+houses_color[data.tx_mask_p_casa]); //CASA
-                    // $('td:eq(0)', row).addClass('text-center'); //CASA
-                    // $('td:eq(3)', row).addClass('alert-warning');               //DATA-ARRIVO
-                    // $('td:eq(6)', row).addClass('alert-warning');               //OP. PULIZIE
-                    // $('td:eq(12)', row).addClass('alert-danger');                //DATA-PARTENZA
-                    // $('td:eq(13)', row).addClass('alert-danger');                //OP. C-OUT
-                    // $('td:eq(18)', row).addClass('alert-success');                //MANCIA
-
-                    console.log(data);
+                    $('td:eq(1)', row).addClass('text-right');
+                    $('td:eq(2)', row).addClass('text-right');
+                    $('td:eq(3)', row).addClass('text-right');
+                    $('td:eq(4)', row).addClass('text-right');
+                    $('td:eq(5)', row).addClass('text-right');
+                    $('td:eq(6)', row).addClass('text-right');
+                    $('td:eq(7)', row).addClass('text-right');
+                    $('td:eq(8)', row).addClass('text-right');
+                    $('td:eq(9)', row).addClass('text-right');
+                    $('td:eq(10)', row).addClass('text-right');
+                    $('td:eq(11)', row).addClass('text-right');
+                    $('td:eq(12)', row).addClass('text-right');
+                    $('td:eq(13)', row).addClass('text-right');
+                    $('td:eq(14)', row).addClass('text-right');
+                    $('td:eq(15)', row).addClass('text-right');
+                    $('td:eq(16)', row).addClass('text-right');
                 },
 
                 footerCallback: function(row, data, index){
                     var api = this.api(), data;
                     var tot = data.length - 1;
-                    return;
-                    if(tot > 0){
-                        $( api.column( 10 ).footer() ).html(data[tot].sum_tot_stay);
-                        $( api.column( 11 ).footer() ).html(data[tot].sum_saldo_cash);
-                        $( api.column( 20 ).footer() ).addClass('alert-success');
-                    } else {
-                        $( api.column( 10 ).footer() ).html('');
-                        $( api.column( 19 ).footer() ).html('');
-                        $( api.column( 20 ).footer() ).addClass('alert-success');
-                    }
+                    {{-- if(tot > 0){ --}}
+                        $( api.column( 2 ).footer() ).html(data[tot].sum_tot_lordo_incassi).addClass('text-right');
+                        $( api.column( 3 ).footer() ).html(data[tot].sum_importo_stay).addClass('text-right');
+                        $( api.column( 4 ).footer() ).html(data[tot].sum_perc_sito).addClass('text-right');
+                        $( api.column( 5 ).footer() ).html(data[tot].sum_cleaning_fee_amount).addClass('text-right');
+                        $( api.column( 6 ).footer() ).html(data[tot].sum_city_tax_amount).addClass('text-right');
+                        $( api.column( 7 ).footer() ).html(data[tot].sum_s_checkout).addClass('text-right');
+                        $( api.column( 8 ).footer() ).html(data[tot].sum_cash_op_cout).addClass('text-right');
+                        $( api.column( 9 ).footer() ).html(data[tot].sum_cash_simo).addClass('text-right');
+                        $( api.column( 10 ).footer() ).html(data[tot].sum_solo_extra).addClass('text-right');
+                        $( api.column( 11 ).footer() ).html(data[tot].sum_stay_extra).addClass('text-right');
+                        $( api.column( 12 ).footer() ).html(data[tot].sum_banca1).addClass('text-right');
+                        $( api.column( 13 ).footer() ).html(data[tot].sum_s_chin).addClass('text-right');
+                        $( api.column( 14 ).footer() ).html(data[tot].sum_s_b).addClass('text-right');
+                        $( api.column( 15 ).footer() ).html(data[tot].sum_kross_payment_total_amount).addClass('text-right');
+                        $( api.column( 16 ).footer() ).html(data[tot].sum_c_p).addClass('text-right');
+                        $( api.column( 17 ).footer() ).html('').addClass('text-right');
+                    {{-- } else {
+                        $( api.column( 2 ).footer() ).html('');
+                    } --}}
 
                 },
 
@@ -277,10 +276,9 @@
                 },
                 columnDefs: [
                     { className: 'control', targets:   0, width: '3%' }, //plus
-                    { width: '5%', targets: 1}, //house
-                    { width: '5%', targets: 3}, //cliente
-                    { width: '8%', targets: 4}, //data-arrivo
-                    { width: '8%', targets: 5}, //data-partenza
+                    //{ width: '11%', targets: 7}, //extra dovuto
+                    //{ width: '11%', targets: 8}, //extra operatore
+                    //{ width: '11%', targets: 9}, //extra Simonetta
                 ],
 
                 "lengthMenu": [
@@ -291,14 +289,15 @@
                 // set the initial value
                 "pageLength": -1,
 
-                "dom": "<'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'B f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", // horizobtal scrollable datatable
+                "dom": "<'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'B f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", // horizontal scrollable datatable
             });
             $('#submit').on('click', function(e) {
                 oTable.draw();
                 e.preventDefault();
             });
             $('#removeFilter').on('click', function(e) {
-                location.reload();
+                $('#house').val([]);
+                oTable.draw();
             });
         });
 

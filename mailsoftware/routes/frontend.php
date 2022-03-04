@@ -65,6 +65,7 @@ Route::get('/marketing/countries', [\App\Http\Controllers\Frontend\Views\Marketi
 Route::get('/marketing/countries/data', [\App\Http\Controllers\Frontend\Views\Marketing\CountriesController::class, 'getCountriesTable'])->name('countries.table');
 
 Route::get('/sinottico', [\App\Http\Controllers\Frontend\Views\SinotticoController::class, 'index'])->name('viste.sinottico');
+Route::post('/sinottico/note', [\App\Http\Controllers\Frontend\Views\SinotticoController::class, 'saveNotes'])->name('viste.sinottico.note');
 
 // EXPORT GLOBALE DELLE PRENOTAZIONI IN EXCEL
 Route::get('/excel', [\App\Http\Controllers\Frontend\Excel\ExcelController::class, 'index'])->name('excel.index');

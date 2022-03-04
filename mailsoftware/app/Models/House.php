@@ -46,6 +46,11 @@ class House extends Model
         return $this->hasMany(Booking::class, 'tx_mask_p_casa', 'uid');
     }
 
+    public function notes()
+    {
+        return $this->morphMany(Note::class, 'target');
+    }
+
     public function typo()
     {
         return TypoHouses::find($this->uid);

@@ -64,6 +64,8 @@ Route::get('/spese/costi_aziendali/data_anno', [\App\Http\Controllers\Frontend\V
 Route::get('/marketing/countries', [\App\Http\Controllers\Frontend\Views\Marketing\CountriesController::class, 'index'])->name('countries.index');
 Route::get('/marketing/countries/data', [\App\Http\Controllers\Frontend\Views\Marketing\CountriesController::class, 'getCountriesTable'])->name('countries.table');
 
+Route::get('/sinottico', [\App\Http\Controllers\Frontend\Views\SinotticoController::class, 'index'])->name('viste.sinottico');
+
 // EXPORT GLOBALE DELLE PRENOTAZIONI IN EXCEL
 Route::get('/excel', [\App\Http\Controllers\Frontend\Excel\ExcelController::class, 'index'])->name('excel.index');
 Route::get('/excel/export', [\App\Http\Controllers\Frontend\Excel\ExcelController::class, 'bookingsExport'])->name('excel.export');

@@ -1,4 +1,4 @@
-@extends('layouts.templat<e_view')
+@extends('layouts.template_view')
 
 @section('styles')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">

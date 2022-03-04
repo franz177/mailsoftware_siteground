@@ -157,7 +157,7 @@ return [
                         [
                             'title' => 'Sinottico',
                             'bullet' => 'dot',
-                            'page' => '/viste/mensile',
+                            'page' => '/sinottico',
                             'auth' => [1],
                             'new-tab' => false,
                         ],

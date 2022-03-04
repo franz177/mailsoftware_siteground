@@ -12,6 +12,7 @@ class VisteController extends Controller
 {
     protected $CType_pren = 'mask_db_alg_pren';
     protected $CType_costi_op = 'mask_db_alg_c_casa';
+
     /**
      * Display a listing of the resource.
      *
@@ -26,17 +27,6 @@ class VisteController extends Controller
         $sub_seasons = $typo->sub_seasons;
         $house_groups = $typo->house_groups;
         $months = $typo->months;
-
-//        if($request->ajax()){
-//
-//            $costo_c_o = $this->getCostoCheckOut($bookings);
-//
-//            if($request['years']){
-//                return response()->json($bookings);
-//            }
-//
-//            return DataTables::of($bookings)->make();
-//        }
 
         $bookings = $this->bookings();
         $costo_operatore = $this->getCostoOpertore($bookings);
@@ -63,18 +53,13 @@ class VisteController extends Controller
             ->where('tt_content.tx_mask_cod_reservation_status', '!=', "CANC")
             ->first();
 
-//        if($years)
-//            $bookings->whereIn(Typo::raw('YEAR(tx_mask_p_data_arrivo)'), $years);
-//
-//        $bookings->groupBy(Typo::raw('YEAR(tx_mask_p_data_arrivo)'))
-//            ->orderBy(Typo::raw('YEAR(tx_mask_p_data_arrivo)'), 'DESC')
-//            ->get();
-
         return $bookings;
     }
 
     public function getDataForm(Request $request)
-    {}
+    {
+
+    }
 
     public function getCostoOpertore($bookings)
     {
@@ -101,5 +86,4 @@ class VisteController extends Controller
     {
 
     }
-
 }

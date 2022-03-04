@@ -41,6 +41,16 @@ class House extends Model
         return $this->hasMany(HouseRoom::class);
     }
 
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'tx_mask_p_casa', 'uid');
+    }
+
+    public function typo()
+    {
+        return TypoHouses::find($this->uid);
+    }
+
     public function users()
     {
         return $this->belongsToMany(User::class);
@@ -51,4 +61,8 @@ class House extends Model
         return $this->belongsTo(Ztl::class);
     }
 
+    public function getNameAttribute()
+    {
+        return $this->typo()->header;
+    }
 }

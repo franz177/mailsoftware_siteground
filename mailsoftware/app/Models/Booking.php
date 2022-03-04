@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -73,9 +75,26 @@ class Booking extends Model
         return $this->hasOne(Country::class, 'uid', 'tx_mask_t0_country');
     }
 
+    public function house()
+    {
+        return $this->belongsTo(House::class, 'uid', 'tx_mask_p_casa');
+    }
+
+    public function scopeConfirmed($query)
+    {
+        $query->where('tx_mask_cod_reservation_status', '!=', 'CANC');
+    }
+
     public function threads()
     {
         return $this->hasMany(Thread::class, 'uid', 'uid')->orderBy('created_at', 'desc');
+    }
+
+    public function explodedDays()
+    {
+        $start = Carbon::parse($this->attributes['tx_mask_p_data_arrivo']);
+        $end = Carbon::parse($this->attributes['tx_mask_p_data_partenza']);
+        return new Collection(new \DatePeriod($start, new \DateInterval('P1D'), $end->addDays(1)));
     }
 
     /*

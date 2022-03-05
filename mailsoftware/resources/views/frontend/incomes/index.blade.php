@@ -105,7 +105,7 @@
                                 <tfoot class="total-row">
                                 <tr>
                                     <th></th>
-                                    <th class="all">Anno</th>
+                                    <th class="all"></th>
                                     <th class="all"></th>
                                     <th class="all"></th>
                                     <th class="all"></th>
@@ -153,6 +153,9 @@
             var houses_typo = {!! $houses_typo !!};
 
             var tables = $('#table-incassi');
+
+            const countColumns = api => api.columns()[0].length - 1
+            const seq = integer => Array(integer).fill().map( (_,i) => i + 1 )
 
             var oTable = tables.DataTable({
                 // Internationalisation. For more info refer to http://datatables.net/manual/i18n
@@ -215,47 +218,38 @@
                 ],
 
                 rowCallback: function(row, data, index) {
-                    $('td:eq(1)', row).addClass('text-right');
-                    $('td:eq(2)', row).addClass('text-right');
-                    $('td:eq(3)', row).addClass('text-right');
-                    $('td:eq(4)', row).addClass('text-right');
-                    $('td:eq(5)', row).addClass('text-right');
-                    $('td:eq(6)', row).addClass('text-right');
-                    $('td:eq(7)', row).addClass('text-right');
-                    $('td:eq(8)', row).addClass('text-right');
-                    $('td:eq(9)', row).addClass('text-right');
-                    $('td:eq(10)', row).addClass('text-right');
-                    $('td:eq(11)', row).addClass('text-right');
-                    $('td:eq(12)', row).addClass('text-right');
-                    $('td:eq(13)', row).addClass('text-right');
-                    $('td:eq(14)', row).addClass('text-right');
-                    $('td:eq(15)', row).addClass('text-right');
-                    $('td:eq(16)', row).addClass('text-right');
+                    for (const index of seq(countColumns(this.api()))){
+                        $(`td:eq(${index})`, row).addClass('text-right');
+                    }
                 },
 
                 footerCallback: function(row, data, index){
                     var api = this.api(), data;
                     var tot = data.length - 1;
-                    {{-- if(tot > 0){ --}}
-                        $( api.column( 2 ).footer() ).html(data[tot].sum_tot_lordo_incassi).addClass('text-right');
-                        $( api.column( 3 ).footer() ).html(data[tot].sum_importo_stay).addClass('text-right');
-                        $( api.column( 4 ).footer() ).html(data[tot].sum_perc_sito).addClass('text-right');
-                        $( api.column( 5 ).footer() ).html(data[tot].sum_cleaning_fee_amount).addClass('text-right');
-                        $( api.column( 6 ).footer() ).html(data[tot].sum_city_tax_amount).addClass('text-right');
-                        $( api.column( 7 ).footer() ).html(data[tot].sum_s_checkout).addClass('text-right');
-                        $( api.column( 8 ).footer() ).html(data[tot].sum_cash_op_cout).addClass('text-right');
-                        $( api.column( 9 ).footer() ).html(data[tot].sum_cash_simo).addClass('text-right');
-                        $( api.column( 10 ).footer() ).html(data[tot].sum_solo_extra).addClass('text-right');
-                        $( api.column( 11 ).footer() ).html(data[tot].sum_stay_extra).addClass('text-right');
-                        $( api.column( 12 ).footer() ).html(data[tot].sum_banca1).addClass('text-right');
-                        $( api.column( 13 ).footer() ).html(data[tot].sum_s_chin).addClass('text-right');
-                        $( api.column( 14 ).footer() ).html(data[tot].sum_s_b).addClass('text-right');
-                        $( api.column( 15 ).footer() ).html(data[tot].sum_kross_payment_total_amount).addClass('text-right');
-                        $( api.column( 16 ).footer() ).html(data[tot].sum_c_p).addClass('text-right');
-                        $( api.column( 17 ).footer() ).html('').addClass('text-right');
-                    {{-- } else {
-                        $( api.column( 2 ).footer() ).html('');
-                    } --}}
+                    const footer = integer => $( api.column( integer ).footer() )
+                    if(tot > 0){
+                        footer(1).html('Anno');
+                        footer(2).html(data[tot].sum_tot_lordo_incassi).addClass('text-right');
+                        footer(3).html(data[tot].sum_importo_stay).addClass('text-right');
+                        footer(4).html(data[tot].sum_perc_sito).addClass('text-right');
+                        footer(5).html(data[tot].sum_cleaning_fee_amount).addClass('text-right');
+                        footer(6).html(data[tot].sum_city_tax_amount).addClass('text-right');
+                        footer(7).html(data[tot].sum_s_checkout).addClass('text-right');
+                        footer(8).html(data[tot].sum_cash_op_cout).addClass('text-right');
+                        footer(9).html(data[tot].sum_cash_simo).addClass('text-right');
+                        footer(10).html(data[tot].sum_solo_extra).addClass('text-right');
+                        footer(11).html(data[tot].sum_stay_extra).addClass('text-right');
+                        footer(12).html(data[tot].sum_banca1).addClass('text-right');
+                        footer(13).html(data[tot].sum_s_chin).addClass('text-right');
+                        footer(14).html(data[tot].sum_s_b).addClass('text-right');
+                        footer(15).html(data[tot].sum_kross_payment_total_amount).addClass('text-right');
+                        footer(16).html(data[tot].sum_c_p).addClass('text-right');
+                        footer(17).html('').addClass('text-right');
+                    } else {
+                        for (const index of seq(countColumns(api))){
+                            $( api.column( index ).footer() ).html('');
+                        }
+                    }
 
                 },
 

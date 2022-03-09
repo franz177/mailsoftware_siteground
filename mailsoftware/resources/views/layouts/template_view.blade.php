@@ -31,8 +31,6 @@
     {{-- Includable CSS --}}
     @yield('styles')
 
-
-    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     @yield(('css'))
 </head>
 

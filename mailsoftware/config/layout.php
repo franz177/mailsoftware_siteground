@@ -272,7 +272,6 @@ return [
             'plugins/custom/datatables/datatables.bundle.css',
             'plugins/custom/prismjs/prismjs.bundle.css',
             'css/style.bundle.css',
-            'css/custom.css',
         ],
         'js' => [
             'plugins/global/plugins.bundle.js',

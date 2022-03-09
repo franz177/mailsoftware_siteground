@@ -1,12 +1,7 @@
 /node_modules
-/public/hot
-/public/storage
-/public_html
 /storage/*.key
 /vendor
 /MySqlData
-/resources/metronic
-.env
 .env.backup
 .env.example
 .phpunit.result.cache
@@ -15,4 +10,3 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
-APPUNTI_NewTVision.txt

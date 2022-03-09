@@ -397,12 +397,12 @@ class MensileController extends Controller
                     $cambio = '';
                     $icon = '';
                     $span = '';
+                    $culla = '';
 
                     if($row->tx_mask_t2_p_cambi_l > 0 || $row->tx_mask_t2_p_cambi_a > 0){
                         $icon = '<span class="badge badge-warning costi"><i class="fa fa-copyright"></i><span class="font-weight-bolder">';
                         $span = '</span>';
                     }
-
 
                     if($row->tx_mask_t2_p_cambi_l > 0)
                         $lenzuola = $row->tx_mask_t2_p_cambi_l.' Len';
@@ -413,7 +413,10 @@ class MensileController extends Controller
                     if($row->costi_costo_cambi > 0)
                         $cambio = ' <span class="font-size-xs">['.number_format($row->costi_costo_cambi, 2, ',', '.').']</span>';
 
-                    return $kit_base . '</br>' . $icon . ' ' . $lenzuola . ' ' . $asciugamani . $span . $cambio . $span;
+                    if ($row->tx_mask_p_culla === '1')
+                        $culla = ' CULLA';
+
+                    return $kit_base . $culla . '</br>' . $icon . ' ' . $lenzuola . ' ' . $asciugamani . $span . $cambio . $span;
 
                 })
                 ->rawColumns([

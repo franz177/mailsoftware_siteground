@@ -59,6 +59,7 @@ Route::get('/spese/costi_aziendali', [\App\Http\Controllers\Frontend\Views\Spese
 Route::get('/spese/costi_aziendali/data', [\App\Http\Controllers\Frontend\Views\Spese\SpeseController::class, 'getDataCostiAziendali'])->name('costi_aziendali.data');
 Route::get('/spese/costi_aziendali/data_anno', [\App\Http\Controllers\Frontend\Views\Spese\SpeseController::class, 'getDataCostiAziendaliAnno'])->name('costi_aziendali_anno.data');
 
+//INCASSI
 
 // MARKETING
 Route::get('/marketing/countries', [\App\Http\Controllers\Frontend\Views\Marketing\CountriesController::class, 'index'])->name('countries.index');

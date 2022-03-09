@@ -270,13 +270,11 @@ return [
         'css' => [
             'plugins/global/plugins.bundle.css',
             'plugins/custom/datatables/datatables.bundle.css',
-            'plugins/custom/prismjs/prismjs.bundle.css',
             'css/style.bundle.css',
         ],
         'js' => [
             'plugins/global/plugins.bundle.js',
             'plugins/custom/datatables/datatables.bundle.js',
-            'plugins/custom/prismjs/prismjs.bundle.js',
             'js/scripts.bundle.js',
         ],
     ],

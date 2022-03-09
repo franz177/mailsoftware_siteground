@@ -73,7 +73,7 @@
                         <span class="text-muted mt-3 font-weight-bold font-size-sm">Totale {{ count($rooms ) }} camera</span>
                     </h3>
                     <div class="card-toolbar">
-                        <a href="javascript:void(0)" class="btn btn-danger btn-sm font-weight-bolder font-size-sm py-3 px-6" id="createNewCamera" name="createNewCamera">Aggiungi <img src="{{ asset('/media/svg/icons/Navigation/Plus_white.svg') }}"/></a>
+                        <a href="javascript:void(0)" class="btn btn-danger btn-sm font-weight-bolder font-size-sm py-3 px-6" id="createNewCamera" name="createNewCamera">Aggiungi <img src="{{ asset('/media/svg/icons/Navigation/Plus.svg') }}"/></a>
                     </div>
                 </div>
                 <!--end::Header-->

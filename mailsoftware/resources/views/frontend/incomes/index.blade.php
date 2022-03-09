@@ -97,8 +97,7 @@
                                     <th class="all alert-warning" title="API Kross">Pagamento</th>
                                     <th class="all alert-warning" title="Consuntivo - preventivo
 (STAY + Extra cash CO) - (Pagamento + Solo extra)">Cons. - Prev.</th>
-                                    <th class="all alert-warning" title="Costo medio a notte
-(bisogna preparare il calcolo)">Costo <br>medio</th>                                    
+                                    <th class="all alert-warning" title="Media aritmetica dei costi medi a notte">Costo <br>medio</th>                                    
                                 </tr>
                                 </thead>
 
@@ -244,7 +243,7 @@
                         footer(14).html(data[tot].sum_s_b).addClass('text-right');
                         footer(15).html(data[tot].sum_kross_payment_total_amount).addClass('text-right');
                         footer(16).html(data[tot].sum_c_p).addClass('text-right');
-                        footer(17).html('').addClass('text-right');
+                        footer(17).html(data[tot].avg_c_m).addClass('text-right');
                     } else {
                         for (const index of seq(countColumns(api))){
                             $( api.column( index ).footer() ).html('');

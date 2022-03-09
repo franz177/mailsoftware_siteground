@@ -27,7 +27,7 @@ class IncomesController extends Controller
     private $sum_kross_payment_total_amount;
     private $sum_banca1;
     private $sum_c_p;
-    private $sum_c_m;
+    private $avg_c_m;
 
     /**
      * Display a listing of the resource.
@@ -74,7 +74,7 @@ class IncomesController extends Controller
                 Booking::raw('SUM(tx_mask_t5_kross_payment_total_amount) as kross_payment_total_amount'),
                 Booking::raw('SUM(tx_mask_t3_p_stay - tx_mask_t3_p_s_b) as banca1'),
                 Booking::raw('SUM(tx_mask_t3_p_stay + tx_mask_t3_p_s_checkout - tx_mask_t5_kross_payment_total_amount - (' . $solo_extra . ')) as c_p'),
-                // Booking::raw('"Da calcolare" as c_m'),
+                Booking::raw('AVG(prop_costo_medio_a_notte) as c_m'),
             ])
             ->where(function ($q) use ($year) {
                 $q->where(Typo::raw('YEAR(tx_mask_p_data_arrivo)'), '=', $year);
@@ -103,7 +103,7 @@ class IncomesController extends Controller
         $this->sum_kross_payment_total_amount = $data->sum('kross_payment_total_amount');
         $this->sum_banca1 = $data->sum('banca1');
         $this->sum_c_p = $data->sum('c_p');
-        $this->sum_c_m = 0;
+        $this->avg_c_m = $data->avg('c_m');
 
         function htmlEuro($arg)
         {
@@ -182,7 +182,7 @@ class IncomesController extends Controller
                 return htmlEuro($row->c_p);
             })
             ->addColumn('c_m', function ($row) {
-                return '<div title="Da calcolare (il campo indicato non è presente nel DB)">!</div>';
+                return htmlEuro($row->c_m);
             })
             ->addColumn('sum_tot_lordo_incassi', function ($row) {
                 return htmlEuro($this->sum_tot_lordo_incassi);
@@ -229,8 +229,8 @@ class IncomesController extends Controller
             ->addColumn('sum_c_p', function ($row) {
                 return htmlEuro($this->sum_c_p);
             })
-            ->addColumn('sum_c_m', function ($row) {
-                return htmlEuro($this->sum_c_m);
+            ->addColumn('avg_c_m', function ($row) {
+                return htmlEuro($this->avg_c_m);
             })
             ->rawColumns([
                 'month', 'importo_stay', 'perc_sito', 'cleaning_fee_amount', 'city_tax_amount',
@@ -240,7 +240,7 @@ class IncomesController extends Controller
                 'sum_importo_stay', 'sum_tot_lordo_incassi', 'sum_perc_sito', 'sum_cleaning_fee_amount',
                 'sum_city_tax_amount', 'sum_s_checkout', 'sum_cash_op_cout', 'sum_cash_simo', 'sum_solo_extra',
                 'sum_stay_extra', 'sum_s_chin', 'sum_s_b', 'sum_kross_payment_total_amount', 'sum_banca1',
-                'sum_c_p', 'sum_c_m'
+                'sum_c_p', 'avg_c_m'
             ])
             ->make(true);
     }

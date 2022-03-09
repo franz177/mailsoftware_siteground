@@ -16,17 +16,7 @@ const rimraf = require('rimraf');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-    .vue()
-    .sass('resources/sass/app.scss', 'public/css')
-    .postCss('resources/css/app.css', 'public/css', [
-        //
-    ]);
-
-// Global jquery
-// mix.autoload({
-// 'jquery': ['$', 'jQuery'],
-// Popper: ['popper.js', 'default'],
-// });
+    .sass('resources/sass/app.scss', 'public/css');
 
 // 3rd party plugins css/js
 mix.sass('resources/plugins/plugins.scss', 'public/plugins/global/plugins.bundle.css').then(() => {
@@ -34,15 +24,13 @@ mix.sass('resources/plugins/plugins.scss', 'public/plugins/global/plugins.bundle
     rimraf(path.resolve('public/fonts'), () => {});
     rimraf(path.resolve('public/images'), () => {});
 }).sourceMaps(!mix.inProduction())
-    // .setResourceRoot('./')
     .options({processCssUrls: false}).js(['resources/plugins/plugins.js'], 'public/plugins/global/plugins.bundle.js');
 
 // Metronic css/js
 mix.sass('resources/metronic/sass/style.scss', 'public/css/style.bundle.css', {
     sassOptions: {includePaths: ['node_modules']},
 })
-    // .options({processCssUrls: false})
-    .js('resources/js/scripts.js', 'public/js/scripts.bundle.js');
+.js('resources/js/scripts.js', 'public/js/scripts.bundle.js');
 
 // Custom 3rd party plugins
 (glob.sync('resources/plugins/custom/**/*.js') || []).forEach(file => {
@@ -50,17 +38,6 @@ mix.sass('resources/metronic/sass/style.scss', 'public/css/style.bundle.css', {
 });
 (glob.sync('resources/plugins/custom/**/*.scss') || []).forEach(file => {
     mix.sass(file, `public/${file.replace('resources/', '').replace('.scss', '.bundle.css')}`);
-});
-
-// Metronic css pages (single page use)
-(glob.sync('resources/metronic/sass/pages/**/!(_)*.scss') || []).forEach(file => {
-    file = file.replace(/[\\\/]+/g, '/');
-    mix.sass(file, file.replace('resources/metronic/sass', 'public/css').replace(/\.scss$/, '.css'));
-});
-
-// Metronic js pages (single page use)
-(glob.sync('resources/metronic/js/pages/**/*.js') || []).forEach(file => {
-    mix.js(file, `public/${file.replace('resources/metronic/', '')}`);
 });
 
 // Metronic media

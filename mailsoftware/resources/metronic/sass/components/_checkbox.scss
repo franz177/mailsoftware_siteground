@@ -93,7 +93,7 @@
     // Accent type
     &.checkbox-accent {
         > span {
-            border-width: get($checkbox-config, types, accent, borderWidth) !important;
+            // border-width: get($checkbox-config, types, accent, borderWidth) !important;
             border-style: solid !important;
             background-color: transparent !important;
 

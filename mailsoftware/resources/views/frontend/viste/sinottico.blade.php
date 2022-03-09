@@ -27,7 +27,7 @@
 						</h3>
 					</div>
 					<div class="card-body pt-0 pb-3">
-						<table class="table table-sm table-bordered">
+						<table class="table table-xs table-bordered">
 							<thead>
 								<tr>
 									<th width="7.70%"></th>
@@ -54,7 +54,7 @@
 												$count_by_month[$month_index] += 1;
 												@endphp
 
-												<td style="background-color: {{ $value['color'] }}">{{ $value['amount'] }}</td>
+												<td class="bg-{{ $value['color'] }}">{{ $value['amount'] }}</td>
 											@endif
 										@endforeach
 									</tr>

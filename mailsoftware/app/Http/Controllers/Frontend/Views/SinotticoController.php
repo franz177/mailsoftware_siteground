@@ -46,7 +46,7 @@ class SinotticoController extends Controller
 				}
 
 				$allocated[$month][(int) $ad->format('d')] = [
-                    'color' => $house->color->color_bg,
+                    'color' => $house->color->colore_bg,
                     'amount' => 0,
                 ];
 			}

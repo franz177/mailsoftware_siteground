@@ -6,3 +6,13 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+.table {
+	&.table-xs {
+		font-size: 12px;
+
+		th, td {
+			padding: 0.1rem;
+		}
+	}
+}

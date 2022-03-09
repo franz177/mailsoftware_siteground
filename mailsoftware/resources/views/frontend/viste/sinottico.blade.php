@@ -9,9 +9,14 @@
 		</div>
 	</div>
 
-	@foreach($houses as $house)
-		<div class="row">
-	        <div class="col">
+	<div class="row row-cols-1 row-cols-md-2">
+		@foreach($houses as $house)
+			@php
+			$totals_by_month = array_fill(1, 12, 0);
+			$count_by_month = array_fill(1, 12, 0);
+			@endphp
+
+	        <div class="col mb-4">
 				<div class="card card-custom card-stretch gutter-b">
 					<div class="card-header border-0 pt-5">
 						<h3 class="card-title align-items-start flex-column">
@@ -38,18 +43,41 @@
 
 										@foreach($months as $month_index => $month)
 											@php
-												$value = $data[$house->id][$month_index][$i] ?? 0;
+												$value = $data[$house->id][$month_index][$i] ?? null;
 											@endphp
 
-											@if($value == 0)
+											@if(is_null($value) || $value['amount'] == 0)
 												<td>&nbsp;</td>
 											@else
-												<td class="bg-success">{{ $value }}</td>
+												@php
+												$totals_by_month[$month_index] += $value['amount'];
+												$count_by_month[$month_index] += 1;
+												@endphp
+
+												<td style="background-color: {{ $value['color'] }}">{{ $value['amount'] }}</td>
 											@endif
 										@endforeach
 									</tr>
 								@endfor
 							</tbody>
+							<tfoot>
+								<tr>
+									<th>Totale</th>
+									@foreach($months as $month_index => $month)
+										<th>{{ $totals_by_month[$month_index] ?: '' }}</th>
+									@endforeach
+								</tr>
+								<tr>
+									<th>Media</th>
+									@foreach($months as $month_index => $month)
+										<th>
+											@if($count_by_month[$month_index])
+												{{ round($totals_by_month[$month_index] / $count_by_month[$month_index], 2) }}
+											@endif
+										</th>
+									@endforeach
+								</tr>
+							</tfoot>
 						</table>
 
 						<form method="POST" action="{{ route('viste.sinottico.note') }}">
@@ -86,6 +114,6 @@
 					</div>
 				</div>
 	        </div>
-		</div>
-	@endforeach
+		@endforeach
+	</div>
 @endsection

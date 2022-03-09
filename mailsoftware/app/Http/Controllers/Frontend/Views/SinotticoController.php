@@ -45,7 +45,10 @@ class SinotticoController extends Controller
 					$allocated[$month] = [];
 				}
 
-				$allocated[$month][(int) $ad->format('d')] = 0;
+				$allocated[$month][(int) $ad->format('d')] = [
+                    'color' => $house->color->color_bg,
+                    'amount' => 0,
+                ];
 			}
 
 			$bookings = $house->bookings()->where(function($query) use ($current_year) {
@@ -56,13 +59,31 @@ class SinotticoController extends Controller
 				$days = $booking->explodedDays();
 				foreach($days as $d) {
 					if ($d->format('Y') == $current_year) {
-						$allocated[(int) $d->format('m')][(int) $d->format('d')] = $booking->prop_costo_medio_a_notte;
+						$allocated[(int) $d->format('m')][(int) $d->format('d')]['amount'] = $booking->prop_costo_medio_a_notte;
 					}
 				}
 			}
 
 			$data[$house->id] = $allocated;
 		}
+
+        /*
+            I dati delle case 5 e 6 (Corte d'Anglona) vanno mergiati insieme.
+            TODO: Eventualmente questa routine va astratta e messa in
+            App\Models\House per essere riusata in altre circostanze analoghe
+        */
+
+        $houses = $houses->reject(function($h) {
+            return $h->id == 6;
+        });
+
+        foreach($data[6] as $month => $days) {
+            foreach($days as $day => $meta) {
+                $data[5][$month][$day] = $meta;
+            }
+        }
+
+        unset($data[6]);
 
         return view('frontend.viste.sinottico')->with(compact('years', 'current_year', 'houses', 'months', 'data'));
     }

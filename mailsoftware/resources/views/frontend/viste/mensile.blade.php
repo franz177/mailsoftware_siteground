@@ -26,9 +26,9 @@
                                     <div class="mb-2 d-flex flex-column">
                                         <div class="input-group has-validation">
                                             <div class="input-group-prepend">
-                                                            <span class="input-group-text">
-                                                                <i class="far fa-calendar-alt"></i>
-                                                            </span>
+                                                <span class="input-group-text">
+                                                    <i class="far fa-calendar-alt"></i>
+                                                </span>
                                             </div>
                                             <select class="form-control" id="year" name="year">
                                                 @foreach($years as $year)
@@ -42,13 +42,29 @@
                                     <div class="mb-2 d-flex flex-column">
                                         <div class="input-group has-validation">
                                             <div class="input-group-prepend">
-                                                            <span class="input-group-text">
-                                                                <i class="far fa-calendar-alt"></i>
-                                                            </span>
+                                                <span class="input-group-text">
+                                                    <i class="far fa-calendar-alt"></i>
+                                                </span>
                                             </div>
                                             <select class="form-control" id="month" name="month">
                                                 @foreach($months as $month => $name)
                                                     <option value="{{ $month }}" {{ $month == now()->month ? 'selected' : '' }}>{{ $name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="mb-2 d-flex flex-column">
+                                        <div class="input-group has-validation">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-home"></i>
+                                                </span>
+                                            </div>
+                                            <select multiple="multiple" class="form-control" id="house" name="house[]" style="min-height: 150px;">
+                                                @foreach($houses_typo as $uid => $name)
+                                                    <option value="{{ $uid }}">{{ $name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -66,6 +82,18 @@
                 </div>
                 <div class="card-body pt-0 pb-3">
                     <div class="tab-content">
+                        <p class="font-weight-bold font-size-s mb-2 pb-5">
+                            I calcoli sono effettuati sulla data di arrivo colore
+                            <span class="symbol symbol-20 symbol-warning mx-1">
+                                    <span class="symbol-label"></span>
+                                </span>
+                            Giallo
+                            sulla data di partenza colore
+                            <span class="symbol symbol-20 symbol-danger mx-1">
+                                    <span class="symbol-label"></span>
+                                </span>
+                            Rosa
+                        </p>
                         <!--begin::Table-->
                         <div class="table-responsive" >
                             <table class="table table-striped table-bordered  dt-responsive" id="sample_21">
@@ -84,24 +112,24 @@
                                     </th>
                                     <th class="none text-left">Sito</th>
                                     <th class="all text-uppercase">Cliente</th>
-                                    <th class="all">Arrivo</th>
+                                    <th class="all alert-warning">Arrivo</th>
                                     <th class="none">Note Operatore</th>
                                     <th class="none">CityTax</th>
-                                    <th class="all">Op. Pulizie</th>
+                                    <th class="all alert-warning">Op. Pulizie</th>
                                     <th class="none">Ore Pulizie</th>
                                     <th class="none">Costo Ore Pulizie</th>
-                                    <th class="all">TOT Costo <br> C-IN</th>
-                                    <th class="all">Tot <br> Pulizie</th>
-                                    <th class="all">Supervisor <br> Pulizie</th>
-                                    <th class="all">Partenza</th>
-                                    <th class="all">Op. <br> C-OUT</th>
-                                    <th class="all">Costo <br> C-OUT</th>
-                                    <th class="all">Costo <br> Extra <br> C-OUT</th>
-                                    <th class="all">Cash <br> Op. C-OUT</th>
-                                    <th class="all">Cash <br> Simo <br> C-OUT</th>
+                                    <th class="all alert-warning">TOT Costo <br> C-IN</th>
+                                    <th class="all alert-warning">Tot <br> Pulizie</th>
+                                    <th class="all alert-warning">Supervisor <br> Pulizie</th>
+                                    <th class="all alert-danger">Partenza</th>
+                                    <th class="all alert-danger">Op. <br> C-OUT</th>
+                                    <th class="all alert-danger">Costo <br> C-OUT</th>
+                                    <th class="all alert-danger">Costo <br> Extra <br> C-OUT</th>
+                                    <th class="all alert-danger">Cash <br> Op. C-OUT</th>
+                                    <th class="all alert-danger">Cash <br> Simo <br> C-OUT</th>
                                     <th class="all">Mancia Cliente</th>
                                     <th class="none">Extra Cash dell'ospite al C-OUT</th>
-                                    <th class="all">Costo Op.Cambio</th>
+                                    <th class="all alert-danger">Costo Op.Cambio</th>
                                     <th class="none">Extra Mondezza</th>
                                     <th class="none">Costi Extra Op Bi</th>
                                     <th class="all">Totale Prenotazione</th>
@@ -197,12 +225,14 @@
 
                 processing: true,
                 serverSide: true,
+                fixedHeader: true,
 
                 ajax: {
                     url:"{{ route('viste.datas') }}",
                     data: function (d) {
                         d.year = $('select[name=year] option').filter(':selected').val();
                         d.month = $('select[name=month] option').filter(':selected').val();
+                        d.house = $('#house').val();
                     }
                 },
 
@@ -286,19 +316,18 @@
                             return operatore;
                         },
                     },                    //td:eq(19)
-                    {data: 'extra_mondezza'},                    //td:eq(20)
+                    {data: 'extra_mondezza'},                       //td:eq(20)
                     {data: 'costi_extra_op_bi'},                    //td:eq(20)
-                    {data: 'totale_riga'},                    //td:eq(20)
-                    {data: 'costi_costo_kit'},                    //td:eq(20)
+                    {data: 'totale_riga'},                          //td:eq(20)
+                    {data: 'costi_costo_kit'},                      //td:eq(20)
                     {data: 'costi_costo_cambi'},                    //td:eq(20)
-                    {data: 'costi_check_in_self_check_in'},                    //td:eq(20)
-                    {data: 'tx_mask_t3_p_s_extra_checkin'},                    //td:eq(20)
+                    {data: 'costi_check_in_self_check_in'},         //td:eq(20)
+                    {data: 'tx_mask_t3_p_s_extra_checkin'},         //td:eq(20)
                 ],
 
                 rowCallback: function(row, data, index) {
                     $('td:eq(0)', row).addClass('bg-'+houses_color[data.tx_mask_p_casa]); //CASA
                     $('td:eq(0)', row).addClass('text-center'); //CASA
-                    // $('td:eq(2)', row).addClass('alert-warning text-left');     //CLIENTE
                     $('td:eq(3)', row).addClass('alert-warning');               //DATA-ARRIVO
                     $('td:eq(6)', row).addClass('alert-warning');               //OP. PULIZIE
                     $('td:eq(12)', row).addClass('alert-danger');                //DATA-PARTENZA
@@ -306,23 +335,33 @@
                     $('td:eq(18)', row).addClass('alert-success');                //MANCIA
 
                     console.log(data);
-
-                    // if(data.mancia_cli_or < 0){
-                    //     $('td:eq(17)', row).addClass('text-danger');
-                    // }
                 },
 
                 footerCallback: function(row, data, index){
                     var api = this.api(), data;
-                    $( api.column( 10 ).footer() ).html(data[0].sum_tot_costo_cin);
-                    $( api.column( 11 ).footer() ).html(data[0].sum_tot_pulizie);
-                    $( api.column( 12 ).footer() ).html(data[0].sum_supervisor_pulizie);
-                    $( api.column( 15 ).footer() ).html(data[0].sum_costo_co);
-                    $( api.column( 16 ).footer() ).html(data[0].sum_ex_co);
-                    $( api.column( 17 ).footer() ).html(data[0].sum_cash_operatore_co);
-                    $( api.column( 18 ).footer() ).html(data[0].sum_cash_simo_co);
-                    $( api.column( 19 ).footer() ).html(data[0].sum_mancia_cli);
-                    $( api.column( 20 ).footer() ).addClass('alert-success');
+                    var tot = data.length - 1;
+                    if(tot > 0){
+                        $( api.column( 10 ).footer() ).html(data[tot].sum_tot_costo_cin);
+                        $( api.column( 11 ).footer() ).html(data[tot].sum_tot_pulizie);
+                        $( api.column( 12 ).footer() ).html(data[tot].sum_supervisor_pulizie);
+                        $( api.column( 15 ).footer() ).html(data[tot].sum_costo_co);
+                        $( api.column( 16 ).footer() ).html(data[tot].sum_ex_co);
+                        $( api.column( 17 ).footer() ).html(data[tot].sum_cash_operatore_co);
+                        $( api.column( 18 ).footer() ).html(data[tot].sum_cash_simo_co);
+                        $( api.column( 19 ).footer() ).html(data[tot].sum_mancia_cli);
+                        $( api.column( 20 ).footer() ).addClass('alert-success');
+                    } else {
+                        $( api.column( 10 ).footer() ).html('');
+                        $( api.column( 11 ).footer() ).html('');
+                        $( api.column( 12 ).footer() ).html('');
+                        $( api.column( 15 ).footer() ).html('');
+                        $( api.column( 16 ).footer() ).html('');
+                        $( api.column( 17 ).footer() ).html('');
+                        $( api.column( 18 ).footer() ).html('');
+                        $( api.column( 19 ).footer() ).html('');
+                        $( api.column( 20 ).footer() ).addClass('alert-success');
+                    }
+
                 },
 
                 // setup buttons extentension: http://datatables.net/extensions/buttons/

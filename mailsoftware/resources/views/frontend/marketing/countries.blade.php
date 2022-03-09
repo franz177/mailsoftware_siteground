@@ -1,19 +1,16 @@
 @extends('layouts.template')
 
 @section('styles')
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/datatables/datatables.css') }}">
 @endsection
 
 @section('content')
-
     <div class="row">
         <div class="col-lg-12 col-xxl-12">
             <div class="card card-custom card-stretch gutter-b">
                 <div class="card-header border-0 pt-5">
                     <h3 class="card-title align-items-start flex-column">
                             <span class="card-label font-weight-bolder text-dark text-uppercase">
-                                Totali Operatori
+                                Prenotazioni per Nazione
                             </span>
                         <span class="text-muted mt-3 font-weight-bold font-size-sm"></span>
                     </h3>
@@ -32,8 +29,9 @@
                                                 </span>
                                             </div>
                                             <select class="form-control" id="year" name="year">
+                                                <option value="0">Scegli anno</option>
                                                 @foreach($years as $year)
-                                                    <option value="{{ $year->year }}" {{ $year->year == now()->year ? 'selected' : '' }}>{{ $year->year }}</option>
+                                                    <option value="{{ $year->year }}">{{ $year->year }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -43,13 +41,13 @@
                                     <div class="mb-2 d-flex flex-column">
                                         <div class="input-group has-validation">
                                             <div class="input-group-prepend">
-                                                            <span class="input-group-text">
-                                                                <i class="far fa-calendar-alt"></i>
-                                                            </span>
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-home"></i>
+                                                </span>
                                             </div>
-                                            <select class="form-control" id="month" name="month">
-                                                @foreach($months as $month => $name)
-                                                    <option value="{{ $month }}" {{ $month == now()->month ? 'selected' : '' }}>{{ $name }}</option>
+                                            <select multiple="multiple" class="form-control" id="house" name="house[]" style="min-height: 150px;">
+                                                @foreach($houses_typo as $uid => $name)
+                                                    <option value="{{ $uid }}">{{ $name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -67,37 +65,31 @@
                 </div>
                 <div class="card-body pt-0 pb-3">
                     <div class="tab-content">
-                        <p class="font-weight-bold font-size-s mb-2 pb-5">
-                            I calcoli sono effettuati dalla data di arrivo colore
-                                <span class="symbol symbol-20 symbol-warning mx-1">
-                                    <span class="symbol-label"></span>
-                                </span>
-                            Giallo, della data di partenza colore
-                            <span class="symbol symbol-20 symbol-danger mx-1">
-                                <span class="symbol-label"></span>
-                            </span>rosa
-                        </p>
                         <!--begin::Table-->
                         <div class="table-responsive" >
                             <table class="table table-striped table-bordered  dt-responsive" id="sample_21">
-                                <thead>
+                                <thead class="text-uppercase">
                                 <tr>
-                                    <th class="none"></th>
-                                    <th class="all">OPERATORE</th>
-                                    <th class="all alert-warning">TOTALE <br>CHECK-IN</th>
-                                    <th class="all alert-warning">TOTALE <br>PULIZIE</th>
-                                    <th class="all alert-warning">SUPERVISOR <br>PULIZIE</th>
-                                    <th class="all alert-danger">COSTO <br>C-OUT</th>
-                                    <th class="all alert-danger">COSTO EXTRA <br>C-OUT</th>
-                                    <th class="all alert-danger">CASH OP. <br>C-OUT</th>
-                                    <th class="all alert-danger">COSTO <br>OP. CAMBIO</th>
-
+                                    <th></th>
+                                    <th class="all">Nazione</th>
+                                    <th class="all"># Prenotazioni</th>
+                                    <th class="all">% Su totale</th>
                                 </tr>
                                 </thead>
+                                <tfoot>
+                                <tr>
+                                    <th></th>
+                                    <th class="all text-right text-uppercase">Totale</th>
+                                    <th class="none text-left"></th>
+                                    <th class="all text-uppercase"></th>
+                                </tr>
+                                </tfoot>
 
                             </table>
                         </div>
                     </div>
+                </div>
+                <div class="card-footer justify-content-between">
                 </div>
             </div>
         </div>
@@ -140,12 +132,13 @@
 
                 processing: true,
                 serverSide: true,
+                fixedHeader: true,
 
                 ajax: {
-                    url:"{{ route('viste.totali_operatori') }}",
+                    url:"{{ route('countries.table') }}",
                     data: function (d) {
                         d.year = $('select[name=year] option').filter(':selected').val();
-                        d.month = $('select[name=month] option').filter(':selected').val();
+                        d.house = $('#house').val();
                     }
                 },
 
@@ -156,31 +149,26 @@
                         searchable:     false,
                         data:           null,
                         defaultContent: '',
-                        cellType: "th",
-                        sortable: false
+                        cellType:       "th",
+                        sortable:       false
                     },
-
-                    {data: 'uid'},                                      //td:eq(1)
-                    {data: 'costi_cin'},                                      //td:eq(2)
-                    {data: 'totale_pulizie'},                                      //td:eq(2)
-                    {data: 'supervisor_pulizie'},                                      //td:eq(3)
-                    {data: 'costo_co'},                                      //td:eq(4)
-                    {data: 'extra_co'},                                      //td:eq(5)
-                    {data: 'cash_op_co'},                                      //td:eq(6)
-                    {data: 'costi_costo_operatore_cambio_biancheria'},                                      //td:eq(7)
-
-
-
+                    {data: 'country.cn_short_it'},                             //td:eq(13)
+                    {data: 'totale', className: 'text-right',},                          //td:eq(14)
+                    {data: 'percent', className: 'text-right'},                    //td:eq(15)
                 ],
 
                 rowCallback: function(row, data, index) {
-                    $('td:eq(1)', row).addClass('alert-warning');   // TOTALE CHECK-IN
-                    $('td:eq(2)', row).addClass('alert-warning');   // TOTALE PULIZIE
-                    $('td:eq(3)', row).addClass('alert-warning');   // SUPERVISOR PULIZIE
-                    $('td:eq(4)', row).addClass('alert-danger');    // COSTO C-OUT
-                    $('td:eq(5)', row).addClass('alert-danger');    // COSTO EXTRA C-OUT
-                    $('td:eq(6)', row).addClass('alert-danger');    // CASH OP. C-OUT
-                    $('td:eq(7)', row).addClass('alert-danger');    // COSTO OP. CAMBIO
+                },
+
+                footerCallback: function(row, data, index){
+                    var api = this.api(), data;
+                    var tot = data.length - 1;
+                    if(tot > 0){
+                        $( api.column( 2 ).footer() ).html(data[tot].totale_pren);
+                    } else {
+                        $( api.column( 2 ).footer() ).html('');
+                    }
+
                 },
 
                 // setup buttons extentension: http://datatables.net/extensions/buttons/
@@ -200,15 +188,8 @@
                 },
                 columnDefs: [
                     { className: 'control', targets:   0, width: '3%' }, //plus
-                    { width: '11%', targets: 1},         //house
-                    { width: '11%', targets: 2},        //data-arrivo
-                    { width: '11%', targets: 3},        //data-arrivo
-                    { width: '11%', targets: 4},        //OP.PULIZIE
-                    { width: '11%', targets: 5},        //KIT BASE
-                    { width: '11%', targets: 6},       //data-partenza
-                    { width: '11%', targets: 7},       //OP.C-OUT
-                    { width: '11%', targets: 8},       //CASH
-
+                    { width: '10%', targets: 2}, //hous    ],
+                    { width: '10%', targets: 3}, //hous    ],
                 ],
 
                 "lengthMenu": [
@@ -221,6 +202,7 @@
 
                 "dom": "<'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'B f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", // horizobtal scrollable datatable
             });
+
             $('#submit').on('click', function(e) {
                 oTable.draw();
                 e.preventDefault();

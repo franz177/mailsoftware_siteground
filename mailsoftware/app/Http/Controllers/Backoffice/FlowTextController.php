@@ -698,7 +698,14 @@ class FlowTextController extends Controller
     public function destroy(Request $request)
     {
         if ($request->ajax()) {
-            $flow_text = FlowText::where('id', $request->flow_text_id);
+            if ($request->flow_text_id) {
+                $flow_text = FlowText::where('id', $request->flow_text_id);
+            }
+
+            if ($request->text_id_to_delete) {
+                $flow_text = FlowText::where('text_id', $request->text_id_to_delete);
+            }
+
             $flow_text->delete();
 
             return response()->json(['message_delete'=>'Testo: '.$request->text_id.' cancellato correttamente dal flusso: '.$request->flow_text_id]);

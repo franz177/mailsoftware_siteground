@@ -33,7 +33,7 @@ return [
                     'new-tab' => false,
                 ],
                 [
-                    'title' => 'Costi',
+                    'title' => 'Costi Gestione',
                     'bullet' => 'dot',
                     'auth' => [1,3],
                     'new-tab' => false,
@@ -48,14 +48,7 @@ return [
                         [
                             'title' => 'Costi Annuale per Mesi [03]',
                             'bullet' => 'dot',
-                            'page' => '/viste/mensile/simonetta',
-                            'auth' => [1],
-                            'new-tab' => false,
-                        ],
-                        [
-                            'title' => 'Costi Annuale per Anni [04]',
-                            'bullet' => 'dot',
-                            'page' => '/viste/mensile/simonetta',
+                            'page' => '/viste/mensile/costi_annuale_mesi',
                             'auth' => [1],
                             'new-tab' => false,
                         ],
@@ -83,6 +76,20 @@ return [
                         ],
 
                     ],
+                ],
+                [
+                    'title' => 'Costi Aziendali',
+                    'root' => true,
+                    'page' => '/spese/costi_aziendali',
+                    'new-tab' => false,
+                    'auth' => [1,3],
+                ],
+                [
+                    'title' => 'Costi Annuale per Anni [04]',
+                    'bullet' => 'dot',
+                    'page' => '/viste/mensile/costi_annuale_anno',
+                    'auth' => [1],
+                    'new-tab' => false,
                 ],
                 [
                     'title' => 'Incassi',
@@ -122,7 +129,7 @@ return [
                         [
                             'title' => 'Paesi',
                             'bullet' => 'dot',
-                            'page' => '/viste/mensile',
+                            'page' => '/marketing/countries',
                             'auth' => [1],
                             'new-tab' => false,
                         ],
@@ -186,6 +193,29 @@ return [
                     ],
                 ],
             ]
+        ],
+        [
+            'title' => 'Spese',
+            'root' => true,
+            'page' => '',
+            'new-tab' => false,
+            'auth' => [1,3],
+            'submenu' => [
+                [
+                    'title' => 'Categorie',
+                    'bullet' => 'dot',
+                    'page' => '/spese/categorie',
+                    'auth' => [1],
+                    'new-tab' => false,
+                ],
+            ]
+        ],
+        [
+            'title' => 'Scarica Excel',
+            'root' => true,
+            'page' => '/excel',
+            'new-tab' => false,
+            'auth' => [1],
         ],
     ]
 

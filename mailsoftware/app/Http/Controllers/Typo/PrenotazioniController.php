@@ -191,7 +191,7 @@ class PrenotazioniController extends Controller
                 })
                 ->addColumn('cambi', function ($row) {
 
-                    $operatore_cambio = $row->tx_mask_t1_op_cambio_biancheria ?  $row->tx_mask_t1_op_cambio_biancheria : 19;
+                    $operatore_cambio = $row->tx_mask_t1_op_cambio_biancheria ?  $row->tx_mask_t1_op_cambio_biancheria : 0;
 
                     $lenzuola = '';
                     $asciugamani = '';
@@ -210,11 +210,14 @@ class PrenotazioniController extends Controller
 
                     if($row->costi_costo_cambi > 0) {
                         $costo = '[<span class="">€ ' . number_format($row->costi_costo_cambi, 2, ',', '.') . '</span>]';
-                        $operatore_nome = TypoUser::select('first_name')
-                            ->where('uid', '=', $operatore_cambio)
-                            ->first();
-
-                        $operatore_nome = $operatore_nome->first_name;
+                        if ($operatore_cambio === 0) {
+                            $operatore_nome  ='NaN';
+                        } else {
+                            $operatore_nome = TypoUser::select('first_name')
+                                ->where('uid', '=', $operatore_cambio)
+                                ->first();
+                            $operatore_nome = $operatore_nome->first_name;
+                        }
                     }
 
                     $header = '<p> '.$icon.' '.$lenzuola.' '.$asciugamani.' <br> '.$costo.' '. $operatore_nome .' </p>';

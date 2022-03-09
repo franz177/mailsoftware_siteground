@@ -203,12 +203,12 @@ class Controller extends BaseController
 
     // VISTE
     public function getYears(){
-        return Typo::select(Typo::raw('YEAR(tx_mask_p_data_prenotazione) as year'))
+        return Typo::select(Typo::raw('YEAR(tx_mask_p_data_arrivo) as year'))
             ->where('CType', '=', 'mask_db_alg_pren')
             ->where('tt_content.hidden', '=', 0)
             ->where('tt_content.deleted', '=', 0)
             ->whereNotNull('tx_mask_p_data_prenotazione')
-            ->groupBy([Typo::raw('YEAR(tx_mask_p_data_prenotazione)')])
+            ->groupBy([Typo::raw('YEAR(tx_mask_p_data_arrivo)')])
             ->orderBy('year', 'desc')
             ->get();
     }

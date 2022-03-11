@@ -189,6 +189,13 @@ return [
             ]
         ],
         [
+            'title' => 'Links',
+            'root' => true,
+            'page' => '/links',
+            'new-tab' => false,
+            'auth' => [1],
+        ],
+        [
             'title' => 'Scarica Excel',
             'root' => true,
             'page' => '/excel',

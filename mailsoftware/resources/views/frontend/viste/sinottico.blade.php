@@ -77,6 +77,12 @@
 										</th>
 									@endforeach
 								</tr>
+								<tr>
+									<th>&nbsp;</th>
+									@foreach($months as $month)
+										<th>{{ $month }}</th>
+									@endforeach
+								</tr>
 							</tfoot>
 						</table>
 

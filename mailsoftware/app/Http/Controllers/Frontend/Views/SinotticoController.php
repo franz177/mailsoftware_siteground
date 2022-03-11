@@ -85,6 +85,14 @@ class SinotticoController extends Controller
 
         unset($data[6]);
 
+        /*
+            Questo è per forzare l'ordinamento delle case. Sarebbe utile
+            spostarlo direttamente in House e riusarlo in altre circostanze
+        */
+        $houses = $houses->sortBy(function($h, $k) {
+            return array_search($h->id, [1, 4, 2, 3, 7, 5]);
+        });
+
         return view('frontend.viste.sinottico')->with(compact('years', 'current_year', 'houses', 'months', 'data'));
     }
 

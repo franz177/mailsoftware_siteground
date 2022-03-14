@@ -4,8 +4,9 @@
     QUESTO È UN WORK IN PROGRESS, ALCUNI DATI POTREBBERO NON COMBACIARE
     REALMENTE, AGGIORNARE QUESTA LISTA SE SI INCAPPA IN INCONSISTENZE
 
-    tx_mask_p_data_arrivo       datetime, data di arrivo degli ospiti
-    tx_mask_p_data_partenza     datetime, data di partenza degli ospiti
+    tx_mask_p_data_arrivo           datetime, data di arrivo degli ospiti
+    tx_mask_p_data_partenza         datetime, data di partenza degli ospiti
+    tx_mask_cod_reservation_status  stato della prenotazione. Può assumere diversi valori, solitamente solo quelle con stato "CANC" non vanno considerate
 */
 
 namespace App\Models;

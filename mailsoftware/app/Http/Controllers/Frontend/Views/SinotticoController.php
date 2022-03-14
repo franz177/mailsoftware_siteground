@@ -51,7 +51,7 @@ class SinotticoController extends Controller
                 ];
 			}
 
-			$bookings = $house->bookings()->where(function($query) use ($current_year) {
+			$bookings = $house->bookings()->confirmed()->where(function($query) use ($current_year) {
 				$query->where(DB::raw('YEAR(tx_mask_p_data_arrivo)'), $current_year)->orWhere(DB::raw('YEAR(tx_mask_p_data_partenza)'), $current_year);
 			})->get();
 

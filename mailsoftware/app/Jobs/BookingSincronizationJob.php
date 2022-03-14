@@ -35,14 +35,11 @@ class BookingSincronizationJob implements ShouldQueue
      */
     public function handle()
     {
+        /*
+            Vengono lette solo le prenotazioni aggiornate negli ultimi 60 giorni
+        */
+        $starting_from = time() - (60 * 60 * 24 * 30 * 2);
 
-        $month = now()->month;
-        $month_before = $month - 1;
-        $months = [
-            $month_before,
-            $month
-        ];
-        $year = now()->year;
         $bookings = Typo::select('uid', 'header', 'subheader', 'tx_mask_cod_reservation_status', 'tx_mask_contatto_riferimento',
             'tx_mask_doc_inviati', 'tx_mask_p_casa', 'tx_mask_p_culla', 'tx_mask_p_data_arrivo', 'tx_mask_p_data_partenza',
             'tx_mask_p_data_prenotazione', 'tx_mask_p_note_noi', 'tx_mask_p_old_uid', 'tx_mask_p_override_perc', 'tx_mask_p_perc_importo_fisso',
@@ -60,14 +57,8 @@ class BookingSincronizationJob implements ShouldQueue
             'tx_mask_t5_kross_ota_commissions_collected', 'tx_mask_t5_kross_ota_id', 'tx_mask_t5_kross_other_extra_total_amount', 'tx_mask_t5_kross_payments', 'tx_mask_t5_kross_payment_total_amount', 'tx_mask_t6_assistenza_interventol_lastminute',
             'tx_mask_t6_intervento_lastminute')
             ->where('CType','mask_db_alg_pren')
-            ->where('hidden', 0)
-            ->where('deleted', 0)
-            ->whereIn(Typo::raw('MONTH(FROM_UNIXTIME(tstamp))'), $months)
-            ->where(Typo::raw('YEAR(FROM_UNIXTIME(tstamp))'), '=', $year)
+            ->where('tstamp', '>', $starting_from)
             ->whereNotNull('tx_mask_p_casa')
-//            ->whereIn('uid', [1386])
-//            ->whereNotIn('uid', [2319,1421,195,1505])
-            ->where('tx_mask_cod_reservation_status', '!=', 'CANC')
             ->where(Typo::raw('YEAR(tx_mask_p_data_arrivo)'), '>=', 2020)
             ->orderBy('uid', 'desc')
             ->get();

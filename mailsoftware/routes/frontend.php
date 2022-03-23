@@ -50,8 +50,8 @@ Route::get('/booking', [\App\Http\Controllers\BookingController::class, 'index']
 Route::get('/booking/force', [\App\Http\Controllers\BookingController::class, 'force'])->name('booking_force');
 
 // INCASSI
-Route::get('/viste/incomes', [\App\Http\Controllers\Frontend\Views\IncomesController::class, 'index'])->name('incomes.index');
-Route::get('/viste/incomes/datas', [\App\Http\Controllers\Frontend\Views\IncomesController::class, 'getDataTables'])->name('incomes.datas');
+Route::get('/viste/incassi/annuale_mesi', [\App\Http\Controllers\Frontend\Views\IncomesController::class, 'index'])->name('incomes.index');
+Route::get('/viste/incassi/data', [\App\Http\Controllers\Frontend\Views\IncomesController::class, 'getDataTables'])->name('incomes.data');
 
 // SPESE
 Route::get('/spese/categorie', [\App\Http\Controllers\Frontend\Storico\TypoCategoriesController::class, 'index']);

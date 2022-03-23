@@ -94,9 +94,31 @@ return [
                 [
                     'title' => 'Incassi',
                     'bullet' => 'dot',
-                    'page' => '/viste/incomes',
                     'auth' => [1,3],
                     'new-tab' => false,
+                    'submenu' => [
+                        [
+                            'title' => 'Mensile Generale Prenotazioni [06]',
+                            'bullet' => 'dot',
+                            'page' => '/viste/incassi',
+                            'auth' => [1],
+                            'new-tab' => false,
+                        ],
+                        [
+                            'title' => 'Annuale per Mesi [07]',
+                            'bullet' => 'dot',
+                            'page' => '/viste/incassi/annuale_mesi',
+                            'auth' => [1],
+                            'new-tab' => false,
+                        ],
+                        [
+                            'title' => 'Annuale per Anni [08]',
+                            'bullet' => 'dot',
+                            'page' => '/viste/incassi',
+                            'auth' => [1],
+                            'new-tab' => false,
+                        ],
+                    ],
                 ],
                 [
                     'title' => 'Marketing',

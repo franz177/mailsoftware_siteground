@@ -180,7 +180,7 @@
                 bSort: false,
 
                 ajax: {
-                    url:"{{ route('incomes.datas') }}",
+                    url:"{{ route('incomes.data') }}",
                     data: function (d) {
                         d.year = $('select[name=year] option').filter(':selected').val();
                         d.house = $('#house').val();

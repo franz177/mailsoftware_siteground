@@ -92,9 +92,9 @@
                                     <th class="all alert-warning" title="Cash Op. C-OUT +  Cash Simo C-OUT - city tax">Solo <br>extra</th>
                                     <th class="all alert-warning" title="Importo STAY con EXTRA (no siti) = INCASSO al netto della promozione web">STAY <br>+ extra</th>
                                     <th class="all alert-warning" title="Caparra o pagamento in un'unica soluzione da sito web">Incassi <br>banca I</th>
-                                    <th class="all alert-warning" title="Saldo cash ospite al check-in">Cash CI</th>
+                                    <th class="all alert-warning" title="Saldo cash ospite al check-in">Saldo Cash</th>
                                     <th class="all alert-warning" title="Saldo BANCA II dell'ospite">Saldo <br>banca II</th>
-                                    <th class="all alert-warning" title="API Kross">Pagamento</th>
+                                    <th class="all alert-warning" title="API Kross">Pagato</th>
                                     <th class="all alert-warning" title="Consuntivo - preventivo
 (STAY + Extra cash CO) - (Pagamento + Solo extra)">Cons. - Prev.</th>
                                     <!-- <th class="all alert-warning" title="Media aritmetica dei costi medi a notte">Costo <br>medio</th> -->                                   

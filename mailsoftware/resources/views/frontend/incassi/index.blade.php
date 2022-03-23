@@ -130,7 +130,7 @@
                                     <th class="all alert-warning" title="API Kross">Pagamento</th>
                                     <th class="all alert-warning" title="Consuntivo - preventivo
 (STAY + Extra cash CO) - (Pagamento + Solo extra)">Cons. - Prev.</th>
-                                    <th class="all alert-warning" title="Media aritmetica dei costi medi a notte">Costo <br>medio</th>                                    
+                                    <!-- <th class="all alert-warning" title="Media aritmetica dei costi medi a notte">Costo <br>medio</th> -->
                                 </tr>
                                 </thead>
 
@@ -156,7 +156,7 @@
                                     <th class="all"></th>
                                     <th class="all"></th>
                                     <th class="all"></th>
-                                    <th class="all"></th>
+                                    <!-- <th class="all"></th> -->
                                 </tr>
                                 </tfoot>
 
@@ -270,7 +270,7 @@
                     {data: 's_b'},
                     {data: 'kross_payment_total_amount'},
                     {data: 'c_p'},
-                    {data: 'c_m'}
+                    //{data: 'c_m'}
                 ],
 
                 rowCallback: function(row, data, index) {

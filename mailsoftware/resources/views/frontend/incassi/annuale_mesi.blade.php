@@ -97,7 +97,7 @@
                                     <th class="all alert-warning" title="API Kross">Pagato</th>
                                     <th class="all alert-warning" title="Consuntivo - preventivo
 (STAY + Extra cash CO) - (Pagamento + Solo extra)">Cons. - Prev.</th>
-                                    <!-- <th class="all alert-warning" title="Media aritmetica dei costi medi a notte">Costo <br>medio</th> -->                                   
+                                    <!-- <th class="all alert-warning" title="Media aritmetica dei costi medi a notte">Costo <br>medio</th> -->
                                 </tr>
                                 </thead>
 

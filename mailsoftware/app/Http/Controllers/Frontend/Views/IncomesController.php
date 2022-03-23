@@ -34,7 +34,7 @@ class IncomesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function indexAnnualeMesi()
     {
         $typo = new Typo();
         $houses_typo = $this->getHousesAbbrArray();
@@ -42,12 +42,12 @@ class IncomesController extends Controller
 
         $op_check_out = $this->getUsersArray();
 
-        return view('frontend.incomes.index')
+        return view('frontend.incassi.annuale_mesi')
             ->with(compact('years'))
             ->with(compact('houses_typo'));
     }
 
-    public function getDataTables(Request $request)
+    public function getDataTablesMonths(Request $request)
     {
         $year = $request->year ? $request->year : now()->year;
         $house = $request->house ? $request->house : NULL;

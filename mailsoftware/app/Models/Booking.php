@@ -1,5 +1,16 @@
 <?php
 
+/*
+    QUESTO È UN WORK IN PROGRESS, ALCUNI DATI POTREBBERO NON COMBACIARE
+    REALMENTE, AGGIORNARE QUESTA LISTA SE SI INCAPPA IN INCONSISTENZE
+
+    tx_mask_p_data_arrivo           datetime, data di arrivo degli ospiti
+    tx_mask_p_data_partenza         datetime, data di checkout e partenza degli ospiti
+                                    Da considerare il fatto che non va considerato come un giorno pagato
+    tx_mask_cod_reservation_status  stato della prenotazione
+                                    Può assumere diversi valori, solitamente solo quelle con stato "CANC" non vanno considerate
+*/
+
 namespace App\Models;
 
 use Carbon\Carbon;
@@ -94,7 +105,13 @@ class Booking extends Model
     {
         $start = Carbon::parse($this->attributes['tx_mask_p_data_arrivo']);
         $end = Carbon::parse($this->attributes['tx_mask_p_data_partenza']);
-        return new Collection(new \DatePeriod($start, new \DateInterval('P1D'), $end->addDays(1)));
+
+        /*
+            Nota: DatePeriod non include l'ultimo giorno, ma è giusto così.
+            L'ultimo giorno delle prenotazioni è quello del checkout, e
+            ovviamente non viene pagato
+        */
+        return new Collection(new \DatePeriod($start, new \DateInterval('P1D'), $end));
     }
 
     /*

@@ -4,7 +4,7 @@
 @section('styles')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/datatables/datatables.css') }}">
-    <script src="https://cdn.tiny.cloud/1/ucpyfql9omtsyar93aialdqe7os76orkw8t2e5eutcwu83ue/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdn.tiny.cloud/1/{{ config('services.tinymce.key') }}/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 @endsection
 
 {{-- Content --}}

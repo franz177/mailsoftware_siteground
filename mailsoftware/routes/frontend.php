@@ -59,6 +59,7 @@ Route::get('/spese/costi_aziendali', [\App\Http\Controllers\Frontend\Views\Spese
 Route::get('/spese/costi_aziendali/data', [\App\Http\Controllers\Frontend\Views\Spese\SpeseController::class, 'getDataCostiAziendali'])->name('costi_aziendali.data');
 Route::get('/spese/costi_aziendali/data_anno', [\App\Http\Controllers\Frontend\Views\Spese\SpeseController::class, 'getDataCostiAziendaliAnno'])->name('costi_aziendali_anno.data');
 
+//INCASSI
 
 // MARKETING
 Route::get('/marketing/countries', [\App\Http\Controllers\Frontend\Views\Marketing\CountriesController::class, 'index'])->name('countries.index');
@@ -66,6 +67,9 @@ Route::get('/marketing/countries/data', [\App\Http\Controllers\Frontend\Views\Ma
 
 Route::get('/sinottico', [\App\Http\Controllers\Frontend\Views\SinotticoController::class, 'index'])->name('viste.sinottico');
 Route::post('/sinottico/note', [\App\Http\Controllers\Frontend\Views\SinotticoController::class, 'saveNotes'])->name('viste.sinottico.note');
+
+// LINKS
+Route::get('/links', [\App\Http\Controllers\Frontend\Views\DashboardController::class, 'links'])->name('links');
 
 // EXPORT GLOBALE DELLE PRENOTAZIONI IN EXCEL
 Route::get('/excel', [\App\Http\Controllers\Frontend\Excel\ExcelController::class, 'index'])->name('excel.index');

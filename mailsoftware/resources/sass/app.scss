@@ -6,3 +6,184 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+body {
+    background: #eef0f8;
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: 100% 350px;
+}
+
+.container-fluid {
+    padding: 0 0.3%;
+}
+
+td.ciccio a {
+    pointer-events: none;
+    cursor: default;
+    text-decoration: none;
+    color: black !important;
+}
+
+.text-uppercase { text-transform: uppercase !important; }
+
+.text-capitalize { text-transform: capitalize !important;}
+
+.hidden { display: none !important; }
+
+.dataTables_wrapper .child .dtr-details > li.hidden { display: none !important; }
+
+.dropdown > .dropdown-menu a,
+.dropdown.dropleft > .dropdown-menu a { line-height: 17px; }
+
+.dropdown > .dropdown-menu a img,
+.dropdown.dropleft > .dropdown-menu a img { width: 17px; height: 17px; }
+
+$colors:
+	'blue-steel' '#4B77BE',
+	'blue-sharp' '#5c9bd1',
+	'green' '#32c5d2',
+	'green-seagreen' '#1BA39C',
+	'green-turquoise' '#36d7b7',
+	'purple-medium' '#BF55EC',
+	'purple-soft' '#8877a9',
+	'yellow-casablanca' '#f2784b',
+	'yellow-lemon' '#f7ca18',
+	'black' '#333',
+	'red' '#e7505a';
+
+@each $name, $color in $colors {
+	.bg-#{$name} {
+		background: #{$color} !important;
+		color: #FFF!important;
+		text-align: center !important;
+		font-weight: bolder !important;
+	}
+
+	.symbol.symbol-#{$name} .symbol-label {
+		background-color: #{$color};
+		color: #ffffff;
+	}
+
+	.label.label-#{$name} {
+		background-color: #{$color};
+		color: #ffffff;
+	}
+}
+
+td[class*="bg-"].text-left { text-align: left !important; }
+
+.bg-whatsapp-0 { background: #DCF8C6 !important; color: #128C7E !important; font-weight: bold !important;}
+.bg-whatsapp { background: #25D366 !important; color: #FFF !important; font-weight: bold !important;}
+.bg-whatsapp-2 { background: #128C7E !important; color: #FFF !important; font-weight: bold !important;}
+.bg-whatsapp-3 { background: #075E54 !important; color: #FFF !important; font-weight: bold !important;}
+.bg-whatsapp i,
+.bg-whatsapp-2 i,
+.bg-whatsapp-3 i{ color: #FFF !important; }
+
+.bg-whatsapp-0 i{ color: #128C7E !important; }
+
+.tox-tinymce {
+    /*height: 300px !important;*/
+    background: #F3F6F9 !important;
+}
+
+.tox .tox-toolbar, .tox .tox-toolbar__overflow, .tox .tox-toolbar__primary {
+    background: #F3F6F9 !important;
+    border-bottom: 1px #ccc dashed !important;
+    padding: 11px 0px !important;
+}
+
+.tox .tox-menubar,
+.tox .tox-toolbar-overlord,
+.tox .tox-edit-area__iframe {
+    background: #F3F6F9 !important;
+}
+
+
+input[type="range"]::-webkit-slider-thumb {
+    cursor: pointer;
+    -webkit-appearance: none;
+    background-color: #28a745 !important;
+}
+
+.table.fixedHeader-floating {
+    top: 65px !important;
+}
+
+.table.dataTable td span.badge,
+.table.dataTable td span.badge > i,
+.table.dataTable td i {
+    font-size: 75%;
+    color: #333;
+}
+
+.table.dataTable td span.badge.costi,
+.table.dataTable td span.badge.costi > i,
+.table.dataTable td i {
+    font-size: 100%;
+    color: #333;
+}
+
+.table-bordered th, .table-bordered td {
+    border: 1px solid #DDDDDD;
+}
+
+.table.dataTable > thead > tr > th.total-column,
+.table.dataTable > tbody > tr > td.total-column,
+.table.dataTable > tfoot > tr > th.total-column {
+    background-color: #4f4f4f;
+    color: #FFF;
+}
+
+.total-row {
+    background-color: #4f4f4f;
+    color: #FFF;
+}
+
+.dataTables_wrapper .dataTable tfoot.total-row th {
+    color: #FFF;
+}
+
+
+.booking_alert_arrivo {
+    -webkit-animation: booking_flash_arrivo 1s infinite;  /* Safari 4+ */
+    -moz-animation: booking_flash_arrivo 1s infinite;  /* Fx 5+ */
+    -o-animation: booking_flash_arrivo 1s infinite;  /* Opera 12+ */
+    animation: booking_flash_arrivo 1s infinite;  /* IE 10+, Fx 29+ */
+}
+
+@-webkit-keyframes booking_flash_arrivo {
+    0%, 49% {
+        background-color: #ffeecc;
+    }
+    50%, 100% {
+        background-color: #ffe0a3;
+    }
+}
+
+.booking_alert_partenza {
+    -webkit-animation: booking_flash_partenza 1s infinite;  /* Safari 4+ */
+    -moz-animation: booking_flash_partenza 1s infinite;  /* Fx 5+ */
+    -o-animation: booking_flash_partenza 1s infinite;  /* Opera 12+ */
+    animation: booking_flash_partenza 1s infinite;  /* IE 10+, Fx 29+ */
+}
+
+@-webkit-keyframes booking_flash_partenza {
+    0%, 49% {
+        background-color: #fddcdf;
+    }
+    50%, 100% {
+        background-color: #fc6270;
+    }
+}
+
+.table {
+	&.table-xs {
+		font-size: 12px;
+
+		th, td {
+			padding: 0.1rem;
+		}
+	}
+}

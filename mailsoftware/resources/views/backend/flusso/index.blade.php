@@ -44,7 +44,7 @@
                         <span class="text-muted mt-3 font-weight-bold font-size-sm"></span>
                     </h3>
                     <div class="card-toolbar">
-                        <a href="/backend/flusso/create" class="btn btn-danger btn-sm font-weight-bolder font-size-sm py-3 px-6">Aggiungi <img src="{{ asset('/media/svg/icons/Navigation/Plus_white.svg') }}"/></a>
+                        <a href="/backend/flusso/create" class="btn btn-danger btn-sm font-weight-bolder font-size-sm py-3 px-6">Aggiungi <img src="{{ asset('/media/svg/icons/Navigation/Plus.svg') }}"/></a>
                     </div>
                 </div>
             </div>
@@ -136,7 +136,7 @@
                 <!--begin::Header-->
                 <div class="card-header border-0 py-5"  style="display: inline-block">
                     <div class="card-toolbar">
-                        <a href="/backend/flusso/create" class="btn btn-danger btn-sm btn-block font-weight-bolder font-size-sm py-3 px-6">Aggiungi <img src="{{ asset('/media/svg/icons/Navigation/Plus_white.svg') }}"/></a>
+                        <a href="/backend/flusso/create" class="btn btn-danger btn-sm btn-block font-weight-bolder font-size-sm py-3 px-6">Aggiungi <img src="{{ asset('/media/svg/icons/Navigation/Plus.svg') }}"/></a>
                     </div>
                 </div>
             </div>

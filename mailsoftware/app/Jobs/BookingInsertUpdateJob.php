@@ -38,6 +38,7 @@ class BookingInsertUpdateJob implements ShouldQueue
         if($this->chunk){
             $this->chunk->each(function ($booking) {
                 try {
+                    echo $booking['uid'] . ' / ' . $booking['tx_mask_cod_reservation_status'] . "\n";
                     Booking::updateOrCreate(
                         ['uid' => $booking['uid']],
                         [

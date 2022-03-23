@@ -13,7 +13,6 @@
     {{-- Favicon --}}
     <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" />
 
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     {{-- Fonts --}}
@@ -33,7 +32,6 @@
     @yield('styles')
 
 
-    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     @yield(('css'))
 </head>
 

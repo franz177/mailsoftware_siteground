@@ -30,4 +30,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'tinymce' => [
+        'key' => 'bqjas4xgw30nkl3hsd0bed290q4xlff04mvp7kmb4zm1gaf4',
+    ]
+
 ];

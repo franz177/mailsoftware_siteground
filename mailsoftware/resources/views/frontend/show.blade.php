@@ -1,7 +1,7 @@
 @extends('layouts.template')
 
 @section('styles')
-    <script src="https://cdn.tiny.cloud/1/ucpyfql9omtsyar93aialdqe7os76orkw8t2e5eutcwu83ue/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdn.tiny.cloud/1/{{ config('services.tinymce.key') }}/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
 @endsection
 

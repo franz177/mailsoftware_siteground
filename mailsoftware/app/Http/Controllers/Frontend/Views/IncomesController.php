@@ -156,7 +156,7 @@ class IncomesController extends Controller
                 return htmlBalance($row->city_tax_amount);
             })
             ->addColumn('s_checkout', function ($row) {
-                return '<span class=' . ($row->s_checkout > 0 ? "font-weight-bolder" : "text-danger") . '>€ ' . number_format($row->s_checkout, 2, ',', '.') . '</span>';
+                return '<span class=' . ($row->s_checkout > 0 ? "font-weight-bolder" : "text-danger") . '>' . number_format($row->s_checkout, 2, ',', '.') . '</span>';
             })
             ->addColumn('cash_op_cout', function ($row) {
                 return htmlBalance($row->cash_op_cout);
@@ -226,7 +226,7 @@ class IncomesController extends Controller
                 return htmlBalance($this->sum_city_tax_amount);
             })
             ->addColumn('sum_s_checkout', function ($row) {
-                return '<span class=' . ($this->sum_s_checkout > 0 ? "font-weight-bolder" : "text-danger") . '>€ ' . number_format($this->sum_s_checkout, 2, ',', '.') . '</span>';
+                return '<span class=' . ($this->sum_s_checkout > 0 ? "font-weight-bolder" : "text-danger") . '>' . number_format($this->sum_s_checkout, 2, ',', '.') . '</span>';
             })
             ->addColumn('sum_cash_op_cout', function ($row) {
                 return htmlBalance($this->sum_cash_op_cout);

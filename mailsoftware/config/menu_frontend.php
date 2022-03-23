@@ -39,7 +39,7 @@ return [
                     'new-tab' => false,
                     'submenu' => [
                         [
-                            'title' => 'Mensile Generale Prenotazioni [02]',
+                            'title' => 'Costi Mensili Prenotazioni [02]',
                             'bullet' => 'dot',
                             'page' => '/viste/mensile',
                             'auth' => [1],
@@ -97,21 +97,21 @@ return [
                     'new-tab' => false,
                     'submenu' => [
                         [
-                            'title' => 'Mensile Generale Prenotazioni [06]',
+                            'title' => 'Incassi Mensili Prenotazioni [06]',
                             'bullet' => 'dot',
                             'page' => '/viste/incassi',
                             'auth' => [1],
                             'new-tab' => false,
                         ],
                         [
-                            'title' => 'Annuale per Mesi [07]',
+                            'title' => 'Incassi Annuale per Mesi [07]',
                             'bullet' => 'dot',
                             'page' => '/viste/incassi/annuale_mesi',
                             'auth' => [1],
                             'new-tab' => false,
                         ],
                         [
-                            'title' => 'Annuale per Anni [08]',
+                            'title' => 'Incassi Annuale per Anni [08]',
                             'bullet' => 'dot',
                             'page' => '/viste/incassi',
                             'auth' => [1],

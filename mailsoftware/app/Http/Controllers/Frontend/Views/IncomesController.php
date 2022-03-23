@@ -131,9 +131,9 @@ class IncomesController extends Controller
         $this->sum_c_p = $data->sum('c_p');
         $this->avg_c_m = $data->avg('c_m');
 
-        function htmlEuro($arg)
+        function htmlBalance($arg)
         {
-            return '<span class=' . ($arg > 0 ? "font-weight-bolder" : ($arg < 0 ? '"text-danger font-weight-bold"' : "font-weight-normal")) . '>€ ' . number_format($arg, 2, ',', '.') . '</span>';
+            return '<span class=' . ($arg > 0 ? "font-weight-bolder" : ($arg < 0 ? '"text-danger font-weight-bold"' : "font-weight-normal")) . '>' . number_format($arg, 2, ',', '.') . '</span>';
         }
 
         return Datatables::of($data)
@@ -141,43 +141,43 @@ class IncomesController extends Controller
                 return ucwords($row->month);
             })
             ->addColumn('tot_lordo_incassi', function ($row) {
-                return htmlEuro($row->tot_lordo_incassi);
+                return htmlBalance($row->tot_lordo_incassi);
             })
             ->addColumn('importo_stay', function ($row) {
-                return htmlEuro($row->importo_stay);
+                return htmlBalance($row->importo_stay);
             })
             ->addColumn('perc_sito', function ($row) {
-                return htmlEuro($row->perc_sito);
+                return htmlBalance($row->perc_sito);
             })
             ->addColumn('cleaning_fee_amount', function ($row) {
-                return htmlEuro($row->cleaning_fee_amount);
+                return htmlBalance($row->cleaning_fee_amount);
             })
             ->addColumn('city_tax_amount', function ($row) {
-                return htmlEuro($row->city_tax_amount);
+                return htmlBalance($row->city_tax_amount);
             })
             ->addColumn('s_checkout', function ($row) {
                 return '<span class=' . ($row->s_checkout > 0 ? "font-weight-bolder" : "text-danger") . '>€ ' . number_format($row->s_checkout, 2, ',', '.') . '</span>';
             })
             ->addColumn('cash_op_cout', function ($row) {
-                return htmlEuro($row->cash_op_cout);
+                return htmlBalance($row->cash_op_cout);
             })
             ->addColumn('cash_simo', function ($row) {
-                return htmlEuro($row->cash_simo);
+                return htmlBalance($row->cash_simo);
             })
             ->addColumn('solo_extra', function ($row) {
-                return htmlEuro($row->solo_extra);
+                return htmlBalance($row->solo_extra);
             })
             ->addColumn('stay_extra', function ($row) {
-                return htmlEuro($row->stay_extra);
+                return htmlBalance($row->stay_extra);
             })
             ->addColumn('banca1', function ($row) {
-                return htmlEuro($row->banca1);
+                return htmlBalance($row->banca1);
             })
             ->addColumn('s_chin', function ($row) {
-                return htmlEuro($row->s_chin);
+                return htmlBalance($row->s_chin);
             })
             ->addColumn('s_b', function ($row) {
-                return htmlEuro($row->s_b);
+                return htmlBalance($row->s_b);
             })
             ->addColumn('kross_payment_total_amount', function ($row) {
                 // $clean_json = str_replace(',,', ',', $row->kross_payments_json);
@@ -202,61 +202,61 @@ class IncomesController extends Controller
                 //     0
                 // );
                 // $this->sum_kross_payments += $kross_payments;
-                return htmlEuro($row->kross_payment_total_amount);
+                return htmlBalance($row->kross_payment_total_amount);
             })
             ->addColumn('c_p', function ($row) {
-                return htmlEuro($row->c_p);
+                return htmlBalance($row->c_p);
             })
             ->addColumn('c_m', function ($row) {
-                return htmlEuro($row->c_m);
+                return htmlBalance($row->c_m);
             })
             ->addColumn('sum_tot_lordo_incassi', function ($row) {
-                return htmlEuro($this->sum_tot_lordo_incassi);
+                return htmlBalance($this->sum_tot_lordo_incassi);
             })
             ->addColumn('sum_importo_stay', function ($row) {
-                return htmlEuro($this->sum_importo_stay);
+                return htmlBalance($this->sum_importo_stay);
             })
             ->addColumn('sum_perc_sito', function ($row) {
-                return htmlEuro($this->sum_perc_sito);
+                return htmlBalance($this->sum_perc_sito);
             })
             ->addColumn('sum_cleaning_fee_amount', function ($row) {
-                return htmlEuro($this->sum_cleaning_fee_amount);
+                return htmlBalance($this->sum_cleaning_fee_amount);
             })
             ->addColumn('sum_city_tax_amount', function ($row) {
-                return htmlEuro($this->sum_city_tax_amount);
+                return htmlBalance($this->sum_city_tax_amount);
             })
             ->addColumn('sum_s_checkout', function ($row) {
                 return '<span class=' . ($this->sum_s_checkout > 0 ? "font-weight-bolder" : "text-danger") . '>€ ' . number_format($this->sum_s_checkout, 2, ',', '.') . '</span>';
             })
             ->addColumn('sum_cash_op_cout', function ($row) {
-                return htmlEuro($this->sum_cash_op_cout);
+                return htmlBalance($this->sum_cash_op_cout);
             })
             ->addColumn('sum_cash_simo', function ($row) {
-                return htmlEuro($this->sum_cash_simo);
+                return htmlBalance($this->sum_cash_simo);
             })
             ->addColumn('sum_solo_extra', function ($row) {
-                return htmlEuro($this->sum_solo_extra);
+                return htmlBalance($this->sum_solo_extra);
             })
             ->addColumn('sum_stay_extra', function ($row) {
-                return htmlEuro($this->sum_stay_extra);
+                return htmlBalance($this->sum_stay_extra);
             })
             ->addColumn('sum_banca1', function ($row) {
-                return htmlEuro($this->sum_banca1);
+                return htmlBalance($this->sum_banca1);
             })
             ->addColumn('sum_s_chin', function ($row) {
-                return htmlEuro($this->sum_s_chin);
+                return htmlBalance($this->sum_s_chin);
             })
             ->addColumn('sum_s_b', function ($row) {
-                return htmlEuro($this->sum_s_b);
+                return htmlBalance($this->sum_s_b);
             })
             ->addColumn('sum_kross_payment_total_amount', function ($row) {
-                return htmlEuro($this->sum_kross_payment_total_amount);
+                return htmlBalance($this->sum_kross_payment_total_amount);
             })
             ->addColumn('sum_c_p', function ($row) {
-                return htmlEuro($this->sum_c_p);
+                return htmlBalance($this->sum_c_p);
             })
             ->addColumn('avg_c_m', function ($row) {
-                return htmlEuro($this->avg_c_m);
+                return htmlBalance($this->avg_c_m);
             })
             ->rawColumns([
                 'month', 'importo_stay', 'perc_sito', 'cleaning_fee_amount', 'city_tax_amount',

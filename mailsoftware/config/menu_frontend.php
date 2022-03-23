@@ -9,7 +9,7 @@ return [
             'root' => true,
             'page' => '/',
             'new-tab' => false,
-            'auth' => [1,2],
+            'auth' => [1, 2],
         ],
         [
             'title' => 'Storico',
@@ -23,7 +23,7 @@ return [
             'root' => true,
             'page' => '',
             'new-tab' => false,
-            'auth' => [1,3],
+            'auth' => [1, 3],
             'submenu' => [
                 [
                     'title' => 'Dashboard Prenotazioni [01]',
@@ -33,9 +33,9 @@ return [
                     'new-tab' => false,
                 ],
                 [
-                    'title' => 'Costi Gestione',
+                    'title' => 'Costi',
                     'bullet' => 'dot',
-                    'auth' => [1,3],
+                    'auth' => [1, 3],
                     'new-tab' => false,
                     'submenu' => [
                         [
@@ -53,48 +53,47 @@ return [
                             'new-tab' => false,
                         ],
                         [
-                            'title' => 'Operatori',
+                            'title' => 'Costi Annuale per Anni [04]',
                             'bullet' => 'dot',
-                            'auth' => [1,3],
+                            'page' => '/viste/mensile/costi_annuale_anno',
+                            'auth' => [1],
                             'new-tab' => false,
-                            'submenu' => [
-                                [
-                                    'title' => 'Mensile Operatori [05]',
-                                    'bullet' => 'dot',
-                                    'page' => '/viste/mensile/operatori',
-                                    'auth' => [1,3],
-                                    'new-tab' => false,
-                                ],
-                                [
-                                    'title' => 'Totali Mensili Operatori [05.1]',
-                                    'bullet' => 'dot',
-                                    'page' => '/viste/mensile/totali_operatori',
-                                    'auth' => [1,3],
-                                    'new-tab' => false,
-                                ],
-                            ]
                         ],
-
+                        [
+                            'title' => 'Costi Aziendali',
+                            'root' => true,
+                            'page' => '/spese/costi_aziendali',
+                            'new-tab' => false,
+                            'auth' => [1, 3],
+                        ],
                     ],
                 ],
                 [
-                    'title' => 'Costi Aziendali',
-                    'root' => true,
-                    'page' => '/spese/costi_aziendali',
-                    'new-tab' => false,
-                    'auth' => [1,3],
-                ],
-                [
-                    'title' => 'Costi Annuale per Anni [04]',
+                    'title' => 'Operatori',
                     'bullet' => 'dot',
-                    'page' => '/viste/mensile/costi_annuale_anno',
-                    'auth' => [1],
+                    'auth' => [1, 3],
                     'new-tab' => false,
+                    'submenu' => [
+                        [
+                            'title' => 'Mensile Operatori [05]',
+                            'bullet' => 'dot',
+                            'page' => '/viste/mensile/operatori',
+                            'auth' => [1, 3],
+                            'new-tab' => false,
+                        ],
+                        [
+                            'title' => 'Totali Mensili Operatori [05.1]',
+                            'bullet' => 'dot',
+                            'page' => '/viste/mensile/totali_operatori',
+                            'auth' => [1, 3],
+                            'new-tab' => false,
+                        ],
+                    ]
                 ],
                 [
                     'title' => 'Incassi',
                     'bullet' => 'dot',
-                    'auth' => [1,3],
+                    'auth' => [1, 3],
                     'new-tab' => false,
                     'submenu' => [
                         [
@@ -123,7 +122,7 @@ return [
                 [
                     'title' => 'Marketing',
                     'bullet' => 'dot',
-                    'auth' => [1,3],
+                    'auth' => [1, 3],
                     'new-tab' => false,
                     'submenu' => [
                         [
@@ -173,7 +172,7 @@ return [
                 [
                     'title' => 'Tabelle Operative',
                     'bullet' => 'dot',
-                    'auth' => [1,3],
+                    'auth' => [1, 3],
                     'new-tab' => false,
                     'submenu' => [
                         [
@@ -199,7 +198,7 @@ return [
             'root' => true,
             'page' => '',
             'new-tab' => false,
-            'auth' => [1,3],
+            'auth' => [1, 3],
             'submenu' => [
                 [
                     'title' => 'Categorie',

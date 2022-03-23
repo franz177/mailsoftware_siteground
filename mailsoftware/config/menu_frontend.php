@@ -46,14 +46,14 @@ return [
                             'new-tab' => false,
                         ],
                         [
-                            'title' => 'Costi Annuale per Mesi [03]',
+                            'title' => 'Costi Annuali per Mesi [03]',
                             'bullet' => 'dot',
                             'page' => '/viste/mensile/costi_annuale_mesi',
                             'auth' => [1],
                             'new-tab' => false,
                         ],
                         [
-                            'title' => 'Costi Annuale per Anni [04]',
+                            'title' => 'Costi Annuali per Anni [04]',
                             'bullet' => 'dot',
                             'page' => '/viste/mensile/costi_annuale_anno',
                             'auth' => [1],
@@ -104,14 +104,14 @@ return [
                             'new-tab' => false,
                         ],
                         [
-                            'title' => 'Incassi Annuale per Mesi [07]',
+                            'title' => 'Incassi Annuali per Mesi [07]',
                             'bullet' => 'dot',
                             'page' => '/viste/incassi/annuale_mesi',
                             'auth' => [1],
                             'new-tab' => false,
                         ],
                         [
-                            'title' => 'Incassi Annuale per Anni [08]',
+                            'title' => 'Incassi Annuali per Anni [08]',
                             'bullet' => 'dot',
                             'page' => '/viste/incassi',
                             'auth' => [1],

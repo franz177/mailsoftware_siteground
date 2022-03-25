@@ -88,15 +88,10 @@
                                     <span class="symbol-label"></span>
                                 </span>
                             Giallo
-                            sulla data di partenza colore
-                            <span class="symbol symbol-20 symbol-danger mx-1">
-                                    <span class="symbol-label"></span>
-                                </span>
-                            Rosa
                         </p>
                         <!--begin::Table-->
                         <div class="table-responsive" >
-                            <table class="table table-striped table-bordered  dt-responsive" id="sample_21">
+                            <table class="table table-striped table-bordered  dt-responsive" id="table-incassi-mensili">
                                 <thead>
                                 <tr>
                                     <th class="none"></th>
@@ -134,7 +129,7 @@
                                 </tr>
                                 </thead>
 
-                                <tfoot>
+                                <tfoot class="total-row">
                                 <tr>
                                     <th></th>
                                     <th class="all text-center"></th>
@@ -191,7 +186,10 @@
             var sites_array = {!! $sites_array !!};
             var op_check_out = {!! $op_check_out !!};
 
-            var tables = $('#sample_21');
+            var tables = $('#table-incassi-mensili');
+
+            const countColumns = api => api.columns()[0].length - 1
+            const seq = integer => Array(integer).fill().map( (_,i) => i + 1 )
 
             var oTable = tables.DataTable({
                 // Internationalisation. For more info refer to http://datatables.net/manual/i18n
@@ -274,30 +272,41 @@
                 ],
 
                 rowCallback: function(row, data, index) {
-                    // $('td:eq(0)', row).addClass('bg-'+houses_color[data.tx_mask_p_casa]); //CASA
-                    // $('td:eq(0)', row).addClass('text-center'); //CASA
-                    // $('td:eq(3)', row).addClass('alert-warning');               //DATA-ARRIVO
-                    // $('td:eq(6)', row).addClass('alert-warning');               //OP. PULIZIE
-                    // $('td:eq(12)', row).addClass('alert-danger');                //DATA-PARTENZA
-                    // $('td:eq(13)', row).addClass('alert-danger');                //OP. C-OUT
-                    // $('td:eq(18)', row).addClass('alert-success');                //MANCIA
-
-                    console.log(data);
+                    $(`td:eq(0)`, row).addClass('text-center');
+                    const columns = seq(countColumns(this.api())).slice(3);
+                    for (const index of columns){
+                        $(`td:eq(${index})`, row).addClass('text-right');
+                    }
                 },
 
                 footerCallback: function(row, data, index){
                     var api = this.api(), data;
                     var tot = data.length - 1;
-                    return;
-                    {{-- if(tot > 0){
-                        $( api.column( 10 ).footer() ).html(data[tot].sum_tot_stay);
-                        $( api.column( 11 ).footer() ).html(data[tot].sum_saldo_cash);
-                        $( api.column( 20 ).footer() ).addClass('alert-success');
+                    console.log(data);
+                    const footer = integer => $( api.column( integer ).footer() )
+                    if(tot > 0){
+                        footer(4).html(data[tot].month);
+                        footer(5).html(data[tot].sum_tot_lordo_incassi).addClass('text-right');
+                        footer(6).html(data[tot].sum_importo_stay).addClass('text-right');
+                        footer(7).html(data[tot].sum_perc_sito).addClass('text-right');
+                        footer(8).html(data[tot].sum_cleaning_fee_amount).addClass('text-right');
+                        footer(9).html(data[tot].sum_city_tax_amount).addClass('text-right');
+                        footer(10).html(data[tot].sum_s_checkout).addClass('text-right');
+                        footer(11).html(data[tot].sum_cash_op_cout).addClass('text-right');
+                        footer(12).html(data[tot].sum_cash_simo).addClass('text-right');
+                        footer(13).html(data[tot].sum_solo_extra).addClass('text-right');
+                        footer(14).html(data[tot].sum_stay_extra).addClass('text-right');
+                        footer(15).html(data[tot].sum_banca1).addClass('text-right');
+                        footer(16).html(data[tot].sum_s_chin).addClass('text-right');
+                        footer(17).html(data[tot].sum_s_b).addClass('text-right');
+                        footer(18).html(data[tot].sum_kross_payment_total_amount).addClass('text-right');
+                        footer(19).html(data[tot].sum_c_p).addClass('text-right');
+                        //footer(17).html(data[tot].avg_c_m).addClass('text-right');
                     } else {
-                        $( api.column( 10 ).footer() ).html('');
-                        $( api.column( 19 ).footer() ).html('');
-                        $( api.column( 20 ).footer() ).addClass('alert-success');
-                    } --}}
+                        for (const index of seq(countColumns(api))){
+                            $( api.column( index ).footer() ).html('');
+                        }
+                    }
 
                 },
 
@@ -319,9 +328,9 @@
                 columnDefs: [
                     { className: 'control', targets:   0, width: '3%' }, //plus
                     { width: '5%', targets: 1}, //house
-                    { width: '5%', targets: 3}, //cliente
-                    { width: '8%', targets: 4}, //data-arrivo
-                    { width: '8%', targets: 5}, //data-partenza
+                    { width: '5%', targets: 2}, //cliente
+                    { width: '8%', targets: 3}, //data-arrivo
+                    //{ width: '8%', targets: 5}, //data-partenza
                 ],
 
                 "lengthMenu": [
@@ -339,7 +348,8 @@
                 e.preventDefault();
             });
             $('#removeFilter').on('click', function(e) {
-                location.reload();
+                $('#house').val([]);
+                oTable.draw();
             });
         });
 

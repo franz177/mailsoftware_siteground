@@ -151,7 +151,7 @@
 
             var houses_typo = {!! $houses_typo !!};
 
-            var tables = $('#table-incassi');
+            var tables = $('#table-incassi-annuale-mesi');
 
             const countColumns = api => api.columns()[0].length - 1
             const seq = integer => Array(integer).fill().map( (_,i) => i + 1 )

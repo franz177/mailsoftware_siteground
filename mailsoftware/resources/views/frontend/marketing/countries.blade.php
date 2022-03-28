@@ -29,7 +29,7 @@
                                                 </span>
                                             </div>
                                             <select class="form-control" id="year" name="year">
-                                                <option value="0">Scegli anno</option>
+                                                <option value="0">Tutti gli anni</option>
                                                 @foreach($years as $year)
                                                     <option value="{{ $year->year }}">{{ $year->year }}</option>
                                                 @endforeach

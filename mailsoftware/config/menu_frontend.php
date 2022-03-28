@@ -99,7 +99,7 @@ return [
                         [
                             'title' => 'Incassi Mensili Prenotazioni [06]',
                             'bullet' => 'dot',
-                            'page' => '/viste/incassi',
+                            'page' => '/viste/incassi/mensile',
                             'auth' => [1],
                             'new-tab' => false,
                         ],

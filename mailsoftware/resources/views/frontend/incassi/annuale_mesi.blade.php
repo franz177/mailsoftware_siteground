@@ -75,7 +75,7 @@
                         </p>
                         <!--begin::Table-->
                         <div class="table-responsive" >
-                            <table class="table table-striped table-bordered  dt-responsive" id="table-incassi">
+                            <table class="table table-striped table-bordered  dt-responsive" id="table-incassi-annuale-mesi">
                                 <thead>
                                 <tr>
                                     <th></th>

@@ -1,5 +1,9 @@
 <?php
 // Header menu
+const DATE_FORMAT = 'd/m/Y';
+$today = date(DATE_FORMAT);
+$lastyear = date(DATE_FORMAT, strtotime('-1 year'));
+
 return [
 
     'items' => [
@@ -133,11 +137,18 @@ return [
                             'new-tab' => false,
                         ],
                         [
-                            'title' => 'Siti Web',
+                            'title' => 'Dati demografici ospiti (Kross)',
                             'bullet' => 'dot',
-                            'page' => '/viste/mensile',
+                            'page' => 'https://alguerhome2.krossbooking.com/admin/stats#/admin/stats?period=' . $lastyear . '%20-%20' . $today . '&stat=8',
                             'auth' => [1],
-                            'new-tab' => false,
+                            'new-tab' => true,
+                        ],
+                        [
+                            'title' => 'Provenienza Prenotazioni (Kross)',
+                            'bullet' => 'dot',
+                            'page' => 'https://alguerhome2.krossbooking.com/admin/stats#/admin/stats?period=' . $lastyear . '%20-%20' . $today . '&stat=1',
+                            'auth' => [1],
+                            'new-tab' => true,
                         ],
                         [
                             'title' => 'Numero Prenotazioni',

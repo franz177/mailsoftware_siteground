@@ -234,6 +234,13 @@ return [
             'new-tab' => false,
             'auth' => [1],
         ],
+        [
+            'title' => 'Ricarica Prenotazioni',
+            'root' => true,
+            'page' => '/booking/force',
+            'new-tab' => false,
+            'auth' => [1],
+        ],
     ]
 
 ];

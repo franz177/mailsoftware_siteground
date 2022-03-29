@@ -185,7 +185,8 @@ class SimonettaController extends Controller
             Booking::raw('SUM(costi_costo_operatore_cambio_biancheria) as costi_costo_operatore_cambio_biancheria'),
             Booking::raw('SUM(tx_mask_t1_op_costo_extra_cambio_biancheria) as tx_mask_t1_op_costo_extra_cambio_biancheria'),
             Booking::raw('SUM(tx_mask_t3_p_s_ex_checkout) as tx_mask_t3_p_s_ex_checkout'),
-            Booking::raw('(SUM(costi_costo_kit) + SUM(costi_costo_cambi)) as totale_biancheria')
+            Booking::raw('(SUM(costi_costo_kit) + SUM(costi_costo_cambi)) as totale_biancheria'),
+            Booking::raw('SUM(tx_mask_p_perc_importo_fisso) as tx_mask_p_perc_importo_fisso'),
         ])
             ->when($house, function ($q, $house){
                 return $q->whereIn('tx_mask_p_casa', $house);

@@ -43,11 +43,6 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
 
-            Route::prefix('metronic')
-                ->middleware(['web', 'auth'])
-                ->namespace($this->namespace)
-                ->group(base_path('routes/metronic.php'));
-
             Route::middleware(['web', 'auth'])
                 ->namespace($this->namespace)
                 ->group(base_path('routes/frontend.php'));

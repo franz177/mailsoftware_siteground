@@ -9,6 +9,7 @@
                                     Da considerare il fatto che non va considerato come un giorno pagato
     tx_mask_cod_reservation_status  stato della prenotazione
                                     Può assumere diversi valori, solitamente solo quelle con stato "CANC" non vanno considerate
+    tx_mask_p_perc_importo_fisso    float, commissioni del sito web da cui arriva la prenotazione (importo assoluto e non percentuale)
 */
 
 namespace App\Models;
@@ -88,7 +89,7 @@ class Booking extends Model
 
     public function house()
     {
-        return $this->belongsTo(House::class, 'uid', 'tx_mask_p_casa');
+        return $this->belongsTo(House::class, 'tx_mask_p_casa', 'uid');
     }
 
     public function scopeConfirmed($query)

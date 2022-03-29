@@ -516,7 +516,7 @@
             tinymce.init({
                 selector: '#risposta',
                 oninit : "setPlainText",
-                plugins:'lists advlist link autoresize code paste',
+                plugins:'lists advlist link code paste',
                 autoresize_on_init: true,
                 toolbar: 'bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | link code',
                 autoresize_bottom_margin: 50,

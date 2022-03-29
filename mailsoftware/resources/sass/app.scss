@@ -1,11 +1,8 @@
-// Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
-
-// Variables
-@import 'variables';
-
-// Bootstrap
-@import '~bootstrap/scss/bootstrap';
+/*
+    Bootstrap viene già incluso dagli assets di Metronics, che nei templates
+    devono essere inclusi prima di questo.
+    Qui si trovano classi addizionali, utility e override di vario genere.
+*/
 
 body {
     background: #eef0f8;
@@ -25,9 +22,12 @@ td.ciccio a {
     color: black !important;
 }
 
-.text-uppercase { text-transform: uppercase !important; }
-
-.text-capitalize { text-transform: capitalize !important;}
+/*
+    Override per rendere i testi delle labels più leggibili
+*/
+.text-muted {
+    color: #555 !important;
+}
 
 .hidden { display: none !important; }
 

@@ -38,8 +38,6 @@
 
         @yield('content')
 
-        <script>var HOST_URL = "{{ route('quick-search') }}";</script>
-
         {{-- Global Config (global config for global JS scripts) --}}
         <script>
             var KTAppSettings = {!! json_encode(config('layout.js'), JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES) !!};
@@ -55,4 +53,3 @@
 
     </body>
 </html>
-

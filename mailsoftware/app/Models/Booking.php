@@ -88,7 +88,7 @@ class Booking extends Model
 
     public function house()
     {
-        return $this->belongsTo(House::class, 'uid', 'tx_mask_p_casa');
+        return $this->belongsTo(House::class, 'tx_mask_p_casa', 'uid');
     }
 
     public function scopeConfirmed($query)

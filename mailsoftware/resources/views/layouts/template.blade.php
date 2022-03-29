@@ -13,8 +13,6 @@
     {{-- Favicon --}}
     <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" />
 
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
     {{-- Fonts --}}
     {{ Metronic::getGoogleFontsInclude() }}
 
@@ -28,9 +26,10 @@
         <link href="{{ config('layout_frontend.self.rtl') ? asset(Metronic::rtlCssPath($theme)) : asset($theme) }}" rel="stylesheet" type="text/css"/>
     @endforeach
 
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
     {{-- Includable CSS --}}
     @yield('styles')
-
 
     @yield(('css'))
 </head>
@@ -61,4 +60,3 @@
 
 </body>
 </html>
-

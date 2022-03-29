@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PagesController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,5 +14,3 @@ use App\Http\Controllers\PagesController;
 */
 
 Auth::routes();
-
-

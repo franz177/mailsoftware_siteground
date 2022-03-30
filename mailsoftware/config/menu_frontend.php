@@ -39,7 +39,7 @@ return [
                 [
                     'title' => 'Costi',
                     'bullet' => 'dot',
-                    'auth' => [1, 3],
+                    'auth' => [1],
                     'new-tab' => false,
                     'submenu' => [
                         [
@@ -68,7 +68,7 @@ return [
                             'root' => true,
                             'page' => '/spese/costi_aziendali',
                             'new-tab' => false,
-                            'auth' => [1, 3],
+                            'auth' => [1],
                         ],
                     ],
                 ],
@@ -97,7 +97,7 @@ return [
                 [
                     'title' => 'Incassi',
                     'bullet' => 'dot',
-                    'auth' => [1, 3],
+                    'auth' => [1],
                     'new-tab' => false,
                     'submenu' => [
                         [
@@ -126,7 +126,7 @@ return [
                 [
                     'title' => 'Marketing',
                     'bullet' => 'dot',
-                    'auth' => [1, 3],
+                    'auth' => [1],
                     'new-tab' => false,
                     'submenu' => [
                         [
@@ -183,7 +183,7 @@ return [
                 [
                     'title' => 'Tabelle Operative',
                     'bullet' => 'dot',
-                    'auth' => [1, 3],
+                    'auth' => [1],
                     'new-tab' => false,
                     'submenu' => [
                         [
@@ -209,7 +209,7 @@ return [
             'root' => true,
             'page' => '',
             'new-tab' => false,
-            'auth' => [1, 3],
+            'auth' => [1],
             'submenu' => [
                 [
                     'title' => 'Categorie',

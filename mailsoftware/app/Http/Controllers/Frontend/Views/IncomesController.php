@@ -15,6 +15,7 @@ class IncomesController extends Controller
     protected $CType = 'mask_db_alg_pren';
 
     private const SOLO_EXTRA = 'tx_mask_t3_p_cash_op_cout + tx_mask_t3_p_cash_simo - tx_mask_t3_p_city_tax_amount';
+    private const LORDO = 'tx_mask_t3_p_stay + tx_mask_t3_p_s_checkout';
 
     private $sum_tot_lordo_incassi;
     private $sum_importo_stay;
@@ -97,14 +98,14 @@ class IncomesController extends Controller
                 Booking::raw('SUM(tx_mask_t3_p_cash_op_cout) as cash_op_cout'),
                 Booking::raw('SUM(tx_mask_t3_p_cash_simo) as cash_simo'),
                 Booking::raw('SUM(' . self::SOLO_EXTRA . ') as solo_extra'),
-                Booking::raw('SUM(tx_mask_t3_p_stay + tx_mask_p_perc_sito + ' . self::SOLO_EXTRA . ') as tot_lordo_incassi'),
-                Booking::raw('SUM(tx_mask_t3_p_stay - tx_mask_p_perc_sito + tx_mask_t3_p_cash_op_cout + tx_mask_t3_p_cash_simo) as stay_extra'),
+                Booking::raw('SUM(' . self::LORDO . ') as tot_lordo_incassi'),
+                Booking::raw('SUM(tx_mask_t5_kross_payment_total_amount + ' . self::SOLO_EXTRA . ' - tx_mask_p_perc_sito ) as stay_extra'),
                 Booking::raw('SUM(tx_mask_t3_p_s_chin) as s_chin'),
                 Booking::raw('SUM(tx_mask_t3_p_s_b) as s_b'),
                 // Booking::raw('CONCAT("[",GROUP_CONCAT(tx_mask_t5_kross_payments SEPARATOR ","),"]") as kross_payments_json'),
                 Booking::raw('SUM(tx_mask_t5_kross_payment_total_amount) as kross_payment_total_amount'),
                 Booking::raw('SUM(tx_mask_t3_p_stay - tx_mask_t3_p_s_b) as banca1'),
-                Booking::raw('SUM(tx_mask_t3_p_stay + tx_mask_t3_p_s_checkout - tx_mask_t5_kross_payment_total_amount - (' . self::SOLO_EXTRA . ')) as c_p'),
+                Booking::raw('SUM(tx_mask_t5_kross_payment_total_amount + ' . self::SOLO_EXTRA . ' - (' . self::LORDO . ')) as c_p'),
                 Booking::raw('AVG(prop_costo_medio_a_notte) as c_m'),
             ])
             ->where(function ($q) use ($year) {
@@ -296,14 +297,14 @@ class IncomesController extends Controller
                 Booking::raw('(tx_mask_t3_p_cash_op_cout) as cash_op_cout'),
                 Booking::raw('(tx_mask_t3_p_cash_simo) as cash_simo'),
                 Booking::raw('(' . self::SOLO_EXTRA . ') as solo_extra'),
-                Booking::raw('(tx_mask_t3_p_stay + tx_mask_p_perc_sito + ' . self::SOLO_EXTRA . ') as tot_lordo_incassi'),
-                Booking::raw('(tx_mask_t3_p_stay - tx_mask_p_perc_sito + tx_mask_t3_p_cash_op_cout + tx_mask_t3_p_cash_simo) as stay_extra'),
+                Booking::raw('(' . self::LORDO . ') as tot_lordo_incassi'),
+                Booking::raw('(tx_mask_t5_kross_payment_total_amount + ' . self::SOLO_EXTRA . ' - tx_mask_p_perc_sito ) as stay_extra'),
                 Booking::raw('(tx_mask_t3_p_s_chin) as s_chin'),
                 Booking::raw('(tx_mask_t3_p_s_b) as s_b'),
                 // Booking::raw('CONCAT("[",GROUP_CONCAT(tx_mask_t5_kross_payments SEPARATOR ","),"]") as kross_payments_json'),
                 Booking::raw('(tx_mask_t5_kross_payment_total_amount) as kross_payment_total_amount'),
                 Booking::raw('(tx_mask_t3_p_stay - tx_mask_t3_p_s_b) as banca1'),
-                Booking::raw('(tx_mask_t3_p_stay + tx_mask_t3_p_s_checkout - tx_mask_t5_kross_payment_total_amount - (' . self::SOLO_EXTRA . ')) as c_p'),
+                Booking::raw('(tx_mask_t5_kross_payment_total_amount + ' . self::SOLO_EXTRA . ' - (' . self::LORDO . ')) as c_p'),
                 Booking::raw('(prop_costo_medio_a_notte) as c_m'),
             ])
             ->where(function ($q) use ($year) {

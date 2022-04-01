@@ -109,7 +109,7 @@
                                     <th class="all text-uppercase">Cliente</th>
                                     <th class="all alert-warning">Arrivo</th>
                                     <th class="all alert-warning" title="Totale lordo incassi
-(STAY + Sito + Solo extra)">Lordo</th>
+(STAY + Extra Cash CO)">Lordo</th>
                                     <th class="all alert-warning" title="Incasso lordo base">STAY</th>
                                     <th class="all alert-warning" title="% sito web">Sito</th>
                                     <th class="all alert-warning" title="Pulizie cliente">Pulizie</th>
@@ -117,8 +117,8 @@
                                     <th class="all alert-warning" title="Extra cash che il cliente deve al check-out">Extra <br>Cash CO</th>
                                     <th class="all alert-warning" title="Extra cash ritirato al check-out da operatore">Cash <br>Op. C-OUT</th>
                                     <th class="all alert-warning" title="Extra cash ritirato al check-out da Simonetta">Cash <br>Simo C-OUT</th>
-                                    <th class="all alert-warning" title="Cash Op. C-OUT +  Cash Simo C-OUT - city tax">Solo <br>extra</th>
-                                    <th class="all alert-warning" title="Importo STAY con EXTRA (no siti) = INCASSO al netto della promozione web">STAY <br>+ extra</th>
+                                    <th class="all alert-warning" title="Cash Op. C-OUT +  Cash Simo C-OUT - city tax">Solo extra <br>ritirato</th>
+                                    <th class="all alert-warning" title="Pagato con EXTRA (no siti) = INCASSO al netto della promozione web">Pagato + <br>extra - Sito</th>
                                     <th class="all alert-warning" title="Caparra o pagamento in un'unica soluzione da sito web">Incassi <br>banca I</th>
                                     <th class="all alert-warning" title="Saldo cash ospite al check-in">Saldo Cash</th>
                                     <th class="all alert-warning" title="Saldo BANCA II dell'ospite">Saldo <br>banca II</th>

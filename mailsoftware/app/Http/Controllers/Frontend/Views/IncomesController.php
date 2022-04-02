@@ -301,7 +301,7 @@ class IncomesController extends Controller
                 Booking::raw('(tx_mask_t5_kross_payment_total_amount + ' . self::SOLO_EXTRA . ' - tx_mask_p_perc_sito ) as stay_extra'),
                 Booking::raw('(tx_mask_t3_p_s_chin) as s_chin'),
                 Booking::raw('(tx_mask_t3_p_s_b) as s_b'),
-                // Booking::raw('CONCAT("[",GROUP_CONCAT(tx_mask_t5_kross_payments SEPARATOR ","),"]") as kross_payments_json'),
+                Booking::raw('(tx_mask_t5_kross_payments) as kross_payments_json'),
                 Booking::raw('(tx_mask_t5_kross_payment_total_amount) as kross_payment_total_amount'),
                 Booking::raw('(tx_mask_t3_p_stay - tx_mask_t3_p_s_b) as banca1'),
                 Booking::raw('(tx_mask_t5_kross_payment_total_amount + ' . self::SOLO_EXTRA . ' - (' . self::LORDO . ')) as c_p'),
@@ -364,23 +364,20 @@ class IncomesController extends Controller
                 $h = $row->tx_mask_t1_ora_checkout ? $row->tx_mask_t1_ora_checkout : '<span class="text-danger">NaN</span>';
                 return $row->tx_mask_p_data_partenza . ' </br> <span class="text-dark-75">h</span> ' . $h;
             })
-            // ->addColumn('payments', function ($row) {
-            //     $d = json_decode($row->tx_mask_t5_kross_payments);
-            //     if ($d) {
-            //         $ret = [];
+            ->addColumn('payments', function ($row) {
+                $d = json_decode($row->kross_payments_json);
+                if ($d) {
+                    $ret = [];
 
-            //         foreach ($d as $dr) {
-            //             $ret[] = '<span class="font-weight-bolder">' .  $dr->date . ' - € ' . number_format($dr->amount, 2, ',', '.') . '</span>';
-            //         }
+                    foreach ($d as $dr) {
+                        $ret[] = '<div>' .  $dr->date . ' - € ' . $this->htmlBalance($dr->amount) . '</div>';
+                    }
 
-            //         return join('<br>', $ret);
-            //     } else {
-            //         return '';
-            //     }
-            // })
-            // ->addColumn('stay', function ($row) {
-            //     return '<span class="font-weight-bolder">€ ' . number_format($row->tx_mask_t3_p_stay, 2, ',', '.') . '</span>';
-            // })
+                    return join('', $ret);
+                } else {
+                    return 'assenti';
+                }
+            })
             // ->addColumn('chin', function ($row) {
             //     return '<span class="font-weight-bolder">€ ' . number_format($row->tx_mask_t3_p_s_chin, 2, ',', '.') . '</span>';
             // })
@@ -510,7 +507,7 @@ class IncomesController extends Controller
                 'month', 'importo_stay', 'perc_sito', 'cleaning_fee_amount', 'city_tax_amount',
                 's_checkout', 'cash_op_cout', 'cash_simo', 'solo_extra', 'tot_lordo_incassi',
                 'stay_extra', 's_chin', 's_b', 'kross_payment_total_amount', 'banca1',
-                'c_p', 'c_m',
+                'c_p', 'c_m', 'payments',
                 'sum_importo_stay', 'sum_tot_lordo_incassi', 'sum_perc_sito', 'sum_cleaning_fee_amount',
                 'sum_city_tax_amount', 'sum_s_checkout', 'sum_cash_op_cout', 'sum_cash_simo', 'sum_solo_extra',
                 'sum_stay_extra', 'sum_s_chin', 'sum_s_b', 'sum_kross_payment_total_amount', 'sum_banca1',

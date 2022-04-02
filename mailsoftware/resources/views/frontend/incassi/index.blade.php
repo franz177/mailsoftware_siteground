@@ -130,6 +130,7 @@
                                     <th class="all bg-balance" title="Consuntivo - preventivo
 (STAY + Extra cash CO) - (Pagamento + Solo extra)">Cons. - Prev.</th>
                                     <!-- <th class="all alert-warning" title="Media aritmetica dei costi medi a notte">Costo <br>medio</th> -->
+                                    <th class="none text-left">Pagamenti Kross</th>
                                 </tr>
                                 </thead>
 
@@ -156,6 +157,7 @@
                                     <th class="all"></th>
                                     <th class="all"></th>
                                     <!-- <th class="all"></th> -->
+                                    <th class="none text-left"></th>                                    
                                 </tr>
                                 </tfoot>
 
@@ -190,12 +192,12 @@
             var sites_array = {!! $sites_array !!};
             var op_check_out = {!! $op_check_out !!};
 
-            var tables = $('#table-incassi-mensili');
+            var table = $('#table-incassi-mensili');
 
             const countColumns = api => api.columns()[0].length - 1
             const seq = integer => Array(integer).fill().map( (_,i) => i + 1 )
 
-            var oTable = tables.DataTable({
+            var oTable = table.DataTable({
                 // Internationalisation. For more info refer to http://datatables.net/manual/i18n
                 "language": {
                     "aria": {
@@ -273,6 +275,12 @@
                     {data: 'kross_payment_total_amount'},
                     {data: 'c_p'},
                     //{data: 'c_m'}
+                    {data: 'payments',
+                        render: function (data, type, row)
+                        {
+                            return data;
+                        }, className:'text-left', sortable: false,
+                    },
                 ],
 
                 rowCallback: function(row, data, index) {

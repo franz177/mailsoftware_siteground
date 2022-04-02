@@ -294,7 +294,6 @@
                 footerCallback: function(row, data, index){
                     var api = this.api(), data;
                     var tot = data.length - 1;
-                    console.log(data);
                     const footer = integer => $( api.column( integer ).footer() )
                     if(tot > 0){
                         footer(4).html(data[tot].month);

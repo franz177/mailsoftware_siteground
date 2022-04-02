@@ -333,8 +333,6 @@
                     $('td:eq(12)', row).addClass('alert-danger');                //DATA-PARTENZA
                     $('td:eq(13)', row).addClass('alert-danger');                //OP. C-OUT
                     $('td:eq(18)', row).addClass('alert-success');                //MANCIA
-
-                    console.log(data);
                 },
 
                 footerCallback: function(row, data, index){

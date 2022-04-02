@@ -67,11 +67,15 @@
                 <div class="card-body pt-0 pb-3">
                     <div class="tab-content">
                         <p class="font-weight-bold font-size-s mb-2 pb-5">
-                            I calcoli sono effettuati sulla data di arrivo colore
-                            <span class="symbol symbol-20 symbol-warning mx-1">
-                                    <span class="symbol-label"></span>
-                                </span>
-                            Giallo
+                            I calcoli sono effettuati sulla data di arrivo. Preventivo
+                            <span class="symbol symbol-20 mx-1">
+                                <span class="symbol-label bg-budget"></span>
+                            </span>
+                            Celeste. Consuntivo 
+                            <span class="symbol symbol-20 mx-1">
+                                <span class="symbol-label bg-balance"></span>
+                            </span>
+                            Verde
                         </p>
                         <!--begin::Table-->
                         <div class="table-responsive" >
@@ -80,22 +84,22 @@
                                 <tr>
                                     <th></th>
                                     <th class="all">Mese</th>
-                                    <th class="all alert-warning" title="Totale lordo incassi
-(STAY + Sito + Solo extra)">Lordo</th>
-                                    <th class="all alert-warning" title="Incasso lordo base">STAY</th>
-                                    <th class="all alert-warning" title="% sito web">Sito</th>
-                                    <th class="all alert-warning" title="Pulizie cliente">Pulizie</th>
-                                    <th class="all alert-warning">City tax</th>
-                                    <th class="all alert-warning" title="Extra cash che il cliente deve al check-out">Extra <br>Cash CO</th>
-                                    <th class="all alert-warning" title="Extra cash ritirato al check-out da operatore">Cash <br>Op. C-OUT</th>
-                                    <th class="all alert-warning" title="Extra cash ritirato al check-out da Simonetta">Cash <br>Simo C-OUT</th>
-                                    <th class="all alert-warning" title="Cash Op. C-OUT +  Cash Simo C-OUT - city tax">Solo extra <br>ritirato</th>
-                                    <th class="all alert-warning" title="Pagato con EXTRA (no siti) = INCASSO al netto della promozione web">Pagato + <br>extra - Sito</th>
-                                    <th class="all alert-warning" title="Caparra o pagamento in un'unica soluzione da sito web">Incassi <br>banca I</th>
-                                    <th class="all alert-warning" title="Saldo cash ospite al check-in">Saldo Cash</th>
-                                    <th class="all alert-warning" title="Saldo BANCA II dell'ospite">Saldo <br>banca II</th>
-                                    <th class="all alert-warning" title="API Kross">Pagato</th>
-                                    <th class="all alert-warning" title="Consuntivo - preventivo
+                                    <th class="all bg-budget" title="Totale lordo incassi
+(STAY + Extra Cash CO)">Lordo</th>
+                                    <th class="all bg-budget" title="Incasso lordo base">STAY</th>
+                                    <th class="all bg-budget" title="% sito web">Sito</th>
+                                    <th class="all bg-budget" title="Pulizie cliente">Pulizie</th>
+                                    <th class="all bg-budget">City tax</th>
+                                    <th class="all bg-budget" title="Extra cash che il cliente deve al check-out">Extra <br>Cash CO</th>
+                                    <th class="all bg-balance" title="Extra cash ritirato al check-out da operatore">Cash <br>Op. C-OUT</th>
+                                    <th class="all bg-balance" title="Extra cash ritirato al check-out da Simonetta">Cash <br>Simo C-OUT</th>
+                                    <th class="all bg-balance" title="Cash Op. C-OUT +  Cash Simo C-OUT - city tax">Solo extra <br>ritirato</th>
+                                    <th class="all bg-balance" title="Pagato con EXTRA (no siti) = INCASSO al netto della promozione web">Pagato + <br>extra - Sito</th>
+                                    <th class="all bg-budget" title="Caparra o pagamento in un'unica soluzione da sito web">Incassi <br>banca I</th>
+                                    <th class="all bg-budget" title="Saldo cash ospite al check-in">Saldo Cash</th>
+                                    <th class="all bg-budget" title="Saldo BANCA II dell'ospite">Saldo <br>banca II</th>
+                                    <th class="all bg-balance" title="API Kross">Pagato</th>
+                                    <th class="all bg-balance" title="Consuntivo - preventivo
 (STAY + Extra cash CO) - (Pagamento + Solo extra)">Cons. - Prev.</th>
                                     <!-- <th class="all alert-warning" title="Media aritmetica dei costi medi a notte">Costo <br>medio</th> -->
                                 </tr>

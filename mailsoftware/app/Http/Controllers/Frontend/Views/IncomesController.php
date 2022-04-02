@@ -285,7 +285,7 @@ class IncomesController extends Controller
                 Booking::raw('tx_mask_p_data_arrivo'),
                 Booking::raw('tx_mask_p_data_partenza'),
                 Booking::raw('tx_mask_p_sito'),
-                Booking::raw('tx_mask_p_casa'),
+                Booking::raw('tx_mask_p_casa as casa'),
                 Booking::raw('tx_mask_t1_ora_checkin'),
                 Booking::raw('tx_mask_t1_ora_checkout'),
                 Booking::raw('MONTHNAME(STR_TO_DATE(MONTH(tx_mask_p_data_arrivo), "%m")) as month'),
@@ -506,7 +506,7 @@ class IncomesController extends Controller
                 return $this->htmlBalance($this->avg_c_m);
             })
             ->rawColumns([
-                'note_alert', 'header', 'data_arrivo', 'data_partenza', 'tx_mask_p_sito', 'tx_mask_p_casa',
+                'note_alert', 'header', 'data_arrivo', 'data_partenza', 'tx_mask_p_sito', 'casa',
                 'month', 'importo_stay', 'perc_sito', 'cleaning_fee_amount', 'city_tax_amount',
                 's_checkout', 'cash_op_cout', 'cash_simo', 'solo_extra', 'tot_lordo_incassi',
                 'stay_extra', 's_chin', 's_b', 'kross_payment_total_amount', 'banca1',

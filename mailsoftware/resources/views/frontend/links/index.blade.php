@@ -23,6 +23,9 @@
 						<li>
 							<a href="https://gestionale.alguerhome.it/amministrazione/" target="_blank">Gestionale Amministrazione</a>
 						</li>
+						<li>
+							<a href="https://trello.com/b/vF4ZdCiD/mail-software" target="_blank">Trello</a>
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -44,6 +47,9 @@
 						</li>
 						<li>
 							<a href="https://docs.google.com/spreadsheets/d/1mXmEZTf9n-C2mOx9H4wV8SKmvFBMPUelnCXfkOjJyQI/edit" target="_blank">GDoc: Implementazioni e Correzioni</a>
+						</li>
+						<li>
+							<a href="https://drive.google.com/drive/u/0/folders/13kvgsluN34gm7GIfO3BzV2cI8nbkrzXE" target="_blank">GDoc: Prenotazioni Lalla</a>
 						</li>
 					</ul>
 				</div>

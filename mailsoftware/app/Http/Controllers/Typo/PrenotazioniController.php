@@ -33,7 +33,6 @@ class PrenotazioniController extends Controller
      */
     public function index(Request $request)
     {
-
         $today = Carbon::today();
         $today = $today->subDays(1);
 
@@ -60,41 +59,39 @@ class PrenotazioniController extends Controller
 
         if ($request->ajax()){
             $this->users = $this->getAllUsersArray();
+
             $data = Booking::select('*')
                 ->selectRaw('IF(tx_mask_t0_country = "" OR tx_mask_t0_country IS NULL, "NaN", tx_mask_t0_country) tx_mask_t0_country')
                 ->selectRaw('LCASE(header) as headerl')
                 ->selectRaw('IFNULL(tx_mask_p_sito, tx_mask_t5_kross_cod_channel) tx_mask_p_sito')
                 ->selectRaw('IF(tx_mask_doc_inviati = 0, "Attesa", "INVIATI") as documenti')
                 ->selectRaw('IFNULL(tx_mask_p_casa,0) casa')
-//                ->where('CType', $this->CType)
                 ->where('hidden', '=', 0)
                 ->where('deleted', '=', 0)
                 ->where('tx_mask_p_data_partenza', '>', $today)
                 ->where('tx_mask_cod_reservation_status', '!=', "CANC")
                 ->whereIn('tx_mask_p_casa', $hs)
                 ->orderBy('tx_mask_p_data_arrivo', 'ASC')
+                ->with('whatsapps', 'country')
                 ->get();
 
             return Datatables::of($data)
                 ->addColumn('gestore_casa', function($row){
                     if($row->tx_mask_contatto_riferimento > 0){
-                        $contatto_riferimento = TypoUser::select('first_name')
-                            ->where('uid', '=', $row->tx_mask_contatto_riferimento)
-                            ->first();
-                        return '<span class="font-weight-bolder">'. $contatto_riferimento->first_name  .'</span>';
+                        $contatto_riferimento = $this->users[$row->tx_mask_contatto_riferimento] ?? '?';
+                        return '<span class="font-weight-bolder">'. $contatto_riferimento  .'</span>';
                     } else {
                         return '<span class="font-weight-bolder">Seleziona Gestore</span>';
                     }
                 })
                 ->addColumn('city_tax', function ($row) {
-
                     return '<span class="font-weight-bolder">€ '.number_format($row->tx_mask_t3_p_city_tax_amount, 2, ',', '.').'</span>';
                 })
                 ->addColumn('header', function ($row) {
-                    if($row->tx_mask_t0_country != 'NaN'){
-                        $country = $this->getCountriesArray($row->tx_mask_t0_country);
-                        $country = $country->name;
-                    } else {
+                    if ($row->country) {
+                        $country = $row->country->name;
+                    }
+                    else {
                         $country = $row->tx_mask_t0_country;
                     }
 
@@ -111,7 +108,7 @@ class PrenotazioniController extends Controller
                     return $header;
                 })
                 ->addColumn('thread', function ($row) {
-                    $threads = Thread::where('uid','=',$row->uid)->with('flow.typeanswer.color')->latest('created_at')->first();
+                    $threads = $row->threads->first();
 
                     if(!$threads){
                         $threads = 0;
@@ -121,7 +118,7 @@ class PrenotazioniController extends Controller
                     return $threads->title;
                 })
                 ->addColumn('color', function ($row) {
-                    $threads = Thread::where('uid','=',$row->uid)->with('flow.typeanswer.color')->latest('created_at')->first();
+                    $threads = $row->threads->first();
 
                     if(!$threads){
                         $threads = 0;
@@ -165,14 +162,10 @@ class PrenotazioniController extends Controller
 
                 })
                 ->addColumn('whatsapp_stato', function ($row) {
-                    $whatsapp_status = Whatsapp::find($row->uid);
-
-                    return $whatsapp_status->stato;
+                    return $row->whatsapps->stato;
                 })
                 ->addColumn('whatsapp_id', function ($row) {
-                    $whatsapp_id = Whatsapp::find($row->uid);
-
-                    return $whatsapp_id->uid;
+                    return $row->whatsapps->uid;
                 })
                 ->addColumn('op_pulizie', function($row){
                     $user = $this->users;
@@ -213,10 +206,8 @@ class PrenotazioniController extends Controller
                         if ($operatore_cambio === 0) {
                             $operatore_nome  ='NaN';
                         } else {
-                            $operatore_nome = TypoUser::select('first_name')
-                                ->where('uid', '=', $operatore_cambio)
-                                ->first();
-                            $operatore_nome = $operatore_nome->first_name;
+                            $operatore_nome = $this->users[$operatore_cambio] ?? '?';
+                            $operatore_nome = $operatore_nome;
                         }
                     }
 
@@ -241,7 +232,7 @@ class PrenotazioniController extends Controller
                     return '<span class="font-weight-bolder">€ '.number_format($row->tx_mask_t3_p_stay, 2, ',', '.').'</span>';
                 })
                 ->addColumn('threads', function ($row) {
-                    $threads_pren = Thread::where('uid','=',$row->uid)->with('user','flow', 'flow.typeanswer', 'flow.typeanswer.color')->orderBy('created_at', 'ASC')->get();
+                    $threads_pren = $row->threads->reverse();
                     $threads = '';
 
                     if($threads_pren->count() < 1) {
@@ -292,7 +283,6 @@ class PrenotazioniController extends Controller
         }
 
         $pren = Booking::select('uid', 'tx_mask_t5_kross_cod_channel', 'tx_mask_p_casa')
-//            ->where('CType', $this->CType)
             ->where('hidden', '=', 0)
             ->where('deleted', '=', 0)
             ->where('tx_mask_p_data_arrivo', '>=', $today)

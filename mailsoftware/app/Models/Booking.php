@@ -92,6 +92,11 @@ class Booking extends Model
         return $this->belongsTo(House::class, 'tx_mask_p_casa', 'uid');
     }
 
+    public function whatsapps()
+    {
+        return $this->hasOne(Whatsapp::class, 'uid', 'uid');
+    }
+
     public function scopeConfirmed($query)
     {
         $query->where('tx_mask_cod_reservation_status', '!=', 'CANC');

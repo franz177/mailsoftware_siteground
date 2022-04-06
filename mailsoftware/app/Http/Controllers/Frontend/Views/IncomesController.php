@@ -19,7 +19,7 @@ class IncomesController extends Controller
 
     private $sum_tot_lordo_incassi;
     private $sum_importo_stay;
-    private $sum_perc_sito;
+    private $sum_perc_importo_fisso;
     private $sum_cleaning_fee_amount;
     private $sum_city_tax_amount;
     private $sum_s_checkout;
@@ -91,7 +91,7 @@ class IncomesController extends Controller
                 Booking::raw('MONTH(tx_mask_p_data_arrivo) as monthed'),
                 Booking::raw('MONTHNAME(STR_TO_DATE(MONTH(tx_mask_p_data_arrivo), "%m")) as month'),
                 Booking::raw('SUM(tx_mask_t3_p_stay) as importo_stay'),
-                Booking::raw('SUM(tx_mask_p_perc_sito) as perc_sito'),
+                Booking::raw('SUM(tx_mask_p_perc_importo_fisso) as perc_importo_fisso'),
                 Booking::raw('SUM(tx_mask_t3_p_cleaning_fee_amount) as cleaning_fee_amount'),
                 Booking::raw('SUM(tx_mask_t3_p_city_tax_amount) as city_tax_amount'),
                 Booking::raw('SUM(tx_mask_t3_p_s_checkout) as s_checkout'),
@@ -99,7 +99,7 @@ class IncomesController extends Controller
                 Booking::raw('SUM(tx_mask_t3_p_cash_simo) as cash_simo'),
                 Booking::raw('SUM(' . self::SOLO_EXTRA . ') as solo_extra'),
                 Booking::raw('SUM(' . self::LORDO . ') as tot_lordo_incassi'),
-                Booking::raw('SUM(tx_mask_t5_kross_payment_total_amount + ' . self::SOLO_EXTRA . ' - tx_mask_p_perc_sito ) as stay_extra'),
+                Booking::raw('SUM(tx_mask_t5_kross_payment_total_amount + ' . self::SOLO_EXTRA . ' - tx_mask_p_perc_importo_fisso ) as stay_extra'),
                 Booking::raw('SUM(tx_mask_t3_p_s_chin) as s_chin'),
                 Booking::raw('SUM(tx_mask_t3_p_s_b) as s_b'),
                 // Booking::raw('CONCAT("[",GROUP_CONCAT(tx_mask_t5_kross_payments SEPARATOR ","),"]") as kross_payments_json'),
@@ -122,7 +122,7 @@ class IncomesController extends Controller
 
         $this->sum_tot_lordo_incassi = $data->sum('tot_lordo_incassi');
         $this->sum_importo_stay = $data->sum('importo_stay');
-        $this->sum_perc_sito = $data->sum('perc_sito');
+        $this->sum_perc_importo_fisso = $data->sum('perc_importo_fisso');
         $this->sum_cleaning_fee_amount = $data->sum('cleaning_fee_amount');
         $this->sum_city_tax_amount = $data->sum('city_tax_amount');
         $this->sum_s_checkout = $data->sum('s_checkout');
@@ -147,8 +147,8 @@ class IncomesController extends Controller
             ->addColumn('importo_stay', function ($row) {
                 return $this->htmlBalance($row->importo_stay);
             })
-            ->addColumn('perc_sito', function ($row) {
-                return $this->htmlBalance($row->perc_sito);
+            ->addColumn('perc_importo_fisso', function ($row) {
+                return $this->htmlBalance($row->perc_importo_fisso);
             })
             ->addColumn('cleaning_fee_amount', function ($row) {
                 return $this->htmlBalance($row->cleaning_fee_amount);
@@ -157,7 +157,7 @@ class IncomesController extends Controller
                 return $this->htmlBalance($row->city_tax_amount);
             })
             ->addColumn('s_checkout', function ($row) {
-                return '<span class=' . ($row->s_checkout > 0 ? "font-weight-bolder" : "text-danger") . '>' . number_format($row->s_checkout, 2, ',', '.') . '</span>';
+                return $this->htmlBalance($row->s_checkout);
             })
             ->addColumn('cash_op_cout', function ($row) {
                 return $this->htmlBalance($row->cash_op_cout);
@@ -217,8 +217,8 @@ class IncomesController extends Controller
             ->addColumn('sum_importo_stay', function ($row) {
                 return $this->htmlBalance($this->sum_importo_stay);
             })
-            ->addColumn('sum_perc_sito', function ($row) {
-                return $this->htmlBalance($this->sum_perc_sito);
+            ->addColumn('sum_perc_importo_fisso', function ($row) {
+                return $this->htmlBalance($this->sum_perc_importo_fisso);
             })
             ->addColumn('sum_cleaning_fee_amount', function ($row) {
                 return $this->htmlBalance($this->sum_cleaning_fee_amount);
@@ -227,7 +227,7 @@ class IncomesController extends Controller
                 return $this->htmlBalance($this->sum_city_tax_amount);
             })
             ->addColumn('sum_s_checkout', function ($row) {
-                return '<span class=' . ($this->sum_s_checkout > 0 ? "font-weight-bolder" : "text-danger") . '>' . number_format($this->sum_s_checkout, 2, ',', '.') . '</span>';
+                return $this->htmlBalance($this->sum_s_checkout);
             })
             ->addColumn('sum_cash_op_cout', function ($row) {
                 return $this->htmlBalance($this->sum_cash_op_cout);
@@ -260,11 +260,11 @@ class IncomesController extends Controller
                 return $this->htmlBalance($this->avg_c_m);
             })
             ->rawColumns([
-                'month', 'importo_stay', 'perc_sito', 'cleaning_fee_amount', 'city_tax_amount',
+                'month', 'importo_stay', 'perc_importo_fisso', 'cleaning_fee_amount', 'city_tax_amount',
                 's_checkout', 'cash_op_cout', 'cash_simo', 'solo_extra', 'tot_lordo_incassi',
                 'stay_extra', 's_chin', 's_b', 'kross_payment_total_amount', 'banca1',
                 'c_p', 'c_m',
-                'sum_importo_stay', 'sum_tot_lordo_incassi', 'sum_perc_sito', 'sum_cleaning_fee_amount',
+                'sum_importo_stay', 'sum_tot_lordo_incassi', 'sum_perc_importo_fisso', 'sum_cleaning_fee_amount',
                 'sum_city_tax_amount', 'sum_s_checkout', 'sum_cash_op_cout', 'sum_cash_simo', 'sum_solo_extra',
                 'sum_stay_extra', 'sum_s_chin', 'sum_s_b', 'sum_kross_payment_total_amount', 'sum_banca1',
                 'sum_c_p', 'avg_c_m'
@@ -290,7 +290,7 @@ class IncomesController extends Controller
                 Booking::raw('tx_mask_t1_ora_checkout'),
                 Booking::raw('MONTHNAME(STR_TO_DATE(MONTH(tx_mask_p_data_arrivo), "%m")) as month'),
                 Booking::raw('(tx_mask_t3_p_stay) as importo_stay'),
-                Booking::raw('(tx_mask_p_perc_sito) as perc_sito'),
+                Booking::raw('(tx_mask_p_perc_importo_fisso) as perc_importo_fisso'),
                 Booking::raw('(tx_mask_t3_p_cleaning_fee_amount) as cleaning_fee_amount'),
                 Booking::raw('(tx_mask_t3_p_city_tax_amount) as city_tax_amount'),
                 Booking::raw('(tx_mask_t3_p_s_checkout) as s_checkout'),
@@ -298,7 +298,7 @@ class IncomesController extends Controller
                 Booking::raw('(tx_mask_t3_p_cash_simo) as cash_simo'),
                 Booking::raw('(' . self::SOLO_EXTRA . ') as solo_extra'),
                 Booking::raw('(' . self::LORDO . ') as tot_lordo_incassi'),
-                Booking::raw('(tx_mask_t5_kross_payment_total_amount + ' . self::SOLO_EXTRA . ' - tx_mask_p_perc_sito ) as stay_extra'),
+                Booking::raw('(tx_mask_t5_kross_payment_total_amount + ' . self::SOLO_EXTRA . ' - tx_mask_p_perc_importo_fisso ) as stay_extra'),
                 Booking::raw('(tx_mask_t3_p_s_chin) as s_chin'),
                 Booking::raw('(tx_mask_t3_p_s_b) as s_b'),
                 Booking::raw('(tx_mask_t5_kross_payments) as kross_payments_json'),
@@ -325,7 +325,7 @@ class IncomesController extends Controller
 
         $this->sum_tot_lordo_incassi = $data->sum('tot_lordo_incassi');
         $this->sum_importo_stay = $data->sum('importo_stay');
-        $this->sum_perc_sito = $data->sum('perc_sito');
+        $this->sum_perc_importo_fisso = $data->sum('perc_importo_fisso');
         $this->sum_cleaning_fee_amount = $data->sum('cleaning_fee_amount');
         $this->sum_city_tax_amount = $data->sum('city_tax_amount');
         $this->sum_s_checkout = $data->sum('s_checkout');
@@ -390,8 +390,8 @@ class IncomesController extends Controller
             ->addColumn('importo_stay', function ($row) {
                 return $this->htmlBalance($row->importo_stay);
             })
-            ->addColumn('perc_sito', function ($row) {
-                return $this->htmlBalance($row->perc_sito);
+            ->addColumn('perc_importo_fisso', function ($row) {
+                return $this->htmlBalance($row->perc_importo_fisso);
             })
             ->addColumn('cleaning_fee_amount', function ($row) {
                 return $this->htmlBalance($row->cleaning_fee_amount);
@@ -400,7 +400,7 @@ class IncomesController extends Controller
                 return $this->htmlBalance($row->city_tax_amount);
             })
             ->addColumn('s_checkout', function ($row) {
-                return '<span class=' . ($row->s_checkout > 0 ? "font-weight-bolder" : "text-danger") . '>' . number_format($row->s_checkout, 2, ',', '.') . '</span>';
+                return $this->htmlBalance($row->s_checkout);
             })
             ->addColumn('cash_op_cout', function ($row) {
                 return $this->htmlBalance($row->cash_op_cout);
@@ -460,8 +460,8 @@ class IncomesController extends Controller
             ->addColumn('sum_importo_stay', function ($row) {
                 return $this->htmlBalance($this->sum_importo_stay);
             })
-            ->addColumn('sum_perc_sito', function ($row) {
-                return $this->htmlBalance($this->sum_perc_sito);
+            ->addColumn('sum_perc_importo_fisso', function ($row) {
+                return $this->htmlBalance($this->sum_perc_importo_fisso);
             })
             ->addColumn('sum_cleaning_fee_amount', function ($row) {
                 return $this->htmlBalance($this->sum_cleaning_fee_amount);
@@ -470,7 +470,7 @@ class IncomesController extends Controller
                 return $this->htmlBalance($this->sum_city_tax_amount);
             })
             ->addColumn('sum_s_checkout', function ($row) {
-                return '<span class=' . ($this->sum_s_checkout > 0 ? "font-weight-bolder" : "text-danger") . '>' . number_format($this->sum_s_checkout, 2, ',', '.') . '</span>';
+                return $this->htmlBalance($this->sum_s_checkout);
             })
             ->addColumn('sum_cash_op_cout', function ($row) {
                 return $this->htmlBalance($this->sum_cash_op_cout);
@@ -504,11 +504,11 @@ class IncomesController extends Controller
             })
             ->rawColumns([
                 'note_alert', 'header', 'data_arrivo', 'data_partenza', 'tx_mask_p_sito', 'casa',
-                'month', 'importo_stay', 'perc_sito', 'cleaning_fee_amount', 'city_tax_amount',
+                'month', 'importo_stay', 'perc_importo_fisso', 'cleaning_fee_amount', 'city_tax_amount',
                 's_checkout', 'cash_op_cout', 'cash_simo', 'solo_extra', 'tot_lordo_incassi',
                 'stay_extra', 's_chin', 's_b', 'kross_payment_total_amount', 'banca1',
                 'c_p', 'c_m', 'payments',
-                'sum_importo_stay', 'sum_tot_lordo_incassi', 'sum_perc_sito', 'sum_cleaning_fee_amount',
+                'sum_importo_stay', 'sum_tot_lordo_incassi', 'sum_perc_importo_fisso', 'sum_cleaning_fee_amount',
                 'sum_city_tax_amount', 'sum_s_checkout', 'sum_cash_op_cout', 'sum_cash_simo', 'sum_solo_extra',
                 'sum_stay_extra', 'sum_s_chin', 'sum_s_b', 'sum_kross_payment_total_amount', 'sum_banca1',
                 'sum_c_p', 'avg_c_m'

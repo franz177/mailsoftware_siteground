@@ -100,7 +100,7 @@
                                     <th class="all bg-budget" title="Saldo BANCA II dell'ospite">Saldo <br>banca II</th>
                                     <th class="all bg-balance" title="API Kross">Pagato</th>
                                     <th class="all bg-balance" title="Consuntivo - preventivo
-(STAY + Extra cash CO) - (Pagamento + Solo extra)">Cons. - Prev.</th>
+(STAY + Extra cash CO) - (Pagato + Solo extra)">Cons. - Prev.</th>
                                     <!-- <th class="all alert-warning" title="Media aritmetica dei costi medi a notte">Costo <br>medio</th> -->
                                 </tr>
                                 </thead>
@@ -204,7 +204,7 @@
                     {data: 'month'},
                     {data: 'tot_lordo_incassi'},
                     {data: 'importo_stay'}, 
-                    {data: 'perc_sito'},
+                    {data: 'perc_importo_fisso'},
                     {data: 'cleaning_fee_amount'},
                     {data: 'city_tax_amount'},
                     {data: 's_checkout'},
@@ -234,7 +234,7 @@
                         footer(1).html('Anno');
                         footer(2).html(data[tot].sum_tot_lordo_incassi).addClass('text-right');
                         footer(3).html(data[tot].sum_importo_stay).addClass('text-right');
-                        footer(4).html(data[tot].sum_perc_sito).addClass('text-right');
+                        footer(4).html(data[tot].sum_perc_importo_fisso).addClass('text-right');
                         footer(5).html(data[tot].sum_cleaning_fee_amount).addClass('text-right');
                         footer(6).html(data[tot].sum_city_tax_amount).addClass('text-right');
                         footer(7).html(data[tot].sum_s_checkout).addClass('text-right');

@@ -233,6 +233,7 @@ return [
             'page' => '/excel',
             'new-tab' => false,
             'auth' => [1],
+            'custom-class' => 'btn btn-success',
         ],
         [
             'title' => 'Ricarica Prenotazioni',
@@ -240,6 +241,7 @@ return [
             'page' => '/booking/force',
             'new-tab' => false,
             'auth' => [1],
+            'custom-class' => 'btn btn-warning',
         ],
     ]
 

@@ -296,12 +296,7 @@ class MensileController extends Controller
                 })
                 ->addColumn('data_arrivo', function ($row){
                     $h = $row->tx_mask_t1_ora_checkin ? $row->tx_mask_t1_ora_checkin : '<span class="text-danger">NaN</span>';
-                    $arrivo = Carbon::createFromFormat('d-m-y', $row->tx_mask_p_data_arrivo)->format('Y-m-d');
-                    $partenza = Carbon::createFromFormat('d-m-y', $row->tx_mask_p_data_partenza)->format('Y-m-d');
-                    $arrivo = Carbon::parse($arrivo);
-                    $partenza = Carbon::parse($partenza);
-                    $diff = $partenza->diffInDays($arrivo);
-                    return $row->tx_mask_p_data_arrivo . ' </br> <span class="text-dark-75">h</span> '. $h . ' <i class="fas fa-moon text-dark-75"></i> '. $diff ;
+                    return $row->tx_mask_p_data_arrivo . ' </br> <span class="text-dark-75">h</span> '. $h . ' <i class="fas fa-user text-dark-75"></i> '. $row->tx_mask_p_tot_ospiti ;
                 })
                 ->addColumn('data_partenza', function ($row){
                     $h = $row->tx_mask_t1_ora_checkout ? $row->tx_mask_t1_ora_checkout : '<span class="text-danger">NaN</span>';

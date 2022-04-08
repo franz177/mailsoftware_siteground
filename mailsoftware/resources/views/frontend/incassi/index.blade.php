@@ -129,7 +129,7 @@
                                     <th class="all bg-balance" title="API Kross">Pagato</th>
                                     <th class="all bg-balance" title="Consuntivo - preventivo
 (STAY + Extra cash CO) - (Pagato + Solo extra)">Cons. - Prev.</th>
-                                    <!-- <th class="all alert-warning" title="Media aritmetica dei costi medi a notte">Costo <br>medio</th> -->
+                                    <th class="all bg-budget" title="Tariffa giornaliera per l'alloggio che sarebbe stata proposta ad un max di 2 ospiti">Tariffa<br> base</th>
                                     <th class="none text-left">Pagamenti Kross</th>
                                 </tr>
                                 </thead>
@@ -156,7 +156,7 @@
                                     <th class="all"></th>
                                     <th class="all"></th>
                                     <th class="all"></th>
-                                    <!-- <th class="all"></th> -->
+                                    <th class="all"></th>
                                     <th class="none text-left"></th>                                    
                                 </tr>
                                 </tfoot>
@@ -274,7 +274,7 @@
                     {data: 's_b'},
                     {data: 'kross_payment_total_amount'},
                     {data: 'c_p'},
-                    //{data: 'c_m'}
+                    {data: 'c_m'},
                     {data: 'payments',
                         render: function (data, type, row)
                         {
@@ -312,7 +312,7 @@
                         footer(17).html(data[tot].sum_s_b).addClass('text-right');
                         footer(18).html(data[tot].sum_kross_payment_total_amount).addClass('text-right');
                         footer(19).html(data[tot].sum_c_p).addClass('text-right');
-                        //footer(17).html(data[tot].avg_c_m).addClass('text-right');
+                        footer(20).html(`<div title="Media aritmetica">${data[tot].avg_c_m}</div>`).addClass('text-right');
                     } else {
                         for (const index of seq(countColumns(api))){
                             $( api.column( index ).footer() ).html('');

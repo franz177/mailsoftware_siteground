@@ -8,6 +8,26 @@ return [
 
     'items' => [
         [],
+
+        /*
+            Queste voci sono gestite nella root del menu solo per gli utenti di
+            ruolo 3 (gli operatori) in modo che possano vedere solo queste
+        */
+        [
+            'title' => 'Mensile Operatori [05]',
+            'root' => true,
+            'page' => '/viste/mensile/operatori',
+            'new-tab' => false,
+            'auth' => [3],
+        ],
+        [
+            'title' => 'Totali Mensili Operatori [05.1]',
+            'root' => true,
+            'page' => '/viste/mensile/totali_operatori',
+            'new-tab' => false,
+            'auth' => [3],
+        ],
+
         [
             'title' => 'Prenotazioni',
             'root' => true,
@@ -27,7 +47,7 @@ return [
             'root' => true,
             'page' => '',
             'new-tab' => false,
-            'auth' => [1, 3],
+            'auth' => [1],
             'submenu' => [
                 [
                     'title' => 'Dashboard Prenotazioni [01]',
@@ -75,21 +95,21 @@ return [
                 [
                     'title' => 'Operatori',
                     'bullet' => 'dot',
-                    'auth' => [1, 3],
+                    'auth' => [1],
                     'new-tab' => false,
                     'submenu' => [
                         [
                             'title' => 'Mensile Operatori [05]',
                             'bullet' => 'dot',
                             'page' => '/viste/mensile/operatori',
-                            'auth' => [1, 3],
+                            'auth' => [1],
                             'new-tab' => false,
                         ],
                         [
                             'title' => 'Totali Mensili Operatori [05.1]',
                             'bullet' => 'dot',
                             'page' => '/viste/mensile/totali_operatori',
-                            'auth' => [1, 3],
+                            'auth' => [1],
                             'new-tab' => false,
                         ],
                     ]

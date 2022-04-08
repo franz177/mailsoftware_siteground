@@ -206,6 +206,10 @@ class Menu
         if (isset($item['separator'])) {
             echo '<li class="menu-separator"><span></span></li>';
         } elseif (isset($item['title']) || isset($item['code'])) {
+            if (in_array(Auth::user()->role , $item['auth']) == false) {
+                return;
+            }
+
             $item_class = '';
             $item_attr = '';
 
@@ -278,7 +282,6 @@ class Menu
             if (isset($item['code'])) {
                 echo $item['code'];
             } else {
-                if (in_array(99, $item['auth']) || in_array(Auth::user()->role , $item['auth'])){
                 // insert title or heading
                 if (isset($item['heading']) == false) {
                     $url = '#';
@@ -421,11 +424,10 @@ class Menu
                         echo '</div>';
                     }
                 }
-            }
 
-            if (isset($item['heading']) == false) {
-                echo '</li>';
-            }
+                if (isset($item['heading']) == false) {
+                    echo '</li>';
+                }
             }
         } elseif (is_array($item)) {
             foreach ($item as $each) {

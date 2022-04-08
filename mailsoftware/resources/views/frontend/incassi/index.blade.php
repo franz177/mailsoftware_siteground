@@ -312,7 +312,7 @@
                         footer(17).html(data[tot].sum_s_b).addClass('text-right');
                         footer(18).html(data[tot].sum_kross_payment_total_amount).addClass('text-right');
                         footer(19).html(data[tot].sum_c_p).addClass('text-right');
-                        footer(20).html(`<div title="Media aritmetica">${data[tot].avg_c_m}</div>`).addClass('text-right');
+                        //footer(20).html(`<div title="Media aritmetica">${data[tot].avg_c_m}</div>`).addClass('text-right');
                     } else {
                         for (const index of seq(countColumns(api))){
                             $( api.column( index ).footer() ).html('');

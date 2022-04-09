@@ -109,12 +109,13 @@
                                                 </svg>
                                             </span>
                                     </th>
-                                    <th class="none text-left">Sito</th>
+                                    <th class="none text-left">Data partenza</th>
                                     <th class="all">Cliente</th>
-                                    <th class="all">Arrivo</th>
+                                    <th class="all" title="Con origine della prenotazione">Arrivo</th>
                                     <th class="all bg-budget" title="Totale lordo incassi
 (STAY + Extra Cash CO)">Lordo</th>
-                                    <th class="all bg-budget" title="Incasso lordo base">STAY</th>
+                                    <th class="all bg-budget" title="Incasso lordo base
+(tooltip: Stay - Sito)">STAY</th>
                                     <th class="all bg-budget" title="% sito web">Sito</th>
                                     <th class="all bg-budget" title="Pulizie cliente">Pulizie</th>
                                     <th class="all bg-budget">City tax</th>
@@ -128,7 +129,7 @@
                                     <th class="all bg-budget" title="Saldo BANCA II dell'ospite">Saldo <br>banca II</th>
                                     <th class="all bg-balance" title="API Kross">Pagato</th>
                                     <th class="all bg-balance" title="Consuntivo - preventivo
-(STAY + Extra cash CO) - (Pagato + Solo extra)">Cons. - Prev.</th>
+(Pagato + Solo extra) - Lordo">Cons. - Prev.</th>
                                     <th class="all bg-budget" title="Tariffa giornaliera per l'alloggio che sarebbe stata proposta ad un max di 2 ospiti">Tariffa<br> base</th>
                                     <th class="none text-left">Pagamenti Kross</th>
                                 </tr>
@@ -188,9 +189,6 @@
 
             var houses_color = {!! $houses_color !!};
             var houses_typo = {!! $houses_typo !!};
-            var sites_kross = {!! $sites_kross !!};
-            var sites_array = {!! $sites_array !!};
-            var op_check_out = {!! $op_check_out !!};
 
             var table = $('#table-incassi-mensili');
 
@@ -240,22 +238,11 @@
                         data: null,                               //td:eq(0)
                         render: function (data, type, row)
                         {
-                            var houses = houses_typo[row.casa];
-                            return houses +'</br>' + row.note_alert;
+                            return houses_typo[row.casa];
                         },
                         sortable: false,
                     },
-                    {data: 'tx_mask_p_sito',                                  //td:eq(1)
-                        render: function (data, type, row)
-                        {
-                            if(data in sites_array){
-                                var sites = sites_array[data];
-                                // var sites = sites_kross[data];
-                            } else {
-                                var sites = data;
-                            }
-                            return sites;
-                        }, className:'text-left', sortable: false,
+                    {data: 'data_partenza'                                  //td:eq(1)
                     },
                     {data: 'header'}, //td:eq(2)
                     {data: 'data_arrivo'},                //td:eq(3)
@@ -285,6 +272,7 @@
 
                 rowCallback: function(row, data, index) {
                     $(`td:eq(0)`, row).addClass('text-center bg-' + houses_color[data.casa]);
+                    $(`td:eq(3)`, row).addClass('text-center');
                     const columns = seq(countColumns(this.api())).slice(3);
                     for (const index of columns){
                         $(`td:eq(${index})`, row).addClass('text-right');
@@ -340,7 +328,7 @@
                     { className: 'control', targets:   0, width: '3%' }, //plus
                     //{ width: '5%', targets: 1}, //house
                     //{ width: '8%', targets: 3}, //cliente
-                    { width: '7%', targets: 4}, //data-arrivo
+                    //{ width: '7%', targets: 4}, //data-arrivo
                 ],
 
                 "lengthMenu": [

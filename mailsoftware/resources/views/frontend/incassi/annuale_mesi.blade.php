@@ -86,7 +86,8 @@
                                     <th class="all">Mese</th>
                                     <th class="all bg-budget" title="Totale lordo incassi
 (STAY + Extra Cash CO)">Lordo</th>
-                                    <th class="all bg-budget" title="Incasso lordo base">STAY</th>
+                                    <th class="all bg-budget" title="Incasso lordo base
+(tooltip: Stay - Sito)">STAY</th>
                                     <th class="all bg-budget" title="% sito web">Sito</th>
                                     <th class="all bg-budget" title="Pulizie cliente">Pulizie</th>
                                     <th class="all bg-budget">City tax</th>
@@ -100,7 +101,7 @@
                                     <th class="all bg-budget" title="Saldo BANCA II dell'ospite">Saldo <br>banca II</th>
                                     <th class="all bg-balance" title="API Kross">Pagato</th>
                                     <th class="all bg-balance" title="Consuntivo - preventivo
-(STAY + Extra cash CO) - (Pagato + Solo extra)">Cons. - Prev.</th>
+(Pagato + Solo extra) - Lordo">Cons. - Prev.</th>
                                     <!-- <th class="all alert-warning" title="Media aritmetica dei costi medi a notte">Costo <br>medio</th> -->
                                 </tr>
                                 </thead>

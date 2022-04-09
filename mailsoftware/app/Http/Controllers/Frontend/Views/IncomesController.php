@@ -16,6 +16,11 @@ class IncomesController extends Controller
 
     private const SOLO_EXTRA = 'tx_mask_t3_p_cash_op_cout + tx_mask_t3_p_cash_simo - tx_mask_t3_p_city_tax_amount';
     private const LORDO = 'tx_mask_t3_p_stay + tx_mask_t3_p_s_checkout';
+    private const STAY_EXTRA = 'tx_mask_t5_kross_payment_total_amount + ' . self::SOLO_EXTRA . ' - tx_mask_p_perc_importo_fisso';
+    private const BANCA1 = 'tx_mask_t3_p_stay - tx_mask_t3_p_s_chin - tx_mask_t3_p_s_b - tx_mask_p_perc_importo_fisso';
+    private const C_P = 'tx_mask_t5_kross_payment_total_amount + ' . self::SOLO_EXTRA . ' - (' . self::LORDO . ')';
+
+    private $sites_array;
 
     private $sum_tot_lordo_incassi;
     private $sum_importo_stay;
@@ -39,6 +44,11 @@ class IncomesController extends Controller
         return '<span class=' . ($arg > 0 ? "font-weight-bolder" : ($arg < 0 ? '"text-danger font-weight-bold"' : "font-weight-normal")) . '>' . number_format($arg, 2, ',', '.') . '</span>';
     }
 
+    private function htmlTooltip($arg, $tooltip)
+    {
+        return '<span title="' . $tooltip . '">' . $arg . '</span>';
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -51,8 +61,6 @@ class IncomesController extends Controller
         $houses = House::with('color')->get();
         $houses_color = $houses->pluck('color.colore_bg', 'uid');
         $houses_typo = $this->getHousesAbbrArray();
-        $sites_kross = $this->getSitesKross();
-        $sites_array = $this->getSitesArray();
         $years = $this->getYears();
         $months = $typo->months;
 
@@ -62,9 +70,6 @@ class IncomesController extends Controller
             ->with(compact('houses_color'))
             ->with(compact('years'))
             ->with(compact('months'))
-            ->with(compact('sites_kross'))
-            ->with(compact('sites_array'))
-            ->with(compact('op_check_out'))
             ->with(compact('houses_typo'));
     }
 
@@ -99,13 +104,13 @@ class IncomesController extends Controller
                 Booking::raw('SUM(tx_mask_t3_p_cash_simo) as cash_simo'),
                 Booking::raw('SUM(' . self::SOLO_EXTRA . ') as solo_extra'),
                 Booking::raw('SUM(' . self::LORDO . ') as tot_lordo_incassi'),
-                Booking::raw('SUM(tx_mask_t5_kross_payment_total_amount + ' . self::SOLO_EXTRA . ' - tx_mask_p_perc_importo_fisso ) as stay_extra'),
+                Booking::raw('SUM(' . self::STAY_EXTRA . ') as stay_extra'),
                 Booking::raw('SUM(tx_mask_t3_p_s_chin) as s_chin'),
                 Booking::raw('SUM(tx_mask_t3_p_s_b) as s_b'),
                 // Booking::raw('CONCAT("[",GROUP_CONCAT(tx_mask_t5_kross_payments SEPARATOR ","),"]") as kross_payments_json'),
                 Booking::raw('SUM(tx_mask_t5_kross_payment_total_amount) as kross_payment_total_amount'),
-                Booking::raw('SUM(tx_mask_t3_p_stay - tx_mask_t3_p_s_b) as banca1'),
-                Booking::raw('SUM(tx_mask_t5_kross_payment_total_amount + ' . self::SOLO_EXTRA . ' - (' . self::LORDO . ')) as c_p'),
+                Booking::raw('SUM(' . self::BANCA1 . ') as banca1'),
+                Booking::raw('SUM(' . self::C_P . ') as c_p'),
                 Booking::raw('AVG(prop_costo_medio_a_notte) as c_m'),
             ])
             ->where(function ($q) use ($year) {
@@ -145,7 +150,7 @@ class IncomesController extends Controller
                 return $this->htmlBalance($row->tot_lordo_incassi);
             })
             ->addColumn('importo_stay', function ($row) {
-                return $this->htmlBalance($row->importo_stay);
+                return $this->htmlTooltip($this->htmlBalance($row->importo_stay), 'Senza sito: ' . $row->importo_stay - $row->perc_importo_fisso);
             })
             ->addColumn('perc_importo_fisso', function ($row) {
                 return $this->htmlBalance($row->perc_importo_fisso);
@@ -277,10 +282,10 @@ class IncomesController extends Controller
         $month = $request->month ? $request->month : now()->month;
         $year = $request->year ? $request->year : now()->year;
         $house = $request->house ? $request->house : NULL;
+        $this->sites_array = $this->getSitesArray();
 
         $data =
             Booking::select([
-                Booking::raw('tx_mask_t1_op_note'),
                 Booking::raw('header'),
                 Booking::raw('tx_mask_p_data_arrivo'),
                 Booking::raw('tx_mask_p_data_partenza'),
@@ -298,13 +303,13 @@ class IncomesController extends Controller
                 Booking::raw('(tx_mask_t3_p_cash_simo) as cash_simo'),
                 Booking::raw('(' . self::SOLO_EXTRA . ') as solo_extra'),
                 Booking::raw('(' . self::LORDO . ') as tot_lordo_incassi'),
-                Booking::raw('(tx_mask_t5_kross_payment_total_amount + ' . self::SOLO_EXTRA . ' - tx_mask_p_perc_importo_fisso ) as stay_extra'),
+                Booking::raw('(' . self::STAY_EXTRA . ') as stay_extra'),
                 Booking::raw('(tx_mask_t3_p_s_chin) as s_chin'),
                 Booking::raw('(tx_mask_t3_p_s_b) as s_b'),
                 Booking::raw('(tx_mask_t5_kross_payments) as kross_payments_json'),
                 Booking::raw('(tx_mask_t5_kross_payment_total_amount) as kross_payment_total_amount'),
-                Booking::raw('(tx_mask_t3_p_stay - tx_mask_t3_p_s_b) as banca1'),
-                Booking::raw('(tx_mask_t5_kross_payment_total_amount + ' . self::SOLO_EXTRA . ' - (' . self::LORDO . ')) as c_p'),
+                Booking::raw('(' . self::BANCA1 . ') as banca1'),
+                Booking::raw('(' . self::C_P . ') as c_p'),
                 Booking::raw('(prop_costo_medio_a_notte) as c_m'),
             ])
             ->where(function ($q) use ($year) {
@@ -341,28 +346,16 @@ class IncomesController extends Controller
         $this->avg_c_m = $data->avg('c_m');
 
         return Datatables::of($data)
-            ->addColumn('note_alert', function ($row) {
-                $note_alert = '';
-                if ($row->tx_mask_t1_op_note)
-                    $note_alert = '<span class="badge badge-warning"><i class="fas fa-exclamation" aria-hidden="true"></i> note</span>';
-                return $note_alert;
-            })
             ->addColumn('header', function ($row) {
                 $header = preg_replace('/(\([a-zA-Z0-9\s]+\)\s?)/', '', $row->header);
                 return '<a href="#" data-toggle="tooltip"  class="text-dark-75 text-hover-primary mb-1 font-size-lg text-capitalize text-left">' . $header . '</a>';
             })
             ->addColumn('data_arrivo', function ($row) {
-                $h = $row->tx_mask_t1_ora_checkin ? $row->tx_mask_t1_ora_checkin : '<span class="text-danger">NaN</span>';
-                $arrivo = Carbon::createFromFormat('d-m-y', $row->tx_mask_p_data_arrivo)->format('Y-m-d');
-                $partenza = Carbon::createFromFormat('d-m-y', $row->tx_mask_p_data_partenza)->format('Y-m-d');
-                $arrivo = Carbon::parse($arrivo);
-                $partenza = Carbon::parse($partenza);
-                $diff = $partenza->diffInDays($arrivo);
-                return $row->tx_mask_p_data_arrivo . ' </br> <span class="text-dark-75">h</span> ' . $h . ' <i class="fas fa-moon text-dark-75"></i> ' . $diff;
+                $sito = ($row->tx_mask_p_sito) ? '<br>' . $this->sites_array[$row->tx_mask_p_sito] : '';
+                return $row->tx_mask_p_data_arrivo . $sito;
             })
             ->addColumn('data_partenza', function ($row) {
-                $h = $row->tx_mask_t1_ora_checkout ? $row->tx_mask_t1_ora_checkout : '<span class="text-danger">NaN</span>';
-                return $row->tx_mask_p_data_partenza . ' </br> <span class="text-dark-75">h</span> ' . $h;
+                return $row->tx_mask_p_data_partenza;
             })
             ->addColumn('payments', function ($row) {
                 $d = json_decode($row->kross_payments_json);
@@ -388,7 +381,7 @@ class IncomesController extends Controller
                 return $this->htmlBalance($row->tot_lordo_incassi);
             })
             ->addColumn('importo_stay', function ($row) {
-                return $this->htmlBalance($row->importo_stay);
+                return $this->htmlTooltip($this->htmlBalance($row->importo_stay), 'Senza sito: ' . $row->importo_stay - $row->perc_importo_fisso);
             })
             ->addColumn('perc_importo_fisso', function ($row) {
                 return $this->htmlBalance($row->perc_importo_fisso);
@@ -503,7 +496,7 @@ class IncomesController extends Controller
                 return $this->htmlBalance($this->avg_c_m);
             })
             ->rawColumns([
-                'note_alert', 'header', 'data_arrivo', 'data_partenza', 'tx_mask_p_sito', 'casa',
+                'header', 'data_arrivo', 'data_partenza', 'tx_mask_p_sito', 'casa',
                 'month', 'importo_stay', 'perc_importo_fisso', 'cleaning_fee_amount', 'city_tax_amount',
                 's_checkout', 'cash_op_cout', 'cash_simo', 'solo_extra', 'tot_lordo_incassi',
                 'stay_extra', 's_chin', 's_b', 'kross_payment_total_amount', 'banca1',
